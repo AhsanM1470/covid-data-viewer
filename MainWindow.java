@@ -12,7 +12,7 @@ import java.net.URL;
  * @author Ishab Ahmed, Saihan Marshall
  * @version 2023.03.13
  */
-public class CovidDataGUI extends Application
+public class MainWindow extends Application
 {
     private ArrayList<CovidData> data;
     
