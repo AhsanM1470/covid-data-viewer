@@ -63,8 +63,4 @@ public class DataViewerController
             }
         }
     }
-    
-    private void loadTable() {
-        
-    }
 }
