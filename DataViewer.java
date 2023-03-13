@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import java.util.ArrayList;
 import java.net.URL;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 
 /**
  * GUI to display.
@@ -33,4 +34,5 @@ public class DataViewer extends Application
         stage.setScene(scene);
         stage.show();
     }
+
 }
