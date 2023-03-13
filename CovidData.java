@@ -8,133 +8,133 @@
 
 public class CovidData {
 
-	/*
-	The date the COVID information (cases & deaths) was collected
-	*/
-	private String date;
-	
-	/*
-	The COVID information is organised by (London) borough
-	*/
-	private String borough;
-	
-	
-	/*
-	The COVID information that's collected daily for each London borough
-	*/
-	private int newCases;
-	private int totalCases;
-	private int newDeaths;
-	private int totalDeaths;
-	
-	
-	/*
-	Google analysed location data from Android smartphones to measure movement
-	in London.  The data shows percent change from the baseline.  For example, 
-	a negative value means there's less human traffic compared to the baseline.
-	*/
-	private int retailRecreationGMR;
-	private int groceryPharmacyGMR;
-	private int parksGMR;
-	private int transitGMR;
-	private int workplacesGMR;
-	private int residentialGMR;
+    /*
+    The date the COVID information (cases & deaths) was collected
+    */
+    private String date;
+    
+    /*
+    The COVID information is organised by (London) borough
+    */
+    private String borough;
+    
+    
+    /*
+    The COVID information that's collected daily for each London borough
+    */
+    private Integer newCases;
+    private Integer totalCases;
+    private Integer newDeaths;
+    private Integer totalDeaths;
+    
+    
+    /*
+    Google analysed location data from Android smartphones to measure movement
+    in London.  The data shows percent change from the baseline.  For example, 
+    a negative value means there's less human traffic compared to the baseline.
+    */
+    private Integer retailRecreationGMR;
+    private Integer groceryPharmacyGMR;
+    private Integer parksGMR;
+    private Integer transitGMR;
+    private Integer workplacesGMR;
+    private Integer residentialGMR;
 
 
 
-	public CovidData(String date, String borough, int retailRecreationGMR, int groceryPharmacyGMR, 
-						int parksGMR, int transitGMR, int workplacesGMR, int residentialGMR, 
-						int newCases, int totalCases, int newDeaths, int totalDeaths) {
+    public CovidData(String date, String borough, Integer retailRecreationGMR, Integer groceryPharmacyGMR, 
+                        Integer parksGMR, Integer transitGMR, Integer workplacesGMR, Integer residentialGMR, 
+                        Integer newCases, Integer totalCases, Integer newDeaths, Integer totalDeaths) {
 
-		this.date = date;
-		this.borough = borough;
-		this.retailRecreationGMR = retailRecreationGMR;
-		this.groceryPharmacyGMR = groceryPharmacyGMR;
-		this.parksGMR = parksGMR;
-		this.transitGMR = transitGMR;
-		this.workplacesGMR = workplacesGMR;
-		this.residentialGMR = residentialGMR;
-		this.newCases = newCases;
-		this.totalCases = totalCases;
-		this.newDeaths = newDeaths;
-		this.totalDeaths = totalDeaths;
-	}
-
-
-	public String getDate() {
-		return date;
-	}
+        this.date = date;
+        this.borough = borough;
+        this.retailRecreationGMR = retailRecreationGMR;
+        this.groceryPharmacyGMR = groceryPharmacyGMR;
+        this.parksGMR = parksGMR;
+        this.transitGMR = transitGMR;
+        this.workplacesGMR = workplacesGMR;
+        this.residentialGMR = residentialGMR;
+        this.newCases = newCases;
+        this.totalCases = totalCases;
+        this.newDeaths = newDeaths;
+        this.totalDeaths = totalDeaths;
+    }
 
 
-	public String getBorough() {
-		return borough;
-	}
+    public String getDate() {
+        return date;
+    }
 
 
-	public int getRetailRecreationGMR() {
-		return retailRecreationGMR;
-	}
+    public String getBorough() {
+        return borough;
+    }
 
 
-	public int getGroceryPharmacyGMR() {
-		return groceryPharmacyGMR;
-	}
+    public Integer getRetailRecreationGMR() {
+        return retailRecreationGMR;
+    }
 
 
-	public int getParksGMR() {
-		return parksGMR;
-	}
+    public Integer getGroceryPharmacyGMR() {
+        return groceryPharmacyGMR;
+    }
 
 
-	public int getTransitGMR() {
-		return transitGMR;
-	}
+    public Integer getParksGMR() {
+        return parksGMR;
+    }
 
 
-	public int getWorkplacesGMR() {
-		return workplacesGMR;
-	}
+    public Integer getTransitGMR() {
+        return transitGMR;
+    }
 
 
-	public int getResidentialGMR() {
-		return residentialGMR;
-	}
+    public Integer getWorkplacesGMR() {
+        return workplacesGMR;
+    }
 
 
-	public int getNewCases() {
-		return newCases;
-	}
+    public Integer getResidentialGMR() {
+        return residentialGMR;
+    }
 
 
-	public int getTotalCases() {
-		return totalCases;
-	}
+    public Integer getNewCases() {
+        return newCases;
+    }
 
 
-	public int getNewDeaths() {
-		return newDeaths;
-	}
+    public Integer getTotalCases() {
+        return totalCases;
+    }
 
 
-	public int getTotalDeaths() {
-		return totalDeaths;
-	}
+    public Integer getNewDeaths() {
+        return newDeaths;
+    }
+
+
+    public Integer getTotalDeaths() {
+        return totalDeaths;
+    }
 
     @Override
-	public String toString() {
-		return "Covid Record {" + 
-		" date='" + date +'\'' +
-		", borough='" + borough +'\'' +
-		", retailRecreationGMR=" + retailRecreationGMR + 
-		", groceryPharmacyGMR=" + groceryPharmacyGMR + 
-		", parksGMR=" + parksGMR + 
-		", transitGMR=" + transitGMR + 
-		", workplacesGMR=" + workplacesGMR + 
-		", residentialGMR=" + residentialGMR + 
-		", newCases=" + newCases + 
-		", totalCases=" + totalCases + 
-		", newDeaths=" + newDeaths + 
-		", totalDeaths=" + totalDeaths + 
-		"}";
-	}
+    public String toString() {
+        return "Covid Record {" + 
+        " date='" + date +'\'' +
+        ", borough='" + borough +'\'' +
+        ", retailRecreationGMR=" + retailRecreationGMR + 
+        ", groceryPharmacyGMR=" + groceryPharmacyGMR + 
+        ", parksGMR=" + parksGMR + 
+        ", transitGMR=" + transitGMR + 
+        ", workplacesGMR=" + workplacesGMR + 
+        ", residentialGMR=" + residentialGMR + 
+        ", newCases=" + newCases + 
+        ", totalCases=" + totalCases + 
+        ", newDeaths=" + newDeaths + 
+        ", totalDeaths=" + totalDeaths + 
+        "}";
+    }
 }

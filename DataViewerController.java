@@ -14,6 +14,9 @@ import java.util.List;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.ObservableList;
+import javafx.fxml.Initializable;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * Controls logic of DataViewer
@@ -21,7 +24,7 @@ import javafx.collections.ObservableList;
  * @author Ishab Ahmed
  * @version 2023.03.13
  */
-public class DataViewerController
+public class DataViewerController implements Initializable
 {
     @FXML
     private DatePicker fromDatePicker;
@@ -51,37 +54,8 @@ public class DataViewerController
         data = dataLoader.load();
     }
     
-    @FXML
-    private void dateChanged(ActionEvent event) {
-        leftButton.setDisable(true);
-        rightButton.setDisable(true);
-        welcomePane.setVisible(true);
-        tablePane.setVisible(false);
-        
-        LocalDate fromDate = fromDatePicker.getValue();
-        LocalDate toDate = toDatePicker.getValue();
-        
-        if (fromDate != null && toDate != null) {
-            if (fromDate.isBefore(toDate)) {
-                leftButton.setDisable(false);
-                rightButton.setDisable(false);
-                welcomePane.setVisible(false);
-                tablePane.setVisible(true);
-                System.out.println("x");
-                populateTable(fromDate, toDate);
-                System.out.println("y");
-            }
-        }
-    }
-    
-    private void populateTable(LocalDate from, LocalDate to) {
-        System.out.println("a");
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yy-MM-dd");
-        
-        System.out.println("i");
-        //ArrayList<CovidData> filteredData = data.stream().filter(x -> LocalDate.parse(x.getDate(), dateFormat).isAfter(from)).filter(x -> LocalDate.parse(x.getDate(), dateFormat).isBefore(to)).collect(Collectors.toCollection(ArrayList::new));
-        
-        System.out.println("n");
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         TableColumn dateCol = new TableColumn("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<CovidData,String>("date"));
          
@@ -90,24 +64,63 @@ public class DataViewerController
          
         TableColumn newCasesCol = new TableColumn("New Cases");
         newCasesCol.setCellValueFactory(new PropertyValueFactory<CovidData,String>("newCases"));
-        System.out.println("f");
+        
         TableColumn totalCasesCol = new TableColumn("Total Cases");
         totalCasesCol.setCellValueFactory(new PropertyValueFactory<CovidData,String>("totalCases"));
          
         TableColumn newDeathsCol = new TableColumn("New Deaths");
         newDeathsCol.setCellValueFactory(new PropertyValueFactory<CovidData,String>("newDeaths"));
-        System.out.println("j");
+    
         TableColumn totalDeathsCol = new TableColumn("Total Deaths");
         totalDeathsCol.setCellValueFactory(new PropertyValueFactory<CovidData,String>("totalDeaths"));
         
-        System.out.println("b");
         dataTable.getColumns().addAll(dateCol, boroughCol, newCasesCol, totalCasesCol, newDeathsCol, totalDeathsCol);
-        System.out.println("c");
+    }
+    
+    @FXML
+    private void dateChanged(ActionEvent event) {
+        // leftButton.setDisable(true);
+        // rightButton.setDisable(true);
+        // welcomePane.setVisible(true);
+        // tablePane.setVisible(false);
+        setWelcomeState(true);
+        
+        LocalDate fromDate = fromDatePicker.getValue();
+        LocalDate toDate = toDatePicker.getValue();
+        
+        if (fromDate != null && toDate != null) {
+            if (fromDate.isBefore(toDate)) {
+                // leftButton.setDisable(false);
+                // rightButton.setDisable(false);
+                // welcomePane.setVisible(false);
+                // tablePane.setVisible(true);
+                populateTable(fromDate, toDate);
+            }
+        }
+    }
+    
+    private void setWelcomeState(boolean state) {
+        leftButton.setDisable(state);
+        rightButton.setDisable(state);
+        welcomePane.setVisible(state);
+        tablePane.setVisible(!state);
+    }
+    
+    private void populateTable(LocalDate from, LocalDate to) {
+        dataTable.getItems().clear();
+        
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yy-MM-dd");
+        
         for (CovidData d : data) {
             LocalDate date = LocalDate.parse(d.getDate());
             if (date.isAfter(from) && date.isBefore(to))
                 dataTable.getItems().add(d);
         }
-        System.out.println("d");
+        
+        if (dataTable.getItems().isEmpty()) {
+            setWelcomeState(true);
+        } else {
+            setWelcomeState(false);
+        }
     }
 }

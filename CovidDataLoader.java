@@ -26,16 +26,16 @@ public class CovidDataLoader {
                 
                 String date    = line[0];
                 String borough    = line[1];    
-                int retailRecreationGMR    = convertInt(line[2]);    
-                int groceryPharmacyGMR    = convertInt(line[3]);    
-                int parksGMR    = convertInt(line[4]);    
-                int transitGMR    = convertInt(line[5]);    
-                int workplacesGMR    = convertInt(line[6]);    
-                int residentialGMR    = convertInt(line[7]);    
-                int newCases    = convertInt(line[8]);    
-                int totalCases    = convertInt(line[9]);    
-                int newDeaths    = convertInt(line[10]);    
-                int totalDeaths    = convertInt(line[11]);                
+                Integer retailRecreationGMR    = convertInt(line[2]);    
+                Integer groceryPharmacyGMR    = convertInt(line[3]);    
+                Integer parksGMR    = convertInt(line[4]);    
+                Integer transitGMR    = convertInt(line[5]);    
+                Integer workplacesGMR    = convertInt(line[6]);    
+                Integer residentialGMR    = convertInt(line[7]);    
+                Integer newCases    = convertInt(line[8]);    
+                Integer totalCases    = convertInt(line[9]);    
+                Integer newDeaths    = convertInt(line[10]);    
+                Integer totalDeaths    = convertInt(line[11]);                
 
                 CovidData record = new CovidData(date,borough,retailRecreationGMR,
                     groceryPharmacyGMR,parksGMR,transitGMR,workplacesGMR,
@@ -73,7 +73,7 @@ public class CovidDataLoader {
         if(intString != null && !intString.trim().equals("")){
             return Integer.parseInt(intString);
         }
-        return -1;
+        return null;
     }
 
 }
