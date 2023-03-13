@@ -6,6 +6,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
+
 import java.net.URISyntaxException;
 
 public class CovidDataLoader {
@@ -42,7 +44,7 @@ public class CovidDataLoader {
                     residentialGMR,newCases,totalCases,newDeaths,totalDeaths);
                 records.add(record);
             }
-        } catch(IOException | URISyntaxException e){
+        } catch(IOException | URISyntaxException | CsvValidationException e){
             System.out.println("Something Went Wrong?!");
             e.printStackTrace();
         }
