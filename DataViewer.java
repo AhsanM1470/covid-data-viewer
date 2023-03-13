@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.fxml.FXMLLoader;
 import java.util.ArrayList;
 import java.net.URL;
+import javafx.event.ActionEvent;
 
 /**
  * GUI to display.
@@ -12,7 +13,7 @@ import java.net.URL;
  * @author Ishab Ahmed, Saihan Marshall
  * @version 2023.03.13
  */
-public class MainWindow extends Application
+public class DataViewer extends Application
 {
     private ArrayList<CovidData> data;
     
