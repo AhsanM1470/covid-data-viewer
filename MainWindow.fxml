@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -13,7 +12,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
-
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DataViewerController">
    <top>
@@ -60,16 +58,7 @@
          <children>
             <Pane fx:id="tablePane" layoutX="205.0" layoutY="35.0" visible="false">
                <children>
-                  <TableView fx:id="dataTable">
-                    <columns>
-                      <TableColumn prefWidth="75.0" text="Date" />
-                      <TableColumn prefWidth="75.0" text="Borough" />
-                        <TableColumn prefWidth="75.0" text="New Cases" />
-                        <TableColumn prefWidth="75.0" text="Total Cases" />
-                        <TableColumn prefWidth="75.0" text="New Deaths" />
-                        <TableColumn prefWidth="75.0" text="Total Deaths" />
-                    </columns>
-                  </TableView>
+                  <TableView fx:id="dataTable" />
                </children>
             </Pane>
             <VBox fx:id="welcomePane" alignment="CENTER" layoutX="133.0" layoutY="226.0">
