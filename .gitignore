@@ -1,0 +1,6 @@
+## Files to ignore when commiting
+*.vscode
+*.ctxt
+*.class
+*.bluej
+*.py
