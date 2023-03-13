@@ -39,10 +39,10 @@
             <Line endX="850.0" />
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <left>
-                  <Button disable="true" mnemonicParsing="false" text="&lt;" BorderPane.alignment="CENTER" />
+                  <Button fx:id="leftButton" disable="true" mnemonicParsing="false" text="&lt;" BorderPane.alignment="CENTER" />
                </left>
                <right>
-                  <Button disable="true" mnemonicParsing="false" text="&gt;" BorderPane.alignment="CENTER" />
+                  <Button fx:id="rightButton" disable="true" mnemonicParsing="false" text="&gt;" BorderPane.alignment="CENTER" />
                </right>
                <VBox.margin>
                   <Insets left="5.0" right="5.0" />

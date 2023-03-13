@@ -1,21 +1,44 @@
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.control.DatePicker;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+import java.time.LocalDate;
+import javafx.scene.control.Button;
 
 /**
- * Write a description of class Controller here.
+ * Controls logic of DataViewer
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Ishab Ahmed
+ * @version 2023.03.13
  */
 public class DataViewerController
 {
-    private DatePicker toDatePicker;
+    @FXML
     private DatePicker fromDatePicker;
     
     @FXML
+    private DatePicker toDatePicker;
+    
+    @FXML
+    private Button leftButton;
+    
+    @FXML
+    private Button rightButton;
+    
+    @FXML
     private void dateChanged(ActionEvent event) {
-        System.out.println(toDatePicker.getValue());
-        System.out.println(fromDatePicker.getValue());
+        rightButton.setDisable(true);
+        
+        DateFormat dateFormat = new SimpleDateFormat("yy-mm-dd");
+        
+        LocalDate fromDate = fromDatePicker.getValue();
+        LocalDate toDate = toDatePicker.getValue();
+        
+        if (fromDate != null && toDate != null) {
+            if (fromDate.isBefore(toDate)) {
+                rightButton.setDisable(false);
+            }
+        }
     }
 }
