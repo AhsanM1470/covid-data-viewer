@@ -48,14 +48,15 @@ public class DataViewerController implements Initializable
     private TableView dataTable;
     
     private ArrayList<CovidData> data;
+
     
-    public DataViewerController() {
-        CovidDataLoader dataLoader = new CovidDataLoader();
-        data = dataLoader.load();
-    }
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        CovidDataLoader dataLoader = new CovidDataLoader();
+        data = dataLoader.load();
+
         TableColumn dateCol = new TableColumn("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<CovidData,String>("date"));
          

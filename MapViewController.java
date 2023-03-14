@@ -46,4 +46,9 @@ public class MapViewController{
 
     }
 
+    @FXML
+    void polygonClicked(MouseEvent event){
+        System.out.println(event.getSource());
+    }
+
 }
