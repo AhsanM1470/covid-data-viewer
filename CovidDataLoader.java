@@ -6,7 +6,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
 
 import java.net.URISyntaxException;
 
