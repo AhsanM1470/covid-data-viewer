@@ -43,7 +43,7 @@ public class CovidDataLoader {
                     residentialGMR,newCases,totalCases,newDeaths,totalDeaths);
                 records.add(record);
             }
-        } catch(IOException | URISyntaxException | CsvValidationException e){
+        } catch(IOException | URISyntaxException e){
             System.out.println("Something Went Wrong?!");
             e.printStackTrace();
         }
