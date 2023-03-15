@@ -15,7 +15,11 @@ import java.util.ArrayList;
  * @version 2023.03.13
  */
 public class DataViewer extends Application
-{   
+{
+    public static void main(String[] args){
+        launch(DataViewer.class);
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
         URL url = getClass().getResource("MainWindow.fxml");
