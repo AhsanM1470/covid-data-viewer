@@ -17,6 +17,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.scene.control.Label;
 
 /**
  * Controls logic of DataViewer
@@ -47,13 +48,13 @@ public class DataViewerController implements Initializable
     @FXML
     private TableView dataTable;
     
+    @FXML
+    private Label dataTableInfoLabel;
+    
     private ArrayList<CovidData> data;
 
-    
-    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         CovidDataLoader dataLoader = new CovidDataLoader();
         data = dataLoader.load();
 
@@ -80,24 +81,26 @@ public class DataViewerController implements Initializable
     
     @FXML
     private void dateChanged(ActionEvent event) {
-        // leftButton.setDisable(true);
-        // rightButton.setDisable(true);
-        // welcomePane.setVisible(true);
-        // tablePane.setVisible(false);
         setWelcomeState(true);
         
         LocalDate fromDate = fromDatePicker.getValue();
         LocalDate toDate = toDatePicker.getValue();
         
-        if (fromDate != null && toDate != null) {
-            if (fromDate.isBefore(toDate)) {
-                // leftButton.setDisable(false);
-                // rightButton.setDisable(false);
-                // welcomePane.setVisible(false);
-                // tablePane.setVisible(true);
-                populateTable(fromDate, toDate);
+        if (validDateRangeChosen(fromDate, toDate)) {
+            populateTable(fromDate, toDate);
+        } else {
+            dataTableInfoLabel.setText("The 'from' date is after the 'to' date.");
+            setWelcomeState(false);
+        }
+    }
+    
+    private boolean validDateRangeChosen(LocalDate from, LocalDate to) {
+        if (from != null && to != null) {
+            if (from.isBefore(to)) {
+                return true;
             }
         }
+        return false;
     }
     
     private void setWelcomeState(boolean state) {
@@ -118,10 +121,15 @@ public class DataViewerController implements Initializable
                 dataTable.getItems().add(d);
         }
         
+        checkNoDataInRange(from, to);
+        setWelcomeState(false);
+    }
+    
+    private void checkNoDataInRange(LocalDate from, LocalDate to) {
         if (dataTable.getItems().isEmpty()) {
-            setWelcomeState(true);
+            dataTableInfoLabel.setText("There’s no available data for the selected date range.");
         } else {
-            setWelcomeState(false);
+            dataTableInfoLabel.setText("Showing data from " + from + " to " + to + ".");
         }
     }
 }
