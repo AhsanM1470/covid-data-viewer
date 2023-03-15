@@ -73,7 +73,7 @@
          <center>
             <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <StackPane fx:id="firstPane" prefHeight="150.0" prefWidth="200.0">
+                  <StackPane fx:id="firstPane" prefHeight="150.0" prefWidth="200.0" visible="false">
                      <children>
                         <Label text="asefasfea">
                            <font>
@@ -82,11 +82,25 @@
                         </Label>
                      </children>
                   </StackPane>
-                  <StackPane fx:id="secondPane" prefHeight="150.0" prefWidth="200.0" visible="false">
-                     <children>
-                        <Label text="kpk;k" />
-                     </children>
-                  </StackPane>
+                  <BorderPane fx:id="secondPane" prefHeight="200.0" prefWidth="200.0">
+                     <top>
+                        <Label alignment="CENTER" prefHeight="154.0" prefWidth="399.0" text="Total number of total deaths" underline="true" BorderPane.alignment="CENTER">
+                           <font>
+                              <Font size="30.0" />
+                           </font>
+                           <padding>
+                              <Insets top="20.0" />
+                           </padding>
+                        </Label>
+                     </top>
+                     <center>
+                        <Label alignment="CENTER" prefHeight="287.0" prefWidth="306.0" text="Label" BorderPane.alignment="CENTER">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </center>
+                  </BorderPane>
                   <StackPane fx:id="thirdPane" prefHeight="150.0" prefWidth="200.0" visible="false">
                      <children>
                         <Label text="sss" />

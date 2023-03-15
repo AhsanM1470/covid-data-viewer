@@ -57,7 +57,7 @@ public class StatsViewerController
      * This pane is automatically set to invisible when
      *  "StatsViewer" is launched.
      */
-    private StackPane secondPane;
+    private BorderPane secondPane;
     
     @FXML
     /**
@@ -92,6 +92,7 @@ public class StatsViewerController
         statsPanes.add(secondPane);
         statsPanes.add(thirdPane);
         statsPanes.add(fourthPane);
+        firstPane.setVisible(true);
     }
     
     @FXML
