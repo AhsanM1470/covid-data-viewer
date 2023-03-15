@@ -12,7 +12,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DataViewerController">
+<BorderPane fx:id="mainLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DataViewerController">
    <top>
       <VBox prefHeight="30.0" BorderPane.alignment="CENTER">
          <children>
@@ -30,20 +30,20 @@
                   <Insets right="5.0" />
                </VBox.margin>
             </HBox>
-            <Line endX="850.0" />
+            <Line endX="920.0" />
          </children>
       </VBox>
    </top>
    <bottom>
       <VBox prefHeight="30.0" BorderPane.alignment="CENTER">
          <children>
-            <Line endX="850.0" />
+            <Line endX="920.0" />
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <left>
-                  <Button fx:id="leftButton" disable="true" mnemonicParsing="false" text="&lt;" BorderPane.alignment="CENTER" />
+                  <Button fx:id="leftButton" disable="true" mnemonicParsing="false" onAction="#previousPanel" text="&lt;" BorderPane.alignment="CENTER" />
                </left>
                <right>
-                  <Button fx:id="rightButton" disable="true" mnemonicParsing="false" text="&gt;" BorderPane.alignment="CENTER" />
+                  <Button fx:id="rightButton" disable="true" mnemonicParsing="false" onAction="#nextPanel" text="&gt;" BorderPane.alignment="CENTER" />
                </right>
                <VBox.margin>
                   <Insets left="5.0" right="5.0" />
@@ -53,7 +53,7 @@
       </VBox>
    </bottom>
    <center>
-      <StackPane BorderPane.alignment="CENTER">
+      <StackPane fx:id="mainPanel" BorderPane.alignment="CENTER">
          <children>
             <VBox fx:id="welcomePane" alignment="CENTER">
                <children>

@@ -7,13 +7,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.TableView;
 import java.util.ArrayList;
-// import java.time.format.DateTimeFormatter;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.scene.control.Label;
+import javafx.scene.Parent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.BorderPane;
 
 /**
  * Controls logic of DataViewer
@@ -23,6 +26,12 @@ import javafx.scene.control.Label;
  */
 public class DataViewerController implements Initializable
 {
+    @FXML
+    private BorderPane mainLayout;
+    
+    @FXML
+    private StackPane mainPanel;
+    
     @FXML
     private DatePicker fromDatePicker;
     
@@ -48,6 +57,9 @@ public class DataViewerController implements Initializable
     private Label dataTableInfoLabel;
     
     private ArrayList<CovidData> data;
+    
+    private Parent[] panels;
+    private int panelIdx;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -73,6 +85,29 @@ public class DataViewerController implements Initializable
         totalDeathsCol.setCellValueFactory(new PropertyValueFactory<CovidData,String>("totalDeaths"));
         
         dataTable.getColumns().addAll(dateCol, boroughCol, newCasesCol, totalCasesCol, newDeathsCol, totalDeathsCol);
+        
+        try {
+            panels = new Parent[2];
+            Parent[] panels = loadPanels();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+        
+        panelIdx = 0;
+    }
+    
+    public Parent[] loadPanels() throws Exception {
+        //URL url = getClass().getResource("MapView.fxml");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(
+               "MapWindow.fxml"));
+        Parent mapPanel = (Parent) loader.load();
+        MapViewerController controller = loader.getController();
+        
+        panels[0] = mainPanel;
+        panels[1] = controller.getMapPane();
+        
+        return panels;
     }
     
     @FXML
@@ -109,8 +144,6 @@ public class DataViewerController implements Initializable
     private void populateTable(LocalDate from, LocalDate to) {
         dataTable.getItems().clear();
         
-        // DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yy-MM-dd");
-        
         for (CovidData d : data) {
             LocalDate date = LocalDate.parse(d.getDate());
             if (date.isAfter(from) && date.isBefore(to))
@@ -127,5 +160,23 @@ public class DataViewerController implements Initializable
         } else {
             dataTableInfoLabel.setText("Showing data from " + from + " to " + to + ".");
         }
+    }
+    
+    @FXML
+    void nextPanel(ActionEvent event) {
+        panelIdx += 1;
+        panelIdx = panelIdx % panels.length;
+        mainLayout.setCenter(panels[panelIdx]);
+        System.out.println(panelIdx);
+    }
+
+    @FXML
+    void previousPanel(ActionEvent event) {
+        panelIdx -= 1;
+        if (panelIdx < 0) {
+            panelIdx = panels.length - 1;
+        }
+        mainLayout.setCenter(panels[panelIdx]);
+        System.out.println(panelIdx);
     }
 }

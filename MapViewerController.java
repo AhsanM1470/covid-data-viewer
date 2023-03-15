@@ -11,6 +11,7 @@ import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import java.util.HashMap;
+import javafx.scene.Parent;
 
 public class MapViewerController {
 
@@ -102,6 +103,10 @@ public class MapViewerController {
         label.setText(text);
         label.setAlignment(Pos.CENTER);
         label.setFont(new Font(fontSize));
+    }
+    
+    public Parent getMapPane() {
+        return mapPane;
     }
 
 }
