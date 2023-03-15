@@ -7,13 +7,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.TableView;
 import java.util.ArrayList;
-import java.time.format.DateTimeFormatter;
-import java.util.stream.Stream;
-import java.util.stream.Collectors;
-import java.util.List;
+// import java.time.format.DateTimeFormatter;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -46,7 +42,7 @@ public class DataViewerController implements Initializable
     private Pane tablePane;
     
     @FXML
-    private TableView dataTable;
+    private TableView<CovidData> dataTable;
     
     @FXML
     private Label dataTableInfoLabel;
@@ -58,22 +54,22 @@ public class DataViewerController implements Initializable
         CovidDataLoader dataLoader = new CovidDataLoader();
         data = dataLoader.load();
 
-        TableColumn dateCol = new TableColumn("Date");
+        TableColumn<CovidData,String> dateCol = new TableColumn<CovidData,String>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<CovidData,String>("date"));
          
-        TableColumn boroughCol = new TableColumn("Borough");
+        TableColumn<CovidData,String> boroughCol = new TableColumn<CovidData,String>("Borough");
         boroughCol.setCellValueFactory(new PropertyValueFactory<CovidData,String>("borough"));
          
-        TableColumn newCasesCol = new TableColumn("New Cases");
+        TableColumn<CovidData,String> newCasesCol = new TableColumn<CovidData,String>("New Cases");
         newCasesCol.setCellValueFactory(new PropertyValueFactory<CovidData,String>("newCases"));
         
-        TableColumn totalCasesCol = new TableColumn("Total Cases");
+        TableColumn<CovidData,String> totalCasesCol = new TableColumn<CovidData,String>("Total Cases");
         totalCasesCol.setCellValueFactory(new PropertyValueFactory<CovidData,String>("totalCases"));
          
-        TableColumn newDeathsCol = new TableColumn("New Deaths");
+        TableColumn<CovidData,String> newDeathsCol = new TableColumn<CovidData,String>("New Deaths");
         newDeathsCol.setCellValueFactory(new PropertyValueFactory<CovidData,String>("newDeaths"));
     
-        TableColumn totalDeathsCol = new TableColumn("Total Deaths");
+        TableColumn<CovidData,String> totalDeathsCol = new TableColumn<CovidData,String>("Total Deaths");
         totalDeathsCol.setCellValueFactory(new PropertyValueFactory<CovidData,String>("totalDeaths"));
         
         dataTable.getColumns().addAll(dateCol, boroughCol, newCasesCol, totalCasesCol, newDeathsCol, totalDeathsCol);
@@ -113,7 +109,7 @@ public class DataViewerController implements Initializable
     private void populateTable(LocalDate from, LocalDate to) {
         dataTable.getItems().clear();
         
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yy-MM-dd");
+        // DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yy-MM-dd");
         
         for (CovidData d : data) {
             LocalDate date = LocalDate.parse(d.getDate());
@@ -127,7 +123,7 @@ public class DataViewerController implements Initializable
     
     private void checkNoDataInRange(LocalDate from, LocalDate to) {
         if (dataTable.getItems().isEmpty()) {
-            dataTableInfoLabel.setText("There’s no available data for the selected date range.");
+            dataTableInfoLabel.setText("There's no available data for the selected date range.");
         } else {
             dataTableInfoLabel.setText("Showing data from " + from + " to " + to + ".");
         }

@@ -6,11 +6,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DataViewerController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StatsViewerController">
    <top>
       <VBox prefHeight="30.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -53,14 +54,14 @@
    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <left>
-            <Button mnemonicParsing="false" prefHeight="395.0" prefWidth="127.0" text="&lt;" BorderPane.alignment="CENTER">
+            <Button mnemonicParsing="false" onAction="#backwardButton" prefHeight="395.0" prefWidth="127.0" text="&lt;" BorderPane.alignment="CENTER">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
          </left>
          <right>
-            <Button mnemonicParsing="false" onAction="#clickButton" prefHeight="395.0" prefWidth="127.0" text="&gt;" BorderPane.alignment="CENTER">
+            <Button mnemonicParsing="false" onAction="#forwardButton" prefHeight="395.0" prefWidth="127.0" text="&gt;" BorderPane.alignment="CENTER">
                <font>
                   <Font size="20.0" />
                </font>
@@ -69,6 +70,36 @@
          <padding>
             <Insets left="10.0" right="10.0" />
          </padding>
+         <center>
+            <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <StackPane fx:id="firstPane" prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <Label text="asefasfea">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </StackPane>
+                  <StackPane fx:id="secondPane" prefHeight="150.0" prefWidth="200.0" visible="false">
+                     <children>
+                        <Label text="kpk;k" />
+                     </children>
+                  </StackPane>
+                  <StackPane fx:id="thirdPane" prefHeight="150.0" prefWidth="200.0" visible="false">
+                     <children>
+                        <Label text="sss" />
+                     </children>
+                  </StackPane>
+                  <StackPane fx:id="fourthPane" prefHeight="150.0" prefWidth="200.0" visible="false">
+                     <children>
+                        <Label text="oafjoa" />
+                     </children>
+                  </StackPane>
+               </children>
+            </StackPane>
+         </center>
       </BorderPane>
    </center>
 </BorderPane>

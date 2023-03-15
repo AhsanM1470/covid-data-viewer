@@ -4,9 +4,6 @@ import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.fxml.FXMLLoader;
 import java.net.URL;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import java.util.ArrayList;
 
 /**
  * GUI to display.
@@ -18,7 +15,7 @@ public class DataViewer extends Application
 {   
     @Override
     public void start(Stage stage) throws Exception {
-        URL url = getClass().getResource("MainWindow.fxml");
+        URL url = getClass().getResource("MapWindow.fxml");
         
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);

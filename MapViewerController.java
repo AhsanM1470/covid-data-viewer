@@ -8,24 +8,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
-import javafx.scene.transform.Scale;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-
-public class MapViewController {
+public class MapViewerController {
 
     Paint hoveredPolygonDefaultBorderColor;
     Double hoveredPolygonDefaultStroke;
@@ -51,12 +38,11 @@ public class MapViewController {
             wandsworthPolygon, westminsterPolygon;
 
     @FXML
-    private Label title;
+    private Label title, hillingdonLabel;
+
 
     private HashMap<String, String> boroughIdToName;
-    private HashMap<String,Boolean> boroughVisited = new HashMap<>();
-
-    
+    // private HashMap<String,Boolean> boroughVisited = new HashMap<>();
 
     @FXML
     void dateChanged(ActionEvent event) {
@@ -65,8 +51,6 @@ public class MapViewController {
 
     @FXML
     void polygonClicked(MouseEvent event) {
-        
-        // System.out.println("polygon clicked");
         Polygon poly = (Polygon) event.getSource();
         String name = boroughIdToName.get(poly.getId());
         System.out.println(name);
@@ -94,8 +78,9 @@ public class MapViewController {
         Polygon poly = (Polygon) event.getSource();
         poly.setStrokeWidth(1);
         poly.setStroke(hoveredPolygonDefaultBorderColor);
-        setLabelText(selectedBoroughLabel, null, 0);
 
+        // remove text if no borough is selected
+        setLabelText(selectedBoroughLabel, null, 0);
     }
 
     @FXML
@@ -107,6 +92,12 @@ public class MapViewController {
 
     }
 
+    /**
+     * 
+     * @param label label component to be customised
+     * @param text text to be displayed on the label
+     * @param fontSize size of the text
+     */
     private void setLabelText(Label label, String text, double fontSize){
         label.setText(text);
         label.setAlignment(Pos.CENTER);

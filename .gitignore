@@ -32,6 +32,7 @@ replay_pid*
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
+*.DS_Store
 
 *.py
 
