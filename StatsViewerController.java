@@ -6,14 +6,9 @@ import java.text.DateFormat;
 import java.time.LocalDate;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.AnchorPane;
 import java.util.ArrayList;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.Pane;
-import javafx.fxml.Initializable;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 
 /**
  * Controls logic of DataViewer
