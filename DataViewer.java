@@ -13,13 +13,10 @@ import java.net.URL;
  */
 public class DataViewer extends Application
 {
-    public static void main(String[] args){
-        launch(DataViewer.class);
-    }
 
     @Override
     public void start(Stage stage) throws Exception {
-        URL url = getClass().getResource("MapWindow.fxml");
+        URL url = getClass().getResource("MainWindow.fxml");
         
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);

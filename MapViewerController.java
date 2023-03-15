@@ -88,7 +88,7 @@ public class MapViewerController {
         setLabelText(title, "Current Borough Selected:", 15.0);
         // load the mapping of polygon IDs to their respective borough names
         JsonReader jsonReader = new JsonReader();
-        boroughIdToName = jsonReader.readJson("boroughIds.json");
+        boroughIdToName = jsonReader.readJson("boroughIDs.json");
 
     }
 
