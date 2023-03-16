@@ -1,5 +1,6 @@
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
+import javafx.scene.Parent;
 import javafx.scene.control.DatePicker;
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
@@ -33,9 +34,9 @@ public class StatsViewerController extends Controller
     
     @FXML
     private Button rightButton;
-    
+
     @FXML
-    private BorderPane statsBP;
+    private BorderPane statsPane;
     
     @FXML
     /**
@@ -93,16 +94,30 @@ public class StatsViewerController extends Controller
         statsPanes.add(fourthPane);
         firstPane.setVisible(true);
     }
-    
+
+    /**
+     *
+     * @param from
+     * @param to
+     */
+    protected void dateChanged(LocalDate from, LocalDate to) {;}
+
+    /**
+     * @return the main centre panel
+     */
+    protected Parent getView() {
+        return statsPane;
+    }
+
     @FXML
     private void dateChanged(ActionEvent event) {
         rightButton.setDisable(true);
-    
+
         DateFormat dateFormat = new SimpleDateFormat("yy-mm-dd");
-        
+
         LocalDate fromDate = fromDatePicker.getValue();
         LocalDate toDate = toDatePicker.getValue();
-        
+
         if (fromDate != null && toDate != null) {
             if (fromDate.isBefore(toDate)) {
                 rightButton.setDisable(false);

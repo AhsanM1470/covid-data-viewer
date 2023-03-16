@@ -52,7 +52,7 @@
       </VBox>
    </bottom>
    <center>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <BorderPane fx:id="statsPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <left>
             <Button mnemonicParsing="false" onAction="#backwardButton" prefHeight="395.0" prefWidth="127.0" text="&lt;" BorderPane.alignment="CENTER">
                <font>
