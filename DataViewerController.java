@@ -24,19 +24,13 @@ import javafx.scene.layout.BorderPane;
  * @author Ishab Ahmed
  * @version 2023.03.13
  */
-public class DataViewerController implements Initializable
+public class DataViewerController extends Controller
 {
     @FXML
     private BorderPane mainLayout;
     
     @FXML
     private StackPane mainPanel;
-    
-    @FXML
-    private DatePicker fromDatePicker;
-    
-    @FXML
-    private DatePicker toDatePicker;
     
     @FXML
     private Button leftButton;
@@ -58,11 +52,12 @@ public class DataViewerController implements Initializable
     
     private ArrayList<CovidData> data;
     
-    private Parent[] panels;
-    private int panelIdx;
+    private Controller[] controllers;
+    private int controllerIndex;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    public void initialize() {
+        
         CovidDataLoader dataLoader = new CovidDataLoader();
         data = dataLoader.load();
 
@@ -87,53 +82,90 @@ public class DataViewerController implements Initializable
         dataTable.getColumns().addAll(dateCol, boroughCol, newCasesCol, totalCasesCol, newDeathsCol, totalDeathsCol);
         
         try {
-            panels = new Parent[2];
-            Parent[] panels = loadPanels();
+            controllers = new Controller[2];
+            loadControllers();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
         
-        panelIdx = 0;
+        controllerIndex = 0;
     }
     
-    public Parent[] loadPanels() throws Exception {
-        //URL url = getClass().getResource("MapView.fxml");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(
+    /**
+     * Loads the controllers of all of the panels.
+     */
+    public void loadControllers() throws Exception {
+        
+        FXMLLoader mapLoader = new FXMLLoader(getClass().getResource(
                "MapWindow.fxml"));
-        Parent mapPanel = (Parent) loader.load();
-        MapViewerController controller = loader.getController();
+        mapLoader.load();
+        Controller mapController = mapLoader.getController();
         
-        panels[0] = mainPanel;
-        panels[1] = controller.getMapPane();
-        
-        return panels;
+        controllers[0] = this;
+        controllers[1] = mapController;
     }
     
+    /**
+     * When the date is changed, check if the date range is valid and display the data if so.
+     */
     @FXML
     private void dateChanged(ActionEvent event) {
-        setWelcomeState(true);
-        
         LocalDate fromDate = fromDatePicker.getValue();
         LocalDate toDate = toDatePicker.getValue();
         
-        if (validDateRangeChosen(fromDate, toDate)) {
-            populateTable(fromDate, toDate);
+        // sets the pickers of the current panel to the dates chosen
+        controllers[controllerIndex].setDateRange(fromDate, toDate);
+        
+        if (isDateRangeValid(fromDate, toDate) == true) {
+            if (isDataInDateRange(fromDate, toDate) == true) {
+                populateTable(fromDate, toDate);
+                dataTableInfoLabel.setText("Showing data from " + fromDate + " to " + toDate + ".");
+            } else {
+                dataTableInfoLabel.setText("There's no available data for the selected date range.");
+            }
         } else {
-            dataTableInfoLabel.setText("The 'from' date is on or after the 'to' date.");
-            setWelcomeState(false);
+            dataTableInfoLabel.setText("The 'from' date is before the 'to' date.");
         }
+        
+        setWelcomeState(false);
     }
     
-    private boolean validDateRangeChosen(LocalDate from, LocalDate to) {
+    /**
+     * @return whether the 'from' date if before the 'to' date 
+     */
+    private boolean isDateRangeValid(LocalDate from, LocalDate to) {
+        boolean validRange = false;
+        
         if (from != null && to != null) {
             if (from.isBefore(to)) {
-                return true;
+                validRange = true;
             }
         }
-        return false;
+        
+        return validRange;
     }
     
+    /**
+     * @return whether data is in the range selected
+     */
+    private boolean isDataInDateRange(LocalDate from, LocalDate to) {
+        boolean dataInRange = false;
+        
+        for (CovidData row : data) {
+            LocalDate date = LocalDate.parse(row.getDate());
+            if (date.isAfter(from) && date.isBefore(to)) {
+                dataInRange = true;
+                break;
+            } 
+        }
+        
+        return dataInRange;
+    }
+    
+    /**
+     * Toggles the Welcome components.
+     */
     private void setWelcomeState(boolean state) {
         leftButton.setDisable(state);
         rightButton.setDisable(state);
@@ -141,6 +173,9 @@ public class DataViewerController implements Initializable
         tablePane.setVisible(!state);
     }
     
+    /**
+     * Populates the table with the data in the range selected.
+     */
     private void populateTable(LocalDate from, LocalDate to) {
         dataTable.getItems().clear();
         
@@ -149,34 +184,67 @@ public class DataViewerController implements Initializable
             if (date.isAfter(from) && date.isBefore(to))
                 dataTable.getItems().add(d);
         }
+    }
+    
+    /**
+     * Changes the center panel to the next.
+     */
+    @FXML
+    private void nextPanel(ActionEvent event) {
+        controllerIndex++;
+        controllerIndex = controllerIndex % controllers.length;
         
-        checkNoDataInRange(from, to);
-        setWelcomeState(false);
+        // sets the date picker of the next panel to the dates chosen on the current panel
+        controllers[controllerIndex].setDateRange(getFromDate(), getToDate());
+        
+        // switches the center of the BorderPane to the next panel
+        mainLayout.setCenter(controllers[controllerIndex].getView());
     }
     
-    private void checkNoDataInRange(LocalDate from, LocalDate to) {
-        if (dataTable.getItems().isEmpty()) {
-            dataTableInfoLabel.setText("There's no available data for the selected date range.");
-        } else {
-            dataTableInfoLabel.setText("Showing data from " + from + " to " + to + ".");
+    /**
+     * Changes the center panel to the previous.
+     */
+    @FXML
+    private void previousPanel(ActionEvent event) {
+        controllerIndex--;
+        if (controllerIndex < 0) {
+            controllerIndex = controllers.length - 1;
         }
+        
+        // sets the date picker of the previous panel to the dates chosen on the current panel
+        controllers[controllerIndex].setDateRange(getFromDate(), getToDate());
+        
+        // switches the center of the BorderPane to the previous panel
+        mainLayout.setCenter(controllers[controllerIndex].getView());
     }
     
-    @FXML
-    void nextPanel(ActionEvent event) {
-        panelIdx += 1;
-        panelIdx = panelIdx % panels.length;
-        mainLayout.setCenter(panels[panelIdx]);
-        System.out.println(panelIdx);
+    /**
+     * @return the value in the fromDatePicker
+     */
+    public LocalDate getFromDate() {
+        return fromDatePicker.getValue();
     }
-
-    @FXML
-    void previousPanel(ActionEvent event) {
-        panelIdx -= 1;
-        if (panelIdx < 0) {
-            panelIdx = panels.length - 1;
-        }
-        mainLayout.setCenter(panels[panelIdx]);
-        System.out.println(panelIdx);
+    
+    /**
+     * @return the value in the toDatePicker
+     */
+    public LocalDate getToDate() {
+        return toDatePicker.getValue();
+    }
+    
+    /**
+     * @return an array of all of the CovidData
+     */
+    public ArrayList<CovidData> getData() {
+        return data;
+    }
+    
+    protected void dateChanged(LocalDate from, LocalDate to) {;}
+    
+    /**
+     * @return the main centre panel
+     */
+    protected Parent getView() {
+        return mainPanel;
     }
 }

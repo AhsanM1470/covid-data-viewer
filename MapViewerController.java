@@ -23,7 +23,7 @@ import org.apache.commons.lang3.ObjectUtils.Null;
 
 import javafx.scene.Parent;
 
-public class MapViewerController {
+public class MapViewerController extends Controller {
 
     Paint hoveredPolygonDefaultBorderColor;
     Double hoveredPolygonDefaultStroke;
@@ -37,11 +37,11 @@ public class MapViewerController {
     @FXML
     private Label selectedBoroughLabel;
 
-    @FXML
-    private DatePicker toDatePicker;
+    // @FXML
+    // private DatePicker toDatePicker;
 
-    @FXML
-    private DatePicker fromDatePicker;
+    // @FXML
+    // private DatePicker fromDatePicker;
 
     @FXML
     private Polygon brentPolygon, bexleyPolygon, bromleyPolygon, camdenPolygon, cityPolygon, croydonPolygon,
@@ -65,6 +65,7 @@ public class MapViewerController {
     private ArrayList<CovidData> allData;
 
     private ArrayList<CovidData> dateRangeData;
+    
 
     /**
      * collects dates form date picker, checks if its valid, and if so, loads the
@@ -81,6 +82,18 @@ public class MapViewerController {
         if (validDateRangeChosen(fromDate, toDate)) {
             // filter all the data to select data from our selected range
             loadDateRangeData(fromDate, toDate);
+            // get the deaths for each borough to colour them
+            loadBoroughDeaths();
+
+            assignBoroughsColor();
+        }
+    }
+    
+    protected void dateChanged(LocalDate from, LocalDate to) {
+
+        if (validDateRangeChosen(from, to)) {
+            // filter all the data to select data from our selected range
+            loadDateRangeData(from, to);
             // get the deaths for each borough to colour them
             loadBoroughDeaths();
 
@@ -237,7 +250,6 @@ public class MapViewerController {
 
         System.out.println(name + " total deaths: " + boroughsTotalDeaths.get(name) + " | highest death count: "
                 + highestDeathCount);
-
     }
 
     /**
@@ -290,22 +302,7 @@ public class MapViewerController {
         label.setFont(new Font(fontSize));
     }
 
-    public Parent getMapPane() {
+    protected Parent getView() {
         return mapPane;
     }
-
-    /**
-     * Get the dates selected from DataViewerController
-     */
-    // public void getDate(){
-    // // LocalDate fromDate = fromDatePicker.getValue();
-    // // LocalDate toDate = toDatePicker.getValue();
-    // FXMLLoader loader = new FXMLLoader(getClass().getResource(
-    // "MainWindow.fxml"));
-
-    // MapViewerController controller = loader.getController();
-    // LocalDate fromDate = fromDatePicker.getValue();
-    // LocalDate toDate = toDatePicker.getValue();
-    // }
-
 }
