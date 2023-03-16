@@ -120,7 +120,7 @@ public class DataViewerController implements Initializable
         if (validDateRangeChosen(fromDate, toDate)) {
             populateTable(fromDate, toDate);
         } else {
-            dataTableInfoLabel.setText("The 'from' date is before or after the 'to' date.");
+            dataTableInfoLabel.setText("The 'from' date is after the 'to' date.");
             setWelcomeState(false);
         }
     }
