@@ -104,7 +104,7 @@
                   <Polygon fx:id="croydonPolygon" fill="#ababab" layoutX="500.0" layoutY="456.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-48.32838821411133, -15.505212783813477, -69.86204528808594, 12.755337715148926, -44.059814453125, 46.3702392578125, 3.934295654296875, 0.978240966796875, 16.663665771484375, -1.8212890625, -27.91314697265625, -102.40216064453125, -57.79998779296875, -81.39999389648438" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
                   <Polygon fx:id="suttonPolygon" fill="#ababab" layoutX="425.0" layoutY="449.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-36.43841552734375, -5.188690185546875, -5.791595458984375, 19.3865966796875, 14.4468994140625, -7.790771484375, 7.600006103515625, -50.399993896484375, -57.399993896484375, -50.399993896484375, -62.748443603515625, -38.72674560546875, -45.97943115234375, -1.71923828125" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
                   
-                  <Label fx:id="hillingdonLabel" alignment="CENTER" cacheShape="false" centerShape="false" disable="true" focusTraversable="false" layoutX="171.0" layoutY="213.0" scaleShape="false" text="Hillingdon">
+                  <Label fx:id="hillingdonLabel" alignment="CENTER" cacheShape="false" centerShape="false" disable="true" focusTraversable="false" layoutX="171.0" layoutY="213.0" scaleShape="false" style="-fx-opacity: 1;" text="Hillingdon">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
@@ -132,7 +132,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label alignment="CENTER" disable="true" layoutX="248.0" layoutY="116.0" text="Harrow">
+                  <Label alignment="CENTER" disable="true" layoutX="248.0" layoutY="116.0" style="-fx-opacity: 1;" text="Harrow">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -154,7 +154,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label alignment="CENTER" disable="true" layoutX="358.0" layoutY="100.0" text="Barnet">
+                  <Label alignment="CENTER" disable="true" layoutX="358.0" layoutY="100.0" style="-fx-opacity: 1;" text="Barnet">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -176,7 +176,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label alignment="CENTER" disable="true" layoutX="448.0" layoutY="50.0" text="Enfield">
+                  <Label alignment="CENTER" disable="true" layoutX="448.0" layoutY="50.0" style="-fx-opacity: 1;" text="Enfield">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -198,7 +198,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label alignment="CENTER" disable="true" layoutX="498.0" layoutY="121.0" prefHeight="41.0" prefWidth="50.0" text="Waltham Forest" wrapText="true">
+                  <Label alignment="CENTER" disable="true" layoutX="498.0" layoutY="121.0" prefHeight="41.0" prefWidth="50.0" style="-fx-opacity: 1;" text="Waltham Forest" wrapText="true">
                      <font>
                         <Font size="11.5" />
                      </font>
@@ -224,7 +224,7 @@
                         </RadialGradient>
                      </textFill>
                   </Label>
-                  <Label alignment="CENTER" disable="true" layoutX="559.0" layoutY="131.0" text="Redbridge">
+                  <Label alignment="CENTER" disable="true" layoutX="559.0" layoutY="131.0" style="-fx-opacity: 1;" text="Redbridge">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -246,7 +246,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label alignment="CENTER" disable="true" layoutX="677.0" layoutY="140.0" text="Havering">
+                  <Label alignment="CENTER" disable="true" layoutX="677.0" layoutY="140.0" style="-fx-opacity: 1;" text="Havering">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -268,7 +268,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label alignment="CENTER" disable="true" layoutX="606.0" layoutY="164.0" prefHeight="60.0" prefWidth="62.0" text="Barking &amp; Dagenham" wrapText="true">
+                  <Label alignment="CENTER" disable="true" layoutX="606.0" layoutY="164.0" prefHeight="60.0" prefWidth="62.0" style="-fx-opacity: 1;" text="Barking &amp; Dagenham" wrapText="true">
                      <font>
                         <Font size="11.0" />
                      </font>
@@ -294,7 +294,7 @@
                         </RadialGradient>
                      </textFill>
                   </Label>
-                  <Label alignment="CENTER" disable="true" layoutX="535.0" layoutY="196.0" text="Newham">
+                  <Label alignment="CENTER" disable="true" layoutX="535.0" layoutY="196.0" style="-fx-opacity: 1;" text="Newham">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -316,7 +316,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label alignment="CENTER" disable="true" layoutX="466.0" layoutY="168.0" rotate="38.7" snapToPixel="false" text="Hackney">
+                  <Label alignment="CENTER" disable="true" layoutX="466.0" layoutY="168.0" rotate="38.7" snapToPixel="false" style="-fx-opacity: 1;" text="Hackney">
                      <font>
                         <Font name="System Bold" size="11.3" />
                      </font>
@@ -342,7 +342,7 @@
                         </RadialGradient>
                      </textFill>
                   </Label>
-                  <Label alignment="CENTER" disable="true" layoutX="433.0" layoutY="119.0" text="Haringey">
+                  <Label alignment="CENTER" disable="true" layoutX="433.0" layoutY="119.0" style="-fx-opacity: 1;" text="Haringey">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -364,7 +364,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label alignment="CENTER" disable="true" layoutX="430.0" layoutY="174.0" rotate="63.4" text="Islington">
+                  <Label alignment="CENTER" disable="true" layoutX="430.0" layoutY="174.0" rotate="63.4" style="-fx-opacity: 1;" text="Islington">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -386,7 +386,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label alignment="CENTER" disable="true" layoutX="387.0" layoutY="181.0" text="Camden">
+                  <Label alignment="CENTER" disable="true" layoutX="387.0" layoutY="181.0" style="-fx-opacity: 1;" text="Camden">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -408,7 +408,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label alignment="CENTER" disable="true" layoutX="310.0" layoutY="167.0" prefHeight="21.0" prefWidth="40.0" text="Brent">
+                  <Label alignment="CENTER" disable="true" layoutX="310.0" layoutY="167.0" prefHeight="21.0" prefWidth="40.0" style="-fx-opacity: 1;" text="Brent">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -430,7 +430,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label disable="true" layoutX="263.0" layoutY="210.0" text="Ealing">
+                  <Label disable="true" layoutX="263.0" layoutY="210.0" style="-fx-opacity: 1;" text="Ealing">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -452,7 +452,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label disable="true" layoutX="212.0" layoutY="285.0" text="Hounslow">
+                  <Label disable="true" layoutX="212.0" layoutY="285.0" style="-fx-opacity: 1;" text="Hounslow">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -474,7 +474,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label disable="true" layoutX="352.0" layoutY="301.0" text="Wandswroth">
+                  <Label disable="true" layoutX="352.0" layoutY="301.0" style="-fx-opacity: 1;" text="Wandswroth">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -496,7 +496,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label disable="true" layoutX="312.0" layoutY="350.0" prefHeight="62.0" prefWidth="52.0" rotate="21.2" text="Kingston Upon Thames" wrapText="true">
+                  <Label disable="true" layoutX="312.0" layoutY="350.0" prefHeight="62.0" prefWidth="52.0" rotate="21.2" style="-fx-opacity: 1;" text="Kingston Upon Thames" wrapText="true">
                      <font>
                         <Font size="10.0" />
                      </font>
@@ -522,7 +522,7 @@
                         </RadialGradient>
                      </textFill>
                   </Label>
-                  <Label disable="true" layoutX="371.0" layoutY="350.0" text="Merton">
+                  <Label disable="true" layoutX="371.0" layoutY="350.0" style="-fx-opacity: 1;" text="Merton">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -544,7 +544,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label disable="true" layoutX="383.0" layoutY="416.0" text="Sutton">
+                  <Label disable="true" layoutX="383.0" layoutY="416.0" style="-fx-opacity: 1;" text="Sutton">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -566,7 +566,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label disable="true" layoutX="451.0" layoutY="416.0" text="Croydon">
+                  <Label disable="true" layoutX="451.0" layoutY="416.0" style="-fx-opacity: 1;" text="Croydon">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -588,7 +588,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label disable="true" layoutX="545.0" layoutY="389.0" text="Bromley">
+                  <Label disable="true" layoutX="545.0" layoutY="389.0" style="-fx-opacity: 1;" text="Bromley">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -610,7 +610,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label disable="true" layoutX="393.0" layoutY="222.0" rotate="42.3" text="Westminster">
+                  <Label disable="true" layoutX="393.0" layoutY="222.0" rotate="42.3" style="-fx-opacity: 1;" text="Westminster">
                      <font>
                         <Font size="9.0" />
                      </font>
@@ -636,7 +636,7 @@
                         </RadialGradient>
                      </textFill>
                   </Label>
-                  <Label disable="true" focusTraversable="false" layoutX="370.0" layoutY="239.0" prefHeight="26.0" prefWidth="68.0" rotate="47.1" text="Kensington &amp; Chelsea" wrapText="true">
+                  <Label disable="true" focusTraversable="false" layoutX="370.0" layoutY="239.0" prefHeight="26.0" prefWidth="68.0" rotate="47.1" style="-fx-opacity: 1;" text="Kensington &amp; Chelsea" wrapText="true">
                      <font>
                         <Font size="7.5" />
                      </font>
@@ -662,7 +662,7 @@
                         </RadialGradient>
                      </textFill>
                   </Label>
-                  <Label disable="true" layoutX="338.0" layoutY="237.0" prefHeight="13.0" prefWidth="62.0" rotate="63.4" text="Hammersmith &amp;">
+                  <Label disable="true" layoutX="338.0" layoutY="237.0" prefHeight="13.0" prefWidth="62.0" rotate="63.4" style="-fx-opacity: 1;" text="Hammersmith &amp;">
                      <font>
                         <Font size="8.0" />
                      </font>
@@ -688,7 +688,7 @@
                         </RadialGradient>
                      </textFill>
                   </Label>
-                  <Label disable="true" layoutX="429.0" layoutY="308.0" rotate="49.8" text="Lambeth">
+                  <Label disable="true" layoutX="429.0" layoutY="308.0" rotate="49.8" style="-fx-opacity: 1;" text="Lambeth">
                      <font>
                         <Font size="10.5" />
                      </font>
@@ -714,7 +714,7 @@
                         </RadialGradient>
                      </textFill>
                   </Label>
-                  <Label disable="true" layoutX="460.0" layoutY="279.0" rotate="55.0" text="Southwark">
+                  <Label disable="true" layoutX="460.0" layoutY="279.0" rotate="55.0" style="-fx-opacity: 1;" text="Southwark">
                      <font>
                         <Font size="10.0" />
                      </font>
@@ -740,7 +740,7 @@
                         </RadialGradient>
                      </textFill>
                   </Label>
-                  <Label disable="true" layoutX="502.0" layoutY="317.0" text="Lewisham">
+                  <Label disable="true" layoutX="502.0" layoutY="317.0" style="-fx-opacity: 1;" text="Lewisham">
                      <textFill>
                         <RadialGradient centerX="0.4224376731301939" centerY="0.5807600950118765" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -762,7 +762,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label disable="true" layoutX="550.0" layoutY="269.0" text="Greenwich">
+                  <Label disable="true" layoutX="550.0" layoutY="269.0" style="-fx-opacity: 1;" text="Greenwich">
                      <textFill>
                         <RadialGradient centerX="1.0" centerY="1.0" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -784,7 +784,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label disable="true" layoutX="628.0" layoutY="301.0" text="Bexley">
+                  <Label disable="true" layoutX="628.0" layoutY="301.0" style="-fx-opacity: 1;" text="Bexley">
                      <textFill>
                         <RadialGradient centerX="1.0" centerY="1.0" cycleMethod="REPEAT" focusAngle="-59.47" focusDistance="1.0" radius="1.0">
                            <stops>
@@ -806,7 +806,7 @@
                            </stops>
                         </RadialGradient>
                      </textFill></Label>
-                  <Label disable="true" layoutX="490.0" layoutY="199.0" prefHeight="37.0" prefWidth="50.0" text="Tower Hamlets" wrapText="true">
+                  <Label disable="true" layoutX="490.0" layoutY="199.0" prefHeight="37.0" prefWidth="50.0" style="-fx-opacity: 1;" text="Tower Hamlets" wrapText="true">
                      <font>
                         <Font size="10.0" />
                      </font>
@@ -832,7 +832,7 @@
                         </RadialGradient>
                      </textFill>
                   </Label>
-                  <Label disable="true" layoutX="348.0" layoutY="243.0" rotate="61.2" text="Fullham">
+                  <Label disable="true" layoutX="348.0" layoutY="243.0" rotate="61.2" style="-fx-opacity: 1;" text="Fullham">
                      <font>
                         <Font size="8.0" />
                      </font>
@@ -858,7 +858,7 @@
                         </RadialGradient>
                      </textFill>
                   </Label>
-                  <Label disable="true" layoutX="459.0" layoutY="220.0" text="City">
+                  <Label disable="true" layoutX="459.0" layoutY="220.0" style="-fx-opacity: 1;" text="City">
                      <font>
                         <Font size="7.0" />
                      </font>
@@ -888,7 +888,7 @@
                   <Line endX="-17.70001220703125" endY="23.100006103515625" layoutX="324.0" layoutY="313.0" startX="-26.846771240234375" startY="-21.404266357421875" strokeWidth="2.0" />
                   <Line endX="5.600006103515625" endY="3.0" layoutX="303.0" layoutY="338.0" startX="2.600006103515625" startY="-3.0" strokeWidth="2.0" />
                   <Polygon fx:id="thamesPolygon" fill="#59bce3" layoutX="309.0" layoutY="389.0" points="-31.36505126953125, -23.46124267578125, -16.113296508789062, -23.46124267578125, 11.5047607421875, -2.8131103515625, 17.20001220703125, -5.399993896484375, 21.0, -51.20001220703125, 18.67413330078125, -55.9881591796875, 10.26812744140625, -98.85800170898438, 28.600006103515625, -110.29998779296875, 49.20001220703125, -105.0, 59.92012023925781, -115.50000762939453, 65.96180725097656, -111.70001220703125, 68.79998779296875, -98.85800170898438, 98.71953582763672, -90.9757080078125, 104.60000610351562, -105.0, 108.20001220703125, -106.20001220703125, 123.0, -109.60000610351562, 134.20001220703125, -111.70001220703125, 146.0, -136.5, 187.20001220703125, -138.29998779296875, 203.16941833496094, -115.50000762939453, 223.29708862304688, -118.89999389648438, 221.22879028320312, -132.97467041015625, 239.62954711914062, -128.11907958984375, 270.780517578125, -124.95968627929688, 285.53704833984375, -144.5, 305.40081787109375, -148.42431640625, 320.8504638671875, -144.5, 336.6759033203125, -121.89999389648438, 362.78521728515625, -123.29998779296875, 365.8751220703125, -128.11907958984375, 339.3900146484375, -128.11907958984375, 320.8504943847656, -152.5, 305.40081787109375, -155.6999969482422, 283.5, -152.5, 266.99749755859375, -132.97467041015625, 239.62954711914062, -136.5, 223.29708862304688, -140.10000610351562, 215.05055236816406, -138.29998779296875, 215.05055236816406, -123.29998016357422, 206.20001220703125, -121.89999389648438, 192.39999389648438, -140.10000610351562, 188.79998779296875, -144.5, 142.39999389648438, -144.5, 130.0, -117.5, 100.0, -111.70001220703125, 94.20001220703125, -97.29998779296875, 76.04900360107422, -102.54248046875, 68.79999542236328, -115.50000762939453, 58.600006103515625, -123.29998779296875, 47.20001220703125, -110.29998779296875, 27.0, -115.5, 1.3711395263671875, -100.63924407958984, 7.400006294250488, -52.824886322021484, 10.268128395080566, -47.344940185546875, 4.477271556854248, -16.292003631591797, -12.0, -29.20001220703125, -35.100006103515625, -34.29998779296875" scaleX="1.15" scaleY="1.15" stroke="#ffffff00" strokeType="INSIDE" />
-                  <Label disable="true" layoutX="248.0" layoutY="330.0" rotate="-29.2" text="Richmond">
+                  <Label disable="true" layoutX="248.0" layoutY="330.0" rotate="-29.2" style="-fx-opacity: 1;" text="Richmond">
                      <font>
                         <Font size="10.0" />
                      </font>
@@ -914,7 +914,7 @@
                         </RadialGradient>
                      </textFill>
                   </Label>
-                  <Label disable="true" layoutX="265.0" layoutY="338.0" rotate="-32.3" text="Upon">
+                  <Label disable="true" layoutX="265.0" layoutY="338.0" rotate="-32.3" style="-fx-opacity: 1;" text="Upon">
                      <font>
                         <Font size="10.0" />
                      </font>
@@ -940,7 +940,7 @@
                         </RadialGradient>
                      </textFill>
                   </Label>
-                  <Label disable="true" layoutX="305.0" layoutY="312.0" rotate="-27.3" text="Thames">
+                  <Label disable="true" layoutX="305.0" layoutY="312.0" rotate="-27.3" style="-fx-opacity: 1;" text="Thames">
                      <font>
                         <Font size="10.0" />
                      </font>

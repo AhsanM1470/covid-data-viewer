@@ -50,7 +50,7 @@ public class DataViewerController extends Controller
     @FXML
     private Label dataTableInfoLabel;
     
-    private ArrayList<CovidData> data;
+    // private ArrayList<CovidData> data;
     
     private Controller[] controllers;
     private int controllerIndex;
@@ -58,8 +58,8 @@ public class DataViewerController extends Controller
     @FXML
     public void initialize() {
         
-        CovidDataLoader dataLoader = new CovidDataLoader();
-        data = dataLoader.load();
+        // CovidDataLoader dataLoader = new CovidDataLoader();
+        // data = dataLoader.load();
 
         TableColumn<CovidData,String> dateCol = new TableColumn<CovidData,String>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<CovidData,String>("date"));
