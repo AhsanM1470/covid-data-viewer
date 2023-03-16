@@ -87,7 +87,7 @@ public class DataViewerController implements Initializable
         dataTable.getColumns().addAll(dateCol, boroughCol, newCasesCol, totalCasesCol, newDeathsCol, totalDeathsCol);
         
         try {
-            panels = new Parent[2];
+            panels = new Parent[3];
             Parent[] panels = loadPanels();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -99,19 +99,30 @@ public class DataViewerController implements Initializable
     
     public Parent[] loadPanels() throws Exception {
         //URL url = getClass().getResource("MapView.fxml");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(
-               "MapWindow.fxml"));
-        Parent mapPanel = (Parent) loader.load();
-        MapViewerController controller = loader.getController();
+        FXMLLoader mapLoader = new FXMLLoader(getClass().getResource("MapWindow.fxml"));
+        Parent mapPanel = (Parent) mapLoader.load();
+        MapViewerController mapController = mapLoader.getController();
+        
+        FXMLLoader graphLoader = new FXMLLoader(getClass().getResource("GraphWindow.fxml"));
+        Parent graphPanel = (Parent) graphLoader.load();
+        GraphViewerController graphController = graphLoader.getController();
+        graphController.setDataController(this);
+        graphController.setData(data);
         
         panels[0] = mainPanel;
-        panels[1] = controller.getMapPane();
+        panels[1] = mapController.getMapPane();
+        panels[2] = graphController.getGraphPane();
+        
+        System.out.println(panels[0]);
+        System.out.println(panels[1]);
+        System.out.println(panels[2]);
         
         return panels;
     }
     
     @FXML
     private void dateChanged(ActionEvent event) {
+        System.out.println("data");
         setWelcomeState(true);
         
         LocalDate fromDate = fromDatePicker.getValue();
@@ -146,7 +157,7 @@ public class DataViewerController implements Initializable
         
         for (CovidData d : data) {
             LocalDate date = LocalDate.parse(d.getDate());
-            if (date.isAfter(from) && date.isBefore(to))
+            if (date.isAfter(from.minusDays(1)) && date.isBefore(to.plusDays(1)))
                 dataTable.getItems().add(d);
         }
         
@@ -167,7 +178,8 @@ public class DataViewerController implements Initializable
         panelIdx += 1;
         panelIdx = panelIdx % panels.length;
         mainLayout.setCenter(panels[panelIdx]);
-        System.out.println(panelIdx);
+        //System.out.println(panels[panelIdx]);
+        //System.out.println(panelIdx);
     }
 
     @FXML
@@ -177,6 +189,19 @@ public class DataViewerController implements Initializable
             panelIdx = panels.length - 1;
         }
         mainLayout.setCenter(panels[panelIdx]);
-        System.out.println(panelIdx);
+        //System.out.println(panels[panelIdx]);
+        //System.out.println(panelIdx);
+    }
+    
+    public LocalDate getFromDate() {
+        return fromDatePicker.getValue();
+    }
+    
+    public LocalDate getToDate() {
+        return toDatePicker.getValue();
+    }
+    
+    public ArrayList<CovidData> getData(){
+        return data;
     }
 }

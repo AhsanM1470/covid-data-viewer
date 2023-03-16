@@ -14,7 +14,6 @@ import java.util.HashMap;
 import javafx.scene.Parent;
 
 public class MapViewerController {
-
     Paint hoveredPolygonDefaultBorderColor;
     Double hoveredPolygonDefaultStroke;
 
@@ -41,17 +40,15 @@ public class MapViewerController {
     @FXML
     private Label title, hillingdonLabel;
 
-
     private HashMap<String, String> boroughIdToName;
     // private HashMap<String,Boolean> boroughVisited = new HashMap<>();
-
     @FXML
-    void dateChanged(ActionEvent event) {
-
+    public void dateChanged(ActionEvent event) {
+        System.out.println("map");
     }
 
     @FXML
-    void polygonClicked(MouseEvent event) {
+    public void polygonClicked(MouseEvent event) {
         Polygon poly = (Polygon) event.getSource();
         String name = boroughIdToName.get(poly.getId());
         System.out.println(name);
@@ -59,7 +56,7 @@ public class MapViewerController {
     }
 
     @FXML
-    void polygonHovered(MouseEvent event) {
+    public void polygonHovered(MouseEvent event) {
         Polygon poly = (Polygon) event.getSource();
 
         // change label text
@@ -75,7 +72,7 @@ public class MapViewerController {
     }
 
     @FXML
-    void polygonLeft(MouseEvent event) {
+    public void polygonLeft(MouseEvent event) {
         Polygon poly = (Polygon) event.getSource();
         poly.setStrokeWidth(1);
         poly.setStroke(hoveredPolygonDefaultBorderColor);
@@ -85,7 +82,7 @@ public class MapViewerController {
     }
 
     @FXML
-    void initialize() {
+    public void initialize() {
         setLabelText(title, "Current Borough Selected:", 15.0);
         // load the mapping of polygon IDs to their respective borough names
         JsonReader jsonReader = new JsonReader();
@@ -110,4 +107,3 @@ public class MapViewerController {
     }
 
 }
-

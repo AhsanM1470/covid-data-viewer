@@ -40,12 +40,5 @@ public class StatsViewer extends Application
         stage.setTitle("Covid Data");
         stage.setScene(scene);
         stage.show();
-        
-        
-        
     }
-    
-    
-    
-
 }
