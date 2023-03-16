@@ -24,7 +24,7 @@ import javafx.scene.layout.BorderPane;
  * @author Ishab Ahmed
  * @version 2023.03.13
  */
-public class DataViewerController implements Initializable
+public class DataViewerController extends Controller
 {
     @FXML
     private BorderPane mainLayout;
@@ -32,11 +32,11 @@ public class DataViewerController implements Initializable
     @FXML
     private StackPane mainPanel;
     
-    @FXML
-    private DatePicker fromDatePicker;
+    // @FXML
+    // private DatePicker fromDatePicker;
     
-    @FXML
-    private DatePicker toDatePicker;
+    // @FXML
+    // private DatePicker toDatePicker;
     
     @FXML
     private Button leftButton;
@@ -58,11 +58,12 @@ public class DataViewerController implements Initializable
     
     private ArrayList<CovidData> data;
     
-    private Parent[] panels;
-    private int panelIdx;
+    private Controller[] controllers;
+    private int controllerIndex;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    public void initialize() {
+        
         CovidDataLoader dataLoader = new CovidDataLoader();
         data = dataLoader.load();
 
@@ -87,27 +88,25 @@ public class DataViewerController implements Initializable
         dataTable.getColumns().addAll(dateCol, boroughCol, newCasesCol, totalCasesCol, newDeathsCol, totalDeathsCol);
         
         try {
-            panels = new Parent[2];
-            Parent[] panels = loadPanels();
+            controllers = new Controller[2];
+            loadControllers();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
         
-        panelIdx = 0;
+        controllerIndex = 0;
     }
     
-    public Parent[] loadPanels() throws Exception {
-        //URL url = getClass().getResource("MapView.fxml");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(
+    public void loadControllers() throws Exception {
+        
+        FXMLLoader mapLoader = new FXMLLoader(getClass().getResource(
                "MapWindow.fxml"));
-        Parent mapPanel = (Parent) loader.load();
-        MapViewerController controller = loader.getController();
+        mapLoader.load();
+        Controller mapController = mapLoader.getController();
         
-        panels[0] = mainPanel;
-        panels[1] = controller.getMapPane();
-        
-        return panels;
+        controllers[0] = this;
+        controllers[1] = mapController;
     }
     
     @FXML
@@ -116,6 +115,8 @@ public class DataViewerController implements Initializable
         
         LocalDate fromDate = fromDatePicker.getValue();
         LocalDate toDate = toDatePicker.getValue();
+        
+        controllers[controllerIndex].setDateRange(fromDate, toDate);
         
         if (validDateRangeChosen(fromDate, toDate)) {
             populateTable(fromDate, toDate);
@@ -163,20 +164,40 @@ public class DataViewerController implements Initializable
     }
     
     @FXML
-    void nextPanel(ActionEvent event) {
-        panelIdx += 1;
-        panelIdx = panelIdx % panels.length;
-        mainLayout.setCenter(panels[panelIdx]);
-        System.out.println(panelIdx);
+    private void nextPanel(ActionEvent event) {
+        controllerIndex++;
+        controllerIndex = controllerIndex % controllers.length;
+        
+        controllers[controllerIndex].setDateRange(getFromDate(), getToDate());
+        mainLayout.setCenter(controllers[controllerIndex].getView());
     }
 
     @FXML
-    void previousPanel(ActionEvent event) {
-        panelIdx -= 1;
-        if (panelIdx < 0) {
-            panelIdx = panels.length - 1;
+    private void previousPanel(ActionEvent event) {
+        controllerIndex--;
+        if (controllerIndex < 0) {
+            controllerIndex = controllers.length - 1;
         }
-        mainLayout.setCenter(panels[panelIdx]);
-        System.out.println(panelIdx);
+        
+        controllers[controllerIndex].setDateRange(getFromDate(), getToDate());
+        mainLayout.setCenter(controllers[controllerIndex].getView());
+    }
+    
+    public LocalDate getFromDate() {
+        return fromDatePicker.getValue();
+    }
+    
+    public LocalDate getToDate() {
+        return toDatePicker.getValue();
+    }
+    
+    public ArrayList<CovidData> getData() {
+        return data;
+    }
+    
+    protected void dateChanged(LocalDate from, LocalDate to) {;}
+    
+    protected Parent getView() {
+        return mainPanel;
     }
 }
