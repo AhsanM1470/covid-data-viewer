@@ -98,6 +98,9 @@ public class DataViewerController extends Controller
         controllerIndex = 0;
     }
     
+    /**
+     * Loads the controllers of all of the panels.
+     */
     public void loadControllers() throws Exception {
         
         FXMLLoader mapLoader = new FXMLLoader(getClass().getResource(
@@ -109,6 +112,9 @@ public class DataViewerController extends Controller
         controllers[1] = mapController;
     }
     
+    /**
+     * When the date is changed, check if the date range is valid and display the data if so.
+     */
     @FXML
     private void dateChanged(ActionEvent event) {
         setWelcomeState(true);
@@ -116,8 +122,10 @@ public class DataViewerController extends Controller
         LocalDate fromDate = fromDatePicker.getValue();
         LocalDate toDate = toDatePicker.getValue();
         
+        // sets the pickers of the current panel to the dates chosen
         controllers[controllerIndex].setDateRange(fromDate, toDate);
         
+        // if date is valid, populate the table
         if (validDateRangeChosen(fromDate, toDate)) {
             populateTable(fromDate, toDate);
         } else {
@@ -126,7 +134,11 @@ public class DataViewerController extends Controller
         }
     }
     
+    /**
+     * @return whether the 'to' date is after the 'from' date.
+     */
     private boolean validDateRangeChosen(LocalDate from, LocalDate to) {
+        // if the dates are not null and 'from' is before 'to', then the date range is valid
         if (from != null && to != null) {
             if (from.isBefore(to)) {
                 return true;
@@ -135,6 +147,9 @@ public class DataViewerController extends Controller
         return false;
     }
     
+    /**
+     * Toggles the Welcome components.
+     */
     private void setWelcomeState(boolean state) {
         leftButton.setDisable(state);
         rightButton.setDisable(state);
@@ -142,6 +157,9 @@ public class DataViewerController extends Controller
         tablePane.setVisible(!state);
     }
     
+    /**
+     * Populates the table with the data in the range selected.
+     */
     private void populateTable(LocalDate from, LocalDate to) {
         dataTable.getItems().clear();
         
@@ -155,6 +173,9 @@ public class DataViewerController extends Controller
         setWelcomeState(false);
     }
     
+    /**
+     * Checks if there is data in the range selected.
+     */
     private void checkNoDataInRange(LocalDate from, LocalDate to) {
         if (dataTable.getItems().isEmpty()) {
             dataTableInfoLabel.setText("There's no available data for the selected date range.");
@@ -163,15 +184,24 @@ public class DataViewerController extends Controller
         }
     }
     
+    /**
+     * Changes the center panel to the next.
+     */
     @FXML
     private void nextPanel(ActionEvent event) {
         controllerIndex++;
         controllerIndex = controllerIndex % controllers.length;
         
+        // sets the date picker of the next panel to the dates chosen on the current panel
         controllers[controllerIndex].setDateRange(getFromDate(), getToDate());
+        
+        // switches the center of the BorderPane to the next panel
         mainLayout.setCenter(controllers[controllerIndex].getView());
     }
-
+    
+    /**
+     * Changes the center panel to the previous.
+     */
     @FXML
     private void previousPanel(ActionEvent event) {
         controllerIndex--;
@@ -179,24 +209,39 @@ public class DataViewerController extends Controller
             controllerIndex = controllers.length - 1;
         }
         
+        // sets the date picker of the previous panel to the dates chosen on the current panel
         controllers[controllerIndex].setDateRange(getFromDate(), getToDate());
+        
+        // switches the center of the BorderPane to the previous panel
         mainLayout.setCenter(controllers[controllerIndex].getView());
     }
     
+    /**
+     * @return the value in the fromDatePicker
+     */
     public LocalDate getFromDate() {
         return fromDatePicker.getValue();
     }
     
+    /**
+     * @return the value in the toDatePicker
+     */
     public LocalDate getToDate() {
         return toDatePicker.getValue();
     }
     
+    /**
+     * @return an array of all of the CovidData
+     */
     public ArrayList<CovidData> getData() {
         return data;
     }
     
     protected void dateChanged(LocalDate from, LocalDate to) {;}
     
+    /**
+     * @return the main centre panel
+     */
     protected Parent getView() {
         return mainPanel;
     }
