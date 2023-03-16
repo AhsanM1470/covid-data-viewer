@@ -62,7 +62,7 @@ public class MapViewerController extends Controller {
 
     private int highestDeathCount;
 
-    private ArrayList<CovidData> allData;
+    // private ArrayList<CovidData> data;
 
     private ArrayList<CovidData> dateRangeData;
     
@@ -103,17 +103,13 @@ public class MapViewerController extends Controller {
 
     /**
      * Creates an ArrayList containing data between date period selected filtered
-     * from the ArrayList 'allData' which was created upon initialisation
+     * from the ArrayList 'data' which was created upon initialisation
      * 
      * @param fromDate
      * @param toDate
      */
     public void loadDateRangeData(LocalDate fromDate, LocalDate toDate) {
-        dateRangeData = new ArrayList<CovidData>(allData.stream().filter((cd) -> {
-            LocalDate date = LocalDate.parse(cd.getDate());
-            return (date.isAfter(fromDate)) && (date.isBefore(toDate));
-        }).collect(Collectors.toList()));
-
+        dateRangeData = super.getDateRangeData(fromDate, toDate);
     }
 
     /**
@@ -122,7 +118,7 @@ public class MapViewerController extends Controller {
      */
     public void resetTotalBoroughDeaths() {
         boroughsTotalDeaths = new HashMap<>();
-        for (CovidData covidRecord : allData) {
+        for (CovidData covidRecord : data) {
             String recordBoroughName = covidRecord.getBorough();
             boroughsTotalDeaths.put(recordBoroughName, null);
         }
@@ -131,9 +127,6 @@ public class MapViewerController extends Controller {
     /**
      * Fills in the boroughsDeaths HashMap with total deaths during date range
      * selected
-     * 
-     * @param fromDate
-     * @param toDate
      */
     private void loadBoroughDeaths() {
 
@@ -170,8 +163,8 @@ public class MapViewerController extends Controller {
     /**
      * determines if a selected date range is valid
      * 
-     * @param from
-     * @param to
+     * @param fromDate
+     * @param toDate
      * @return
      */
     private boolean validDateRangeChosen(LocalDate fromDate, LocalDate toDate) {
@@ -227,8 +220,8 @@ public class MapViewerController extends Controller {
                 walthamPolygon, wandsworthPolygon, westminsterPolygon, barkDagPolygon, barnetPolygon };
 
         // load all covid data
-        CovidDataLoader dataLoader = new CovidDataLoader();
-        allData = dataLoader.load();
+        // CovidDataLoader dataLoader = new CovidDataLoader();
+        // data = dataLoader.load();
 
         // load the mapping of polygon IDs to their respective borough names
         JsonReader jsonReader = new JsonReader();
