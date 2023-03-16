@@ -5,8 +5,12 @@ import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 import java.time.LocalDate;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import java.util.ArrayList;
+import java.util.Objects;
+
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.Pane;
 
@@ -16,7 +20,7 @@ import javafx.scene.layout.Pane;
  * @author Ishab Ahmed
  * @version 2023.03.13
  */
-public class StatsViewerController
+public class StatsViewerController extends Controller
 {
     @FXML
     private DatePicker fromDatePicker;
@@ -149,7 +153,6 @@ public class StatsViewerController
         //sets the current pane as invisible
         statsPanes.get(i).setVisible(false);
 
-
         // if on first pane, sets the last pane as visible to loop around
         if(i == 0){
             statsPanes.get(statsPanes.size() - 1).setVisible(true);
@@ -169,10 +172,23 @@ public class StatsViewerController
             i--;
         }
 
+    }
 
+    /**
+     *
+     */
+    private void totalNumberOfTotalDeathsCount(){
+        int totalNumberOfTotalDeaths = 0;
+        int i = 0;
+        while(!Objects.isNull(getDataTable().getColumns().get(5).getCellObservableValue(i).getValue())){
+            totalNumberOfTotalDeaths += (int) getDataTable().getColumns().get(5).getCellObservableValue(i).getValue();
+            i++;
+        }
+//        System.out.println(totalNumberOfTotalDeaths);
+//        System.out.println(i);
+
+        getDataTable().getColumns().get(5).getCellObservableValue(0).getValue();
 
     }
-    
-    
-    
+
 }
