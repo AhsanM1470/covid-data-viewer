@@ -32,12 +32,6 @@ public class DataViewerController extends Controller
     @FXML
     private StackPane mainPanel;
     
-    // @FXML
-    // private DatePicker fromDatePicker;
-    
-    // @FXML
-    // private DatePicker toDatePicker;
-    
     @FXML
     private Button leftButton;
     
@@ -117,34 +111,56 @@ public class DataViewerController extends Controller
      */
     @FXML
     private void dateChanged(ActionEvent event) {
-        setWelcomeState(true);
-        
         LocalDate fromDate = fromDatePicker.getValue();
         LocalDate toDate = toDatePicker.getValue();
         
         // sets the pickers of the current panel to the dates chosen
         controllers[controllerIndex].setDateRange(fromDate, toDate);
         
-        // if date is valid, populate the table
-        if (validDateRangeChosen(fromDate, toDate)) {
-            populateTable(fromDate, toDate);
+        if (isDateRangeValid(fromDate, toDate) == true) {
+            if (isDataInDateRange(fromDate, toDate) == true) {
+                populateTable(fromDate, toDate);
+                dataTableInfoLabel.setText("Showing data from " + fromDate + " to " + toDate + ".");
+            } else {
+                dataTableInfoLabel.setText("There's no available data for the selected date range.");
+            }
         } else {
-            dataTableInfoLabel.setText("The 'from' date is on or after the 'to' date.");
-            setWelcomeState(false);
+            dataTableInfoLabel.setText("The 'from' date is before the 'to' date.");
         }
+        
+        setWelcomeState(false);
     }
     
     /**
-     * @return whether the 'to' date is after the 'from' date.
+     * @return whether the 'from' date if before the 'to' date 
      */
-    private boolean validDateRangeChosen(LocalDate from, LocalDate to) {
-        // if the dates are not null and 'from' is before 'to', then the date range is valid
+    private boolean isDateRangeValid(LocalDate from, LocalDate to) {
+        boolean validRange = false;
+        
         if (from != null && to != null) {
             if (from.isBefore(to)) {
-                return true;
+                validRange = true;
             }
         }
-        return false;
+        
+        return validRange;
+    }
+    
+    /**
+     * @return whether data is in the range selected
+     */
+    private boolean isDataInDateRange(LocalDate from, LocalDate to) {
+        boolean dataInRange = false;
+        
+        for (CovidData row : data) {
+            LocalDate date = LocalDate.parse(row.getDate());
+            if (date.isAfter(from) && date.isBefore(to)) {
+                dataInRange = true;
+                break;
+            } 
+        }
+        
+        return dataInRange;
     }
     
     /**
@@ -167,20 +183,6 @@ public class DataViewerController extends Controller
             LocalDate date = LocalDate.parse(d.getDate());
             if (date.isAfter(from) && date.isBefore(to))
                 dataTable.getItems().add(d);
-        }
-        
-        checkNoDataInRange(from, to);
-        setWelcomeState(false);
-    }
-    
-    /**
-     * Checks if there is data in the range selected.
-     */
-    private void checkNoDataInRange(LocalDate from, LocalDate to) {
-        if (dataTable.getItems().isEmpty()) {
-            dataTableInfoLabel.setText("There's no available data for the selected date range.");
-        } else {
-            dataTableInfoLabel.setText("Showing data from " + from + " to " + to + ".");
         }
     }
     

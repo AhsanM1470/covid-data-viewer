@@ -66,8 +66,6 @@ public class MapViewerController extends Controller {
 
     private ArrayList<CovidData> dateRangeData;
     
-    private DataViewerController dataController;
-    
 
     /**
      * collects dates form date picker, checks if its valid, and if so, loads the
@@ -252,9 +250,6 @@ public class MapViewerController extends Controller {
 
         System.out.println(name + " total deaths: " + boroughsTotalDeaths.get(name) + " | highest death count: "
                 + highestDeathCount);
-        
-        System.out.println(dataController);
-        System.out.println(dataController.getFromDate());
     }
 
     /**
