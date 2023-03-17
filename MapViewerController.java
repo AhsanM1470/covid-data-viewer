@@ -51,28 +51,41 @@ public class MapViewerController extends Controller {
     @FXML
     private Label title, hillingdonLabel;
 
+    // used to map polygon IDs to String borough names
     private HashMap<String, String> boroughIdToName;
 
-    private HashMap<String, Integer> boroughsTotalDeaths;
+    // stores the data for each borough which will be used to calculate intensity on
+    // heat map
+    private HashMap<String, Integer> boroughHeatMapData;
 
-    private int highestDeathCount;
+    // the value which is used as a base to determine the intensity for other
+    // boroughs on the heat map
+    private int heatMapBaseValue;
 
+    // stores the data within the date range selected
     private ArrayList<CovidData> dateRangeData;
 
-    private double initialPaneWidth; 
+    // used to calculate % change in window size which is used to determine % change
+    // in panel size
+    private double initialPaneWidth;
     private double initialPaneHeight;
-    
 
     @FXML
     void initialize() {
+
+        // adding window size change listeneres
         bp.widthProperty().addListener((obs, oldVal, newVal) -> {
-            // Do whatever you want
-            if(oldVal.floatValue()!=newVal.floatValue()) {resizeComponents();};
+            if (oldVal.floatValue() != newVal.floatValue()) {
+                resizeComponents();
+            }
+            ;
         });
-       
-       bp.heightProperty().addListener((obs, oldVal, newVal) -> {
-            // Do whatever you want
-            if(oldVal.floatValue()!=newVal.floatValue()) {resizeComponents();};
+
+        bp.heightProperty().addListener((obs, oldVal, newVal) -> {
+            if (oldVal.floatValue() != newVal.floatValue()) {
+                resizeComponents();
+            }
+            ;
         });
 
         // an array of all the borough polygons which will be used when assigning
@@ -84,38 +97,37 @@ public class MapViewerController extends Controller {
                 newhamPolygon, redbridgePolygon, richmondPolygon, southwarkPolygon, suttonPolygon,
                 walthamPolygon, wandsworthPolygon, westminsterPolygon, barkDagPolygon, barnetPolygon };
 
-
         // load the mapping of polygon IDs to their respective borough names
         JsonReader jsonReader = new JsonReader();
         boroughIdToName = jsonReader.readJson("boroughIDs.json");
 
+        // store the initial size of window
         initialPaneWidth = bp.getPrefWidth();
         initialPaneHeight = bp.getPrefHeight();
-        
 
-        resetTotalBoroughDeaths();
+        calculateHeatMapBase();
+        resetBoroughHeatMapData();
 
     }
 
-    public void resizeComponents(){
+    public void resizeComponents() {
         var parentPane = bp;
 
-        double ratioX = parentPane.getWidth()/ initialPaneWidth;
-        double ratioY = parentPane.getHeight()/ initialPaneHeight;
-        
-        if (Double.isInfinite(ratioX) || Double.isInfinite(ratioX)){
+        double ratioX = parentPane.getWidth() / initialPaneWidth;
+        double ratioY = parentPane.getHeight() / initialPaneHeight;
+
+        if (Double.isInfinite(ratioX) || Double.isInfinite(ratioX)) {
             return;
         }
 
-        if (Double.isNaN(ratioX) || Double.isNaN(ratioX)){
+        if (Double.isNaN(ratioX) || Double.isNaN(ratioX)) {
             return;
         }
-        
-        //TODO: Try to add aspect ratio scaling
 
-        // make it so that the size of the map can't be smaller than its initially set size.
-        ratioX = Math.max(Math.min(ratioX,2),1);
-        ratioY =  Math.max(Math.min(ratioY,2),1);
+        // make it so that the size of the map can't be smaller than its initially set
+        // size.
+        ratioX = Math.max(Math.min(ratioX, 2), 1);
+        ratioY = Math.max(Math.min(ratioY, 2), 1);
 
         mapAnchorPane.setScaleX(ratioX);
         mapAnchorPane.setScaleY(ratioY);
@@ -123,7 +135,8 @@ public class MapViewerController extends Controller {
     }
 
     /**
-     * collects dates from date picker for this window, checks if its valid, and if so, loads the
+     * collects dates from date picker for this window, checks if its valid, and if
+     * so, loads the
      * data for that range
      * 
      * @param event
@@ -133,22 +146,22 @@ public class MapViewerController extends Controller {
 
         LocalDate fromDate = fromDatePicker.getValue();
         LocalDate toDate = toDatePicker.getValue();
-        
+
         dateChanged(fromDate, toDate);
     }
+
     /**
      * Execues set of instructions related to the date range selected
      */
     protected void dateChanged(LocalDate from, LocalDate to) {
-        // reset boroughs death count information when date is changed
-        resetTotalBoroughDeaths();
+        // reset boroughs heat map measure information when date is changed
+        resetBoroughHeatMapData();
 
         if (isDateRangeValid(from, to)) {
             // filter all the data to select data from our selected range
             loadDateRangeData(from, to);
-            // get the deaths for each borough to colour them
-            loadBoroughDeaths();
-
+            // get the heat map values for each borough to colour them
+            loadBoroughHeatMapData();
             assignBoroughsColor();
         }
     }
@@ -165,90 +178,96 @@ public class MapViewerController extends Controller {
     }
 
     /**
-     * Sets default value for all boroughs' total deaths to null in the HashMap
-     * 'boroughsTotalDeaths'
+     * Sets default value for all boroughs' heat map measure to null in the HashMap
+     * 'boroughHeatMapData'
      */
-    private void resetTotalBoroughDeaths() {
-        boroughsTotalDeaths = new HashMap<>();
+    private void resetBoroughHeatMapData() {
+        boroughHeatMapData = new HashMap<>();
         for (CovidData covidRecord : data) {
             String recordBoroughName = covidRecord.getBorough();
-            boroughsTotalDeaths.put(recordBoroughName, null);
-        }
-    }
-
-    private void getHighestDeathCount(){
-        highestDeathCount = 0;
-        for (CovidData cd: data){
-            Integer totalDeaths = cd.getTotalDeaths();
-            if (totalDeaths!=null){
-                highestDeathCount = Math.max(highestDeathCount,totalDeaths);
-            }
+            boroughHeatMapData.put(recordBoroughName, null);
         }
     }
 
     /**
-     * Fills in the boroughsDeaths HashMap with total deaths during date range
-     * selected
+     * Fills in the boroughHeatMapData HashMap with our chosen measure for the heat
+     * map.
+     * In this case, we're using deaths within the time period selected as the
+     * measure. This is done by summing the number of new deaths on each day for
+     * each borough in the time range
      */
-    private void loadBoroughDeaths() {
+    private void loadBoroughHeatMapData() {
 
-        // reset borough deaths count when new date range is picked
-        resetTotalBoroughDeaths();
-        
-        for (CovidData covidRecord : dateRangeData) {
-            String recordBoroughName = covidRecord.getBorough();
-            Integer dataEntryDeaths = covidRecord.getNewDeaths();
-            Integer boroughDeaths = boroughsTotalDeaths.get(recordBoroughName);
+        for (CovidData covidEntry : dateRangeData) {
+            String entryBoroughName = covidEntry.getBorough();
+            Integer entryDeathsOnDay = covidEntry.getNewDeaths();
+            Integer boroughCumulitiveDeaths = boroughHeatMapData.get(entryBoroughName);
 
-            // if no total deaths, continue onto next iteration
-            if (dataEntryDeaths == null) {
+            // if no new deaths on this entry, continue onto next iteration
+            if (entryDeathsOnDay == null) {
                 continue;
             }
 
-
             // if there's an existing value stored for a borough, update it
-            if (boroughDeaths != null) {
-                int deathCountInDateRange = boroughDeaths+dataEntryDeaths;
-                highestDeathCount = Math.max(highestDeathCount,deathCountInDateRange);
-                boroughsTotalDeaths.put(recordBoroughName, deathCountInDateRange);
-            }
-            else {
-                // if the borough currently stores no total deaths, place cdDeaths
-                boroughsTotalDeaths.put(recordBoroughName, dataEntryDeaths);
+            if (boroughCumulitiveDeaths != null) {
+                int deathCountInDateRange = entryDeathsOnDay + boroughCumulitiveDeaths;
+                boroughHeatMapData.put(entryBoroughName, deathCountInDateRange);
+            } else {
+                // if the borough currently stores no new deaths, place deaths on this day
+                boroughHeatMapData.put(entryBoroughName, entryDeathsOnDay);
             }
 
         }
 
     }
 
-    
+    /**
+     * calculates the highest magnitude of the data value which will be used as the
+     * base value to compare against in heat map intensity
+     */
+    private void calculateHeatMapBase() {
+        for (CovidData cd : data) {
+            Integer totalDeaths = cd.getTotalDeaths();
+            if (totalDeaths != null) {
+                heatMapBaseValue = Math.max(heatMapBaseValue, totalDeaths);
+            }
+        }
+    }
 
     /**
-     * // attempt to calculate which colour to assign to each borough based on total
-     * deaths relative to the highest death count within the date range
+     * attempt to calculate which colour to assign to each borough based on heat map
+     * values within the date range relative to the base heat map value
      * 
      */
     private void assignBoroughsColor() {
         System.out.println("assigning borough colours");
 
-        getHighestDeathCount();
-
         for (Polygon boroughPolygon : boroughPolygons) {
             String boroughName = boroughIdToName.get(boroughPolygon.getId());
+            Integer boroughHeatMapMeasure = boroughHeatMapData.get(boroughName);
             Color col;
 
-            if (boroughsTotalDeaths.get(boroughName) != null) {
-                // try to retrieve deaths of current borough as a proportion of the highest
-                // death count
-                double currentBoroughDeaths = boroughsTotalDeaths.get(boroughName);
-                double percentage = currentBoroughDeaths * 100 / highestDeathCount;
-                // we convert percentage into hsl (hue (in degrees), saturation 100%, brightness
-                // 90%)
-                col = Color.hsb(100 - percentage, 1, 0.7);
+            // if the borough has data available within the date range, give it a valid
+            // heatMap colour.
+            if (boroughHeatMapMeasure != null) {
+
+                // calculate proportion of current borough data with the base value
+                // 120 is used because in HSB 0 -> 120 == red -> green.
+                // converts the proportion of heat map values as a % of the hue upper bound
+                int hueUpperBound = 120;
+                double percentageOfHue = (hueUpperBound * boroughHeatMapMeasure / heatMapBaseValue);
+
+                // subtracting from the upper bound gives us reversed scale.
+                // green -> low deaths
+                // red -> high deaths
+                double hue = hueUpperBound - percentageOfHue;
+
+                // HSB (hue (in degrees), saturation , brightness)
+                col = Color.hsb(hue, 1, 0.7);
 
             } else {
-                // color for if there's no total deaths for the borough in the selectime time
-                // frame
+                // color for if there's no heat map indicator for the borough in the selected
+                // time frame
                 col = Color.rgb(171, 171, 171);
             }
 
@@ -256,8 +275,6 @@ public class MapViewerController extends Controller {
             boroughPolygon.setFill(col);
         }
     }
-
-    
 
     /**
      * If a polygon is clicked, prints the name of the borough that the fxid is
@@ -270,17 +287,9 @@ public class MapViewerController extends Controller {
         Polygon poly = (Polygon) event.getSource();
         String name = boroughIdToName.get(poly.getId());
 
-        System.out.println(name + " total deaths: " + boroughsTotalDeaths.get(name) + " | highest death count: "
-                + highestDeathCount);
-
-        // svgPolygon1.setLayoutX(svgPolygon1.getLayoutX()*1.2);
-        // svgPolygon1.setLayoutY(svgPolygon1.getLayoutY()*1.2);
-        // svgPolygon1.setScaleX(svgPolygon1.getScaleX()*1.2);
-        // svgPolygon1.setScaleY(svgPolygon1.getScaleY()*1.2);
-
-        
-        
-
+        System.out.println(
+                name + " total deaths within date range: " + boroughHeatMapData.get(name) + " | Heat map base value: "
+                        + heatMapBaseValue);
     }
 
     /**
@@ -323,6 +332,7 @@ public class MapViewerController extends Controller {
 
     /**
      * q
+     * 
      * @param label    label component to be customised
      * @param text     text to be displayed on the label
      * @param fontSize size of the text
@@ -330,7 +340,7 @@ public class MapViewerController extends Controller {
     private void setLabelText(Label label, String text, double fontSize) {
         label.setText(text);
         label.setAlignment(Pos.CENTER);
-        label.setFont(new Font("Comic Sans MS",fontSize));
+        label.setFont(new Font("Comic Sans MS", fontSize));
     }
 
     protected Parent getView() {

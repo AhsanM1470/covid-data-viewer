@@ -63,7 +63,7 @@
       </VBox>
    </bottom>
    <center>
-      <HBox fx:id="mapPane" alignment="CENTER" prefHeight="582.0" prefWidth="920.0" style="-fx-background-color: #191919E1;" BorderPane.alignment="CENTER">
+      <HBox fx:id="mapPane" alignment="CENTER" prefHeight="582.0" prefWidth="920.0" style="-fx-background-color: #191919D1;" BorderPane.alignment="CENTER">
          <children>
             <AnchorPane fx:id="mapAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="920.0">
                <children>
