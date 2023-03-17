@@ -39,10 +39,10 @@
             <Line endX="850.0" />
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <left>
-                  <Button disable="true" mnemonicParsing="false" text="&lt;" BorderPane.alignment="CENTER" />
+                  <Button fx:id="leftButton" disable="true" mnemonicParsing="false" text="&lt;" BorderPane.alignment="CENTER" />
                </left>
                <right>
-                  <Button disable="true" mnemonicParsing="false" text="&gt;" BorderPane.alignment="CENTER" />
+                  <Button fx:id="rightButton" disable="true" mnemonicParsing="false" text="&gt;" BorderPane.alignment="CENTER" />
                </right>
                <VBox.margin>
                   <Insets left="5.0" right="5.0" />
@@ -82,7 +82,7 @@
                         </Label>
                      </children>
                   </StackPane>
-                  <BorderPane fx:id="secondPane" prefHeight="200.0" prefWidth="200.0">
+                  <BorderPane fx:id="secondPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                      <top>
                         <Label alignment="CENTER" prefHeight="154.0" prefWidth="399.0" text="Total number of total deaths" underline="true" BorderPane.alignment="CENTER">
                            <font>
@@ -94,7 +94,7 @@
                         </Label>
                      </top>
                      <center>
-                        <Label alignment="CENTER" prefHeight="287.0" prefWidth="306.0" text="Label" BorderPane.alignment="CENTER">
+                        <Label fx:id="sumTotalDeathLabel" alignment="CENTER" prefHeight="287.0" prefWidth="306.0" text="Label" BorderPane.alignment="CENTER">
                            <font>
                               <Font size="20.0" />
                            </font>

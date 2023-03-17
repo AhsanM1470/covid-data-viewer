@@ -38,10 +38,6 @@ public class MapViewerController extends Controller {
     @FXML
     private Label selectedBoroughLabel;
 
-
-    @FXML
-    private AnchorPane buttonPane;
-
     @FXML
     private Polygon brentPolygon, bexleyPolygon, bromleyPolygon, camdenPolygon, cityPolygon, croydonPolygon,
             ealingPolygon, enfieldPolygon, greenwichPolygon, hackneyPolygon, hamletsPolygon, hammfullPolygon,
@@ -322,7 +318,7 @@ public class MapViewerController extends Controller {
     }
 
     /**
-     * 
+     * q
      * @param label    label component to be customised
      * @param text     text to be displayed on the label
      * @param fontSize size of the text

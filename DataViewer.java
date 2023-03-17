@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import java.net.URL;
 
 /**
- * GUI to display.
+ * Responsible for displaying the MainWindow GUI
  *
  * @author Ishab Ahmed, Saihan Marshall
  * @version 2023.03.13
@@ -17,7 +17,6 @@ public class DataViewer extends Application
     @Override
     public void start(Stage stage) throws Exception {
         URL url = getClass().getResource("MainWindow.fxml");
-        
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
         
