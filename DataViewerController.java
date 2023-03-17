@@ -121,15 +121,26 @@ public class DataViewerController extends Controller
      */
     @FXML
     private void dateChanged(ActionEvent event) {
+        // Clear any existing items from the table
+        System.out.println("X");
+        dataTable.getItems().clear();
+        System.out.println("Y");
+        
         LocalDate fromDate = fromDatePicker.getValue();
+        System.out.println("Z");
         LocalDate toDate = toDatePicker.getValue();
+        System.out.println("A");
 
         // sets the pickers of the current panel to the dates chosen
         controllers[controllerIndex].setDateRange(fromDate, toDate);
+        System.out.println("B");
 
         if (isDateRangeValid(fromDate, toDate) == true) {
+            System.out.println("C");
             if (isDataInDateRange(fromDate, toDate) == true) {
+                System.out.println("D");
                 populateTable(fromDate, toDate);
+                System.out.println("E");
                 dataTableInfoLabel.setText("Showing data from " + fromDate + " to " + toDate + ".");
             } else {
                 dataTableInfoLabel.setText("There's no available data for the selected date range.");
@@ -155,7 +166,7 @@ public class DataViewerController extends Controller
             // date in CovidData is string, parse to LocalDate for easy comparison
             LocalDate date = LocalDate.parse(row.getDate());
             // check if date is between 'from' and 'to'
-            if (date.isAfter(from) && date.isBefore(to)) {
+            if (date.isAfter(from) && date.isBefore(to) || date.isEqual(from) || date.isEqual(to)) {
                 dataInRange = true;
                 break;
             } 
@@ -183,14 +194,12 @@ public class DataViewerController extends Controller
      * @param to The ending date of the date range
      */
     private void populateTable(LocalDate from, LocalDate to) {
-        // Clear any existing items from the table
-        dataTable.getItems().clear();
-        
         // Add all CovidData objects within the given date range to the table
         for (CovidData d : data) {
             LocalDate date = LocalDate.parse(d.getDate());
-            if (date.isAfter(from) && date.isBefore(to))
+            if (date.isAfter(from) && date.isBefore(to) || date.isEqual(from) || date.isEqual(to)) {
                 dataTable.getItems().add(d);
+            }
         }
     }
 
