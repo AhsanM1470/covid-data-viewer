@@ -121,26 +121,21 @@ public class DataViewerController extends Controller
      */
     @FXML
     private void dateChanged(ActionEvent event) {
+        togglePanelSwitching(true);
+        
         // Clear any existing items from the table
-        System.out.println("X");
         dataTable.getItems().clear();
-        System.out.println("Y");
         
         LocalDate fromDate = fromDatePicker.getValue();
-        System.out.println("Z");
         LocalDate toDate = toDatePicker.getValue();
-        System.out.println("A");
 
         // sets the pickers of the current panel to the dates chosen
         controllers[controllerIndex].setDateRange(fromDate, toDate);
-        System.out.println("B");
 
         if (isDateRangeValid(fromDate, toDate) == true) {
-            System.out.println("C");
             if (isDataInDateRange(fromDate, toDate) == true) {
-                System.out.println("D");
                 populateTable(fromDate, toDate);
-                System.out.println("E");
+                togglePanelSwitching(false);
                 dataTableInfoLabel.setText("Showing data from " + fromDate + " to " + toDate + ".");
             } else {
                 dataTableInfoLabel.setText("There's no available data for the selected date range.");
@@ -181,10 +176,13 @@ public class DataViewerController extends Controller
      * @param state Bool indicating whether the welcome pane should be shown or hidden
      */
     private void setWelcomeState(boolean state) {
-        leftButton.setDisable(state);
-        rightButton.setDisable(state);
         welcomePane.setVisible(state);
         tablePane.setVisible(!state);
+    }
+    
+    private void togglePanelSwitching(boolean state) {
+        leftButton.setDisable(state);
+        rightButton.setDisable(state);
     }
 
     /**
