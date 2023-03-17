@@ -131,6 +131,23 @@ public class DataViewerController extends Controller
 
     
     /**
+     * @return whether data is in the range selected
+     */
+    private boolean isDataInDateRange(LocalDate from, LocalDate to) {
+        boolean dataInRange = false;
+        
+        for (CovidData row : data) {
+            LocalDate date = LocalDate.parse(row.getDate());
+            if (date.isAfter(from) && date.isBefore(to)) {
+                dataInRange = true;
+                break;
+            } 
+        }
+        
+        return dataInRange;
+    }
+    
+    /**
      * Toggles the Welcome components.
      */
     private void setWelcomeState(boolean state) {
