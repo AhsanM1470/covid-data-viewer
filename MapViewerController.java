@@ -118,7 +118,7 @@ public class MapViewerController extends Controller {
      * @param fromDate
      * @param toDate
      */
-    public void loadDateRangeData(LocalDate fromDate, LocalDate toDate) {
+    private void loadDateRangeData(LocalDate fromDate, LocalDate toDate) {
         dateRangeData = super.getDateRangeData(fromDate, toDate);
     }
 
@@ -126,11 +126,21 @@ public class MapViewerController extends Controller {
      * Sets default value for all boroughs' total deaths to null in the HashMap
      * 'boroughsTotalDeaths'
      */
-    public void resetTotalBoroughDeaths() {
+    private void resetTotalBoroughDeaths() {
         boroughsTotalDeaths = new HashMap<>();
         for (CovidData covidRecord : data) {
             String recordBoroughName = covidRecord.getBorough();
             boroughsTotalDeaths.put(recordBoroughName, null);
+        }
+    }
+
+    private void getHighestDeathCount(){
+        highestDeathCount = 0;
+        for (CovidData cd: data){
+            Integer totalDeaths = cd.getTotalDeaths();
+            if (totalDeaths!=null){
+                highestDeathCount = Math.max(highestDeathCount,totalDeaths);
+            }
         }
     }
 
@@ -142,11 +152,10 @@ public class MapViewerController extends Controller {
 
         // reset borough deaths count when new date range is picked
         resetTotalBoroughDeaths();
-        highestDeathCount = 0;
-
+        
         for (CovidData covidRecord : dateRangeData) {
             String recordBoroughName = covidRecord.getBorough();
-            Integer dataEntryDeaths = covidRecord.getTotalDeaths();
+            Integer dataEntryDeaths = covidRecord.getNewDeaths();
             Integer boroughDeaths = boroughsTotalDeaths.get(recordBoroughName);
 
             // if no total deaths, continue onto next iteration
@@ -154,12 +163,12 @@ public class MapViewerController extends Controller {
                 continue;
             }
 
-            // update highest death count if possible
-            highestDeathCount = Math.max(highestDeathCount, dataEntryDeaths);
 
             // if there's an existing value stored for a borough, update it
             if (boroughDeaths != null) {
-                boroughsTotalDeaths.put(recordBoroughName, Math.max(boroughDeaths, dataEntryDeaths));
+                int deathCountInDateRange = boroughDeaths+dataEntryDeaths;
+                highestDeathCount = Math.max(highestDeathCount,deathCountInDateRange);
+                boroughsTotalDeaths.put(recordBoroughName, deathCountInDateRange);
             }
             else {
                 // if the borough currently stores no total deaths, place cdDeaths
@@ -179,6 +188,8 @@ public class MapViewerController extends Controller {
      */
     private void assignBoroughsColor() {
         System.out.println("assigning borough colours");
+
+        getHighestDeathCount();
 
         for (Polygon boroughPolygon : boroughPolygons) {
             String boroughName = boroughIdToName.get(boroughPolygon.getId());

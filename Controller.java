@@ -12,32 +12,29 @@ import javafx.scene.Parent;
  * @author (your name here)
  * @version (version number or date here)
  */
-public abstract class Controller
-{
+public abstract class Controller {
 
     CovidDataLoader dataLoader = new CovidDataLoader();
     protected ArrayList<CovidData> data = dataLoader.load();
 
-    
     @FXML
     protected DatePicker toDatePicker;
 
     @FXML
     protected DatePicker fromDatePicker;
-    
+
     public void setDateRange(LocalDate from, LocalDate to) {
         fromDatePicker.setValue(from);
         toDatePicker.setValue(to);
-        
+
         dateChanged(from, to);
     }
-    
+
     /**
-     * Creates an ArrayList containing data between date period selected filtered
-     * from the ArrayList 'data' which was created upon initialisation
-     * 
      * @param fromDate
      * @param toDate
+     * @return an ArrayList containing data between date period selected, filtered
+     *         from the ArrayList 'data'
      */
     protected ArrayList<CovidData> getDateRangeData(LocalDate fromDate, LocalDate toDate) {
         return new ArrayList<CovidData>(data.stream().filter((cd) -> {
@@ -48,7 +45,7 @@ public abstract class Controller
     }
 
     /**
-     * determines 
+     * determines
      * 
      * @param fromDate
      * @param toDate
@@ -64,6 +61,6 @@ public abstract class Controller
     }
 
     abstract protected void dateChanged(LocalDate from, LocalDate to);
-    
+
     abstract protected Parent getView();
 }
