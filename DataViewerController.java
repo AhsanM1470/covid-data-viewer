@@ -80,6 +80,8 @@ public class DataViewerController extends Controller
         totalDeathsCol.setCellValueFactory(new PropertyValueFactory<CovidData,String>("totalDeaths"));
         
         dataTable.getColumns().addAll(dateCol, boroughCol, newCasesCol, totalCasesCol, newDeathsCol, totalDeathsCol);
+        // make all columns equal width
+        dataTable.setColumnResizePolicy(dataTable.CONSTRAINED_RESIZE_POLICY);
         
         try {
             controllers = new Controller[2];

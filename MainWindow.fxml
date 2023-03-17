@@ -9,44 +9,71 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="mainLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DataViewerController">
    <top>
       <VBox prefHeight="30.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER_RIGHT" spacing="10.0">
+            <HBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-border-style: hidden hidden solid hidden;">
                <children>
-                  <Label text="From:" />
-                  <DatePicker fx:id="fromDatePicker" onAction="#dateChanged" prefHeight="11.0" prefWidth="111.0" />
-                  <Label text="To:" />
-                  <DatePicker fx:id="toDatePicker" onAction="#dateChanged" prefHeight="11.0" prefWidth="111.0" />
+                  <Label text="From:">
+                     <opaqueInsets>
+                        <Insets bottom="10.0" />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets bottom="2.0" />
+                     </HBox.margin></Label>
+                  <DatePicker fx:id="fromDatePicker" onAction="#dateChanged" prefHeight="11.0" prefWidth="111.0">
+                     <opaqueInsets>
+                        <Insets bottom="10.0" />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </HBox.margin></DatePicker>
+                  <Label text="To:">
+                     <opaqueInsets>
+                        <Insets bottom="10.0" />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets bottom="2.0" />
+                     </HBox.margin></Label>
+                  <DatePicker fx:id="toDatePicker" onAction="#dateChanged" prefHeight="11.0" prefWidth="111.0">
+                     <opaqueInsets>
+                        <Insets bottom="10.0" />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </HBox.margin></DatePicker>
                </children>
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
                <VBox.margin>
-                  <Insets right="5.0" />
+                  <Insets />
                </VBox.margin>
             </HBox>
-            <Line endX="920.0" />
          </children>
       </VBox>
    </top>
    <bottom>
-      <VBox prefHeight="30.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="30.0" prefWidth="920.0" style="-fx-border-bottom: #000000;" BorderPane.alignment="CENTER">
          <children>
-            <Line endX="920.0" />
-            <BorderPane prefHeight="200.0" prefWidth="200.0">
+            <BorderPane prefHeight="60.0" prefWidth="920.0" style="-fx-border-style: solid hidden hidden hidden;">
                <left>
-                  <Button fx:id="leftButton" disable="true" mnemonicParsing="false" onAction="#previousPanel" text="&lt;" BorderPane.alignment="CENTER" />
+                  <Button id="SwitchButton" fx:id="leftButton" disable="true" mnemonicParsing="false" onAction="#previousPanel" text="&lt;" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </BorderPane.margin></Button>
                </left>
                <right>
-                  <Button fx:id="rightButton" disable="true" mnemonicParsing="false" onAction="#nextPanel" text="&gt;" BorderPane.alignment="CENTER" />
+                  <Button fx:id="rightButton" disable="true" mnemonicParsing="false" onAction="#nextPanel" text="&gt;" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </BorderPane.margin></Button>
                </right>
                <VBox.margin>
-                  <Insets left="5.0" right="5.0" />
+                  <Insets />
                </VBox.margin>
             </BorderPane>
          </children>
@@ -55,7 +82,7 @@
    <center>
       <StackPane fx:id="mainPanel" BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="welcomePane" alignment="CENTER">
+            <VBox fx:id="welcomePane" alignment="CENTER" prefHeight="564.0" prefWidth="920.0">
                <children>
                   <Label text="Welcome to the Covid Data Viewer for London!">
                      <font>

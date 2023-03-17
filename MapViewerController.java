@@ -29,7 +29,7 @@ public class MapViewerController extends Controller {
     Double hoveredPolygonDefaultStroke;
 
     @FXML
-    private AnchorPane mapPane;
+    private BorderPane mapPane;
 
     @FXML
     private BorderPane bp;
@@ -292,7 +292,7 @@ public class MapViewerController extends Controller {
     private void setLabelText(Label label, String text, double fontSize) {
         label.setText(text);
         label.setAlignment(Pos.CENTER);
-        label.setFont(new Font(fontSize));
+        label.setFont(new Font("Comic Sans MS",fontSize));
     }
 
     protected Parent getView() {
