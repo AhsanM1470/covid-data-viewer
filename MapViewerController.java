@@ -59,8 +59,8 @@ public class MapViewerController extends Controller {
 
     private ArrayList<CovidData> dateRangeData;
 
-    private double currentWinWidth = 920.0; 
-    private double currentWinHeight = 650.0;
+    private double initialPaneWidth; 
+    private double initialPaneHeight;
     
 
     @FXML
@@ -89,6 +89,10 @@ public class MapViewerController extends Controller {
         JsonReader jsonReader = new JsonReader();
         boroughIdToName = jsonReader.readJson("boroughIDs.json");
 
+        initialPaneWidth = bp.getPrefWidth();
+        initialPaneHeight = bp.getPrefHeight();
+        
+
         resetTotalBoroughDeaths();
 
     }
@@ -96,8 +100,8 @@ public class MapViewerController extends Controller {
     public void resizeComponents(){
         var parentPane = bp;
 
-        double ratioX = parentPane.getWidth()/ currentWinWidth;
-        double ratioY = parentPane.getHeight()/ currentWinHeight;
+        double ratioX = parentPane.getWidth()/ initialPaneWidth;
+        double ratioY = parentPane.getHeight()/ initialPaneHeight;
         
         if (Double.isInfinite(ratioX) || Double.isInfinite(ratioX)){
             return;
