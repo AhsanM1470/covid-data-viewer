@@ -21,7 +21,7 @@ public class MapViewerController extends Controller {
     Double hoveredPolygonDefaultStroke;
 
     @FXML
-    private AnchorPane mapPane;
+    private BorderPane mapPane;
 
     @FXML
     private BorderPane bp;
