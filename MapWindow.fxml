@@ -28,6 +28,9 @@
                      </HBox.margin></DatePicker>
                   <Label text="To:" />
                   <DatePicker fx:id="toDatePicker" onAction="#dateChanged" prefHeight="11.0" prefWidth="111.0" />
+                     <HBox.margin>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </HBox.margin></DatePicker>
                </children>
                <opaqueInsets>
                   <Insets />
@@ -46,13 +49,13 @@
                <left>
                   <Button disable="true" mnemonicParsing="false" text="&lt;" BorderPane.alignment="CENTER">
                      <BorderPane.margin>
-                        <Insets left="4.0" right="4.0" top="4.0" />
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                      </BorderPane.margin></Button>
                </left>
                <right>
                   <Button disable="true" mnemonicParsing="false" text="&gt;" BorderPane.alignment="CENTER">
                      <BorderPane.margin>
-                        <Insets left="4.0" right="4.0" top="4.0" />
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                      </BorderPane.margin></Button>
                </right>
                <VBox.margin>
@@ -63,9 +66,9 @@
       </VBox>
    </bottom>
    <center>
-      <BorderPane fx:id="mapPane" prefHeight="572.0" prefWidth="920.0" style="-fx-background-color: #161616D1;" BorderPane.alignment="CENTER">
+      <BorderPane fx:id="mapPane" prefHeight="582.0" prefWidth="920.0" style="-fx-background-color: #161616D1;" BorderPane.alignment="CENTER">
          <center>
-            <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="590.0" prefWidth="920.0" BorderPane.alignment="CENTER">
+            <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="920.0" BorderPane.alignment="CENTER">
                <bottom>
                   <AnchorPane prefHeight="556.0" prefWidth="921.0" BorderPane.alignment="CENTER">
                      <children>
@@ -991,7 +994,7 @@
                               
                                                                            </children>
                         </AnchorPane>
-                        <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" layoutX="148.0" layoutY="-18.0" prefHeight="38.0" prefWidth="652.0" text="Click on a borough to view more information" textFill="WHITE">
+                        <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" layoutX="145.0" layoutY="6.0" prefHeight="16.0" prefWidth="652.0" text="Click on a borough to view more information" textFill="WHITE">
                            <font>
                               <Font name="Comic Sans MS" size="14.0" />
                            </font>

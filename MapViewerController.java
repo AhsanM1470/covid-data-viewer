@@ -67,28 +67,46 @@ public class MapViewerController extends Controller {
     private ArrayList<CovidData> dateRangeData;
     
 
+    @FXML
+    void initialize() {
+        // an array of all the borough polygons which will be used when assigning
+        // colours
+        boroughPolygons = new Polygon[] { brentPolygon, bexleyPolygon, bromleyPolygon, camdenPolygon, cityPolygon,
+                croydonPolygon, ealingPolygon, enfieldPolygon, greenwichPolygon, hackneyPolygon, hamletsPolygon,
+                hammfullPolygon, haringeyPolygon, harrowPolygon, haveringPolygon, hillingdonPolygon, hounslowPolygon,
+                islingtonPolygon, kensChelsPolygon, kingstonPolygon, lambethPolygon, lewishamPolygon, mertonPolygon,
+                newhamPolygon, redbridgePolygon, richmondPolygon, southwarkPolygon, suttonPolygon,
+                walthamPolygon, wandsworthPolygon, westminsterPolygon, barkDagPolygon, barnetPolygon };
+
+        // load all covid data
+        // CovidDataLoader dataLoader = new CovidDataLoader();
+        // data = dataLoader.load();
+
+        // load the mapping of polygon IDs to their respective borough names
+        JsonReader jsonReader = new JsonReader();
+        boroughIdToName = jsonReader.readJson("boroughIDs.json");
+
+        resetTotalBoroughDeaths();
+    }
+
     /**
-     * collects dates form date picker, checks if its valid, and if so, loads the
+     * collects dates from date picker for this window, checks if its valid, and if so, loads the
      * data for that range
      * 
      * @param event
      */
     @FXML
-    void dateChanged(ActionEvent event) {
+    void datePicked(ActionEvent event) {
 
         LocalDate fromDate = fromDatePicker.getValue();
         LocalDate toDate = toDatePicker.getValue();
-
-        if (validDateRangeChosen(fromDate, toDate)) {
-            // filter all the data to select data from our selected range
-            loadDateRangeData(fromDate, toDate);
-            // get the deaths for each borough to colour them
-            loadBoroughDeaths();
-
-            assignBoroughsColor();
-        }
+        
+        dateChanged(fromDate, toDate);
     }
     
+    /**
+     * Execues set of instructions related to the date range selected
+     */
     protected void dateChanged(LocalDate from, LocalDate to) {
 
         if (validDateRangeChosen(from, to)) {
@@ -208,27 +226,7 @@ public class MapViewerController extends Controller {
         }
     }
 
-    @FXML
-    void initialize() {
-        // an array of all the borough polygons which will be used when assigning
-        // colours
-        boroughPolygons = new Polygon[] { brentPolygon, bexleyPolygon, bromleyPolygon, camdenPolygon, cityPolygon,
-                croydonPolygon, ealingPolygon, enfieldPolygon, greenwichPolygon, hackneyPolygon, hamletsPolygon,
-                hammfullPolygon, haringeyPolygon, harrowPolygon, haveringPolygon, hillingdonPolygon, hounslowPolygon,
-                islingtonPolygon, kensChelsPolygon, kingstonPolygon, lambethPolygon, lewishamPolygon, mertonPolygon,
-                newhamPolygon, redbridgePolygon, richmondPolygon, southwarkPolygon, suttonPolygon,
-                walthamPolygon, wandsworthPolygon, westminsterPolygon, barkDagPolygon, barnetPolygon };
-
-        // load all covid data
-        // CovidDataLoader dataLoader = new CovidDataLoader();
-        // data = dataLoader.load();
-
-        // load the mapping of polygon IDs to their respective borough names
-        JsonReader jsonReader = new JsonReader();
-        boroughIdToName = jsonReader.readJson("boroughIDs.json");
-
-        resetTotalBoroughDeaths();
-    }
+    
 
     /**
      * If a polygon is clicked, prints the name of the borough that the fxid is

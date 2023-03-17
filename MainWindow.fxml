@@ -15,7 +15,7 @@
    <top>
       <VBox prefHeight="30.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-border-style: hidden hidden solid hidden;">
+            <HBox alignment="CENTER_RIGHT" spacing="10.0">
                <children>
                   <Label text="From:">
                      <opaqueInsets>
@@ -57,9 +57,9 @@
       </VBox>
    </top>
    <bottom>
-      <VBox prefHeight="30.0" prefWidth="920.0" style="-fx-border-bottom: #000000;" BorderPane.alignment="CENTER">
+      <VBox prefHeight="30.0" prefWidth="920.0" BorderPane.alignment="CENTER">
          <children>
-            <BorderPane prefHeight="60.0" prefWidth="920.0" style="-fx-border-style: solid hidden hidden hidden;">
+            <BorderPane prefHeight="60.0" prefWidth="920.0">
                <left>
                   <Button id="SwitchButton" fx:id="leftButton" disable="true" mnemonicParsing="false" onAction="#previousPanel" text="&lt;" BorderPane.alignment="CENTER">
                      <BorderPane.margin>
@@ -80,7 +80,7 @@
       </VBox>
    </bottom>
    <center>
-      <StackPane fx:id="mainPanel" BorderPane.alignment="CENTER">
+      <StackPane fx:id="mainPanel" style="-fx-border-style: solid hidden solid hidden;" BorderPane.alignment="CENTER">
          <children>
             <VBox fx:id="welcomePane" alignment="CENTER" prefHeight="564.0" prefWidth="920.0">
                <children>
