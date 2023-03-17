@@ -68,7 +68,7 @@
    <center>
       <BorderPane fx:id="mapPane" prefHeight="582.0" prefWidth="920.0" style="-fx-background-color: #161616D1;" BorderPane.alignment="CENTER">
          <center>
-            <AnchorPane fx:id="mapPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="920.0" BorderPane.alignment="CENTER">
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="920.0" BorderPane.alignment="CENTER">
                <children>
                   <AnchorPane layoutX="3.0" layoutY="52.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="524.0" prefWidth="918.0">
                      <children>
