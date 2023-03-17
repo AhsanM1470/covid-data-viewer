@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import java.net.URL;
 
 /**
- * GUI to display.
+ * Responsible for displaying the MainWindow GUI
  *
  * @author Ishab Ahmed, Saihan Marshall
  * @version 2023.03.13

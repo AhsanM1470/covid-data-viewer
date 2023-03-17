@@ -40,8 +40,6 @@ public class StatsViewer extends Application
         
         
     }
-    
-    
-    
+
 
 }

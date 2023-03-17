@@ -29,12 +29,6 @@ public class MapViewerController extends Controller {
     @FXML
     private Label selectedBoroughLabel;
 
-    // @FXML
-    // private DatePicker toDatePicker;
-
-    // @FXML
-    // private DatePicker fromDatePicker;
-
     @FXML
     private Polygon brentPolygon, bexleyPolygon, bromleyPolygon, camdenPolygon, cityPolygon, croydonPolygon,
             ealingPolygon, enfieldPolygon, greenwichPolygon, hackneyPolygon, hamletsPolygon, hammfullPolygon,
@@ -67,10 +61,6 @@ public class MapViewerController extends Controller {
                 islingtonPolygon, kensChelsPolygon, kingstonPolygon, lambethPolygon, lewishamPolygon, mertonPolygon,
                 newhamPolygon, redbridgePolygon, richmondPolygon, southwarkPolygon, suttonPolygon,
                 walthamPolygon, wandsworthPolygon, westminsterPolygon, barkDagPolygon, barnetPolygon };
-
-        // load all covid data
-        // CovidDataLoader dataLoader = new CovidDataLoader();
-        // data = dataLoader.load();
 
         // load the mapping of polygon IDs to their respective borough names
         JsonReader jsonReader = new JsonReader();
@@ -271,7 +261,7 @@ public class MapViewerController extends Controller {
     }
 
     /**
-     * 
+     * q
      * @param label    label component to be customised
      * @param text     text to be displayed on the label
      * @param fontSize size of the text

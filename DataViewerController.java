@@ -15,7 +15,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.BorderPane;
 
 /**
- * Controls logic of DataViewer
+ * Responsible for managing the GUI components of the application, including 
+ * the table that displays the CovidData information, the date pickers, and the
+ * buttons that navigate through different panels.
  *
  * @author Ishab Ahmed
  * @version 2023.03.13

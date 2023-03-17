@@ -53,14 +53,14 @@ public abstract class Controller {
      * 
      * @param fromDate
      * @param toDate
-     * @return whether a selected date range is valid (from is before to)
+     * @return whether the current date range is valid (i.e. from date is before to date)
      */
     protected boolean isDateRangeValid(LocalDate fromDate, LocalDate toDate) {
         // if any of them are null, date range is automatically invalid
         if (fromDate == null || toDate == null) {
             return false;
         }
-        return fromDate.isBefore(toDate);
+        return fromDate.isBefore(toDate) || fromDate.isEqual(toDate);
 
     }
 
