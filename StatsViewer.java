@@ -5,10 +5,6 @@ import javafx.scene.Parent;
 import javafx.fxml.FXMLLoader;
 import java.util.ArrayList;
 import java.net.URL;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.control.Label;
 
 /**
  * This is the GUI for the window that

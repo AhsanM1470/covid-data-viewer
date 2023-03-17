@@ -1,6 +1,5 @@
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
-import javafx.scene.control.DatePicker;
 import java.time.LocalDate;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -9,9 +8,6 @@ import javafx.scene.control.TableView;
 import java.util.ArrayList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.fxml.Initializable;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.scene.control.Label;
 import javafx.scene.Parent;
 import javafx.fxml.FXMLLoader;
@@ -132,21 +128,7 @@ public class DataViewerController extends Controller
         
         setWelcomeState(false);
     }
-    
-    /**
-     * @return whether the 'from' date if before the 'to' date 
-     */
-    private boolean isDateRangeValid(LocalDate from, LocalDate to) {
-        boolean validRange = false;
-        
-        if (from != null && to != null) {
-            if (from.isBefore(to)) {
-                validRange = true;
-            }
-        }
-        
-        return validRange;
-    }
+
     
     /**
      * @return whether data is in the range selected

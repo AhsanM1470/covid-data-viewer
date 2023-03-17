@@ -14,8 +14,6 @@ import javafx.scene.Parent;
  */
 public abstract class Controller
 {
-    private LocalDate fromDate;
-    private LocalDate toDate;
 
     CovidDataLoader dataLoader = new CovidDataLoader();
     protected ArrayList<CovidData> data = dataLoader.load();

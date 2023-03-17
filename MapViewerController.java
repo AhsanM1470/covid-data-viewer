@@ -1,25 +1,17 @@
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
-import javafx.util.converter.LocalDateStringConverter;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-
-import java.io.IOError;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.ObjectUtils.Null;
 
 import javafx.scene.Parent;
 
@@ -29,7 +21,7 @@ public class MapViewerController extends Controller {
     Double hoveredPolygonDefaultStroke;
 
     @FXML
-    private BorderPane mapPane;
+    private AnchorPane mapPane;
 
     @FXML
     private BorderPane bp;
