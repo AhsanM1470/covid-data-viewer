@@ -14,14 +14,18 @@ import javafx.scene.Parent;
  */
 public abstract class Controller {
 
-    CovidDataLoader dataLoader = new CovidDataLoader();
-    protected ArrayList<CovidData> data = dataLoader.load();
+    protected ArrayList<CovidData> data;
 
     @FXML
     protected DatePicker toDatePicker;
 
     @FXML
     protected DatePicker fromDatePicker;
+    
+    public Controller() {
+        CovidDataLoader dataLoader = new CovidDataLoader();
+        data = dataLoader.load();
+    }
 
     public void setDateRange(LocalDate from, LocalDate to) {
         fromDatePicker.setValue(from);

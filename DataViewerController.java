@@ -46,17 +46,12 @@ public class DataViewerController extends Controller
     @FXML
     private Label dataTableInfoLabel;
     
-    // private ArrayList<CovidData> data;
-    
     private Controller[] controllers;
     private int controllerIndex;
 
     @FXML
     public void initialize() {
         
-        // CovidDataLoader dataLoader = new CovidDataLoader();
-        // data = dataLoader.load();
-
         TableColumn<CovidData,String> dateCol = new TableColumn<CovidData,String>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<CovidData,String>("date"));
          
@@ -76,6 +71,7 @@ public class DataViewerController extends Controller
         totalDeathsCol.setCellValueFactory(new PropertyValueFactory<CovidData,String>("totalDeaths"));
         
         dataTable.getColumns().addAll(dateCol, boroughCol, newCasesCol, totalCasesCol, newDeathsCol, totalDeathsCol);
+        
         // make all columns equal width
         dataTable.setColumnResizePolicy(dataTable.CONSTRAINED_RESIZE_POLICY);
         
