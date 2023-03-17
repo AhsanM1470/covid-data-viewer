@@ -21,7 +21,7 @@ public class MapViewerController extends Controller {
     Double hoveredPolygonDefaultStroke;
 
     @FXML
-    private BorderPane mapPane;
+    private AnchorPane mapPane;
 
     @FXML
     private BorderPane bp;
@@ -53,8 +53,6 @@ public class MapViewerController extends Controller {
     private HashMap<String, Integer> boroughsTotalDeaths;
 
     private int highestDeathCount;
-
-    // private ArrayList<CovidData> data;
 
     private ArrayList<CovidData> dateRangeData;
     
