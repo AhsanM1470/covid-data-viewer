@@ -1,11 +1,17 @@
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -21,7 +27,10 @@ public class MapViewerController extends Controller {
     Double hoveredPolygonDefaultStroke;
 
     @FXML
-    private BorderPane mapPane;
+    private HBox mapPane;
+
+    @FXML
+    private AnchorPane mapAnchorPane;
 
     @FXML
     private BorderPane bp;
@@ -29,11 +38,9 @@ public class MapViewerController extends Controller {
     @FXML
     private Label selectedBoroughLabel;
 
-    // @FXML
-    // private DatePicker toDatePicker;
 
-    // @FXML
-    // private DatePicker fromDatePicker;
+    @FXML
+    private AnchorPane buttonPane;
 
     @FXML
     private Polygon brentPolygon, bexleyPolygon, bromleyPolygon, camdenPolygon, cityPolygon, croydonPolygon,
@@ -55,10 +62,23 @@ public class MapViewerController extends Controller {
     private int highestDeathCount;
 
     private ArrayList<CovidData> dateRangeData;
+
+    private double currentWinWidth = 920.0; 
+    private double currentWinHeight = 650.0;
     
 
     @FXML
     void initialize() {
+        bp.widthProperty().addListener((obs, oldVal, newVal) -> {
+            // Do whatever you want
+            if(oldVal.floatValue()!=newVal.floatValue()) {resizeComponents();};
+        });
+       
+       bp.heightProperty().addListener((obs, oldVal, newVal) -> {
+            // Do whatever you want
+            if(oldVal.floatValue()!=newVal.floatValue()) {resizeComponents();};
+        });
+
         // an array of all the borough polygons which will be used when assigning
         // colours
         boroughPolygons = new Polygon[] { brentPolygon, bexleyPolygon, bromleyPolygon, camdenPolygon, cityPolygon,
@@ -68,15 +88,38 @@ public class MapViewerController extends Controller {
                 newhamPolygon, redbridgePolygon, richmondPolygon, southwarkPolygon, suttonPolygon,
                 walthamPolygon, wandsworthPolygon, westminsterPolygon, barkDagPolygon, barnetPolygon };
 
-        // load all covid data
-        // CovidDataLoader dataLoader = new CovidDataLoader();
-        // data = dataLoader.load();
 
         // load the mapping of polygon IDs to their respective borough names
         JsonReader jsonReader = new JsonReader();
         boroughIdToName = jsonReader.readJson("boroughIDs.json");
 
         resetTotalBoroughDeaths();
+
+    }
+
+    public void resizeComponents(){
+        var parentPane = bp;
+
+        double ratioX = parentPane.getWidth()/ currentWinWidth;
+        double ratioY = parentPane.getHeight()/ currentWinHeight;
+        
+        if (Double.isInfinite(ratioX) || Double.isInfinite(ratioX)){
+            return;
+        }
+
+        if (Double.isNaN(ratioX) || Double.isNaN(ratioX)){
+            return;
+        }
+        
+        //TODO: Try to add aspect ratio scaling
+
+        // make it so that the size of the map can't be smaller than its initially set size.
+        ratioX = Math.max(Math.min(ratioX,2),1);
+        ratioY =  Math.max(Math.min(ratioY,2),1);
+
+        mapAnchorPane.setScaleX(ratioX);
+        mapAnchorPane.setScaleY(ratioY);
+
     }
 
     /**
@@ -93,7 +136,6 @@ public class MapViewerController extends Controller {
         
         dateChanged(fromDate, toDate);
     }
-    
     /**
      * Execues set of instructions related to the date range selected
      */
@@ -230,6 +272,15 @@ public class MapViewerController extends Controller {
 
         System.out.println(name + " total deaths: " + boroughsTotalDeaths.get(name) + " | highest death count: "
                 + highestDeathCount);
+
+        // svgPolygon1.setLayoutX(svgPolygon1.getLayoutX()*1.2);
+        // svgPolygon1.setLayoutY(svgPolygon1.getLayoutY()*1.2);
+        // svgPolygon1.setScaleX(svgPolygon1.getScaleX()*1.2);
+        // svgPolygon1.setScaleY(svgPolygon1.getScaleY()*1.2);
+
+        
+        
+
     }
 
     /**
