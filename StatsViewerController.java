@@ -190,20 +190,20 @@ public class StatsViewerController extends Controller
     }
 
     /**
-     *
-     */
-    private void totalNumberOfTotalDeathsCount(){
-        int totalNumberOfTotalDeaths = 0;
-        int i = 0;
-        while(!Objects.isNull(getDataTable().getColumns().get(5).getCellObservableValue(i).getValue())){
-            totalNumberOfTotalDeaths += (int) getDataTable().getColumns().get(5).getCellObservableValue(i).getValue();
-            i++;
-        }
-//        System.out.println(totalNumberOfTotalDeaths);
-//        System.out.println(i);
+//      *
+//      */
+//     private void totalNumberOfTotalDeathsCount(){
+//         int totalNumberOfTotalDeaths = 0;
+//         int i = 0;
+//         while(!Objects.isNull(getDataTable().getColumns().get(5).getCellObservableValue(i).getValue())){
+//             totalNumberOfTotalDeaths += (int) getDataTable().getColumns().get(5).getCellObservableValue(i).getValue();
+//             i++;
+//         }
+// //        System.out.println(totalNumberOfTotalDeaths);
+// //        System.out.println(i);
 
-        getDataTable().getColumns().get(5).getCellObservableValue(0).getValue();
+//         getDataTable().getColumns().get(5).getCellObservableValue(0).getValue();
 
-    }
+//     }
 
 }

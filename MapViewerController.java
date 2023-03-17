@@ -108,8 +108,10 @@ public class MapViewerController extends Controller {
      * Execues set of instructions related to the date range selected
      */
     protected void dateChanged(LocalDate from, LocalDate to) {
+        // reset boroughs death count information when date is changed
+        resetTotalBoroughDeaths();
 
-        if (validDateRangeChosen(from, to)) {
+        if (isDateRangeValid(from, to)) {
             // filter all the data to select data from our selected range
             loadDateRangeData(from, to);
             // get the deaths for each borough to colour them
@@ -178,21 +180,7 @@ public class MapViewerController extends Controller {
 
     }
 
-    /**
-     * determines if a selected date range is valid
-     * 
-     * @param fromDate
-     * @param toDate
-     * @return
-     */
-    private boolean validDateRangeChosen(LocalDate fromDate, LocalDate toDate) {
-        // if any of them are null, date range is automatically invalid
-        if (fromDate == null || toDate == null) {
-            return false;
-        }
-        return fromDate.isBefore(toDate);
-
-    }
+    
 
     /**
      * // attempt to calculate which colour to assign to each borough based on total

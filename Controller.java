@@ -49,6 +49,22 @@ public abstract class Controller
 
     }
 
+    /**
+     * determines 
+     * 
+     * @param fromDate
+     * @param toDate
+     * @return whether a selected date range is valid (from is before to)
+     */
+    protected boolean isDateRangeValid(LocalDate fromDate, LocalDate toDate) {
+        // if any of them are null, date range is automatically invalid
+        if (fromDate == null || toDate == null) {
+            return false;
+        }
+        return fromDate.isBefore(toDate);
+
+    }
+
     abstract protected void dateChanged(LocalDate from, LocalDate to);
     
     abstract protected Parent getView();

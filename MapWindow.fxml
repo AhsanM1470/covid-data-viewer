@@ -22,12 +22,12 @@
             <HBox alignment="CENTER_RIGHT" prefHeight="29.0" prefWidth="920.0" spacing="10.0">
                <children>
                   <Label text="From:" />
-                  <DatePicker fx:id="fromDatePicker" onAction="#dateChanged" prefHeight="11.0" prefWidth="111.0">
+                  <DatePicker fx:id="fromDatePicker" onAction="#datePicked" prefHeight="11.0" prefWidth="111.0">
                      <HBox.margin>
                         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                      </HBox.margin></DatePicker>
                   <Label text="To:" />
-                  <DatePicker fx:id="toDatePicker" onAction="#dateChanged" prefHeight="11.0" prefWidth="111.0" />
+                  <DatePicker fx:id="toDatePicker" onAction="#datePicked" prefHeight="11.0" prefWidth="111.0">
                      <HBox.margin>
                         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                      </HBox.margin></DatePicker>
