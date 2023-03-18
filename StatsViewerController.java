@@ -132,7 +132,7 @@ public class StatsViewerController extends Controller
      * This is called whenever the dates at the top right are changed.
      * For now, this changes the values of "fromDate" and "toDate" and
      */
-    private void dateChanged(ActionEvent event) {
+    protected void processDateRangeData(LocalDate fromDate, LocalDate toDate) {
         rightButton.setDisable(true);
 
         DateFormat dateFormat = new SimpleDateFormat("yy-mm-dd");

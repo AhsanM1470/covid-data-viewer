@@ -16,7 +16,8 @@ public class DataViewer extends Application
 
     @Override
     public void start(Stage stage) throws Exception {
-        URL url = getClass().getResource("MainWindow.fxml");
+        // load the first scene
+        URL url = getClass().getResource(Controller.scenes[0]);
         Parent root = FXMLLoader.load(url);
         Scene scene = new Scene(root);
         

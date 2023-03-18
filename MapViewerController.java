@@ -11,7 +11,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -22,7 +21,6 @@ import java.util.HashMap;
 import javafx.scene.Parent;
 
 public class MapViewerController extends Controller {
-
     Paint hoveredPolygonDefaultBorderColor;
     Double hoveredPolygonDefaultStroke;
 
@@ -31,9 +29,6 @@ public class MapViewerController extends Controller {
 
     @FXML
     private AnchorPane mapAnchorPane;
-
-    @FXML
-    private BorderPane bp;
 
     @FXML
     private Label selectedBoroughLabel;
@@ -72,18 +67,21 @@ public class MapViewerController extends Controller {
 
     @FXML
     void initialize() {
+        // store the initial size of window
+        initialPaneWidth = mainLayout.getPrefWidth();
+        initialPaneHeight = mainLayout.getPrefHeight();
 
         // adding window size change listeneres
-        mapPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+        mainLayout.widthProperty().addListener((obs, oldVal, newVal) -> {
             if (oldVal.floatValue() != newVal.floatValue()) {
-                resizeComponents();
+                resizeComponents(initialPaneWidth, initialPaneHeight, mainLayout, mapAnchorPane);
             }
             ;
         });
 
-        mapPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+        mainLayout.heightProperty().addListener((obs, oldVal, newVal) -> {
             if (oldVal.floatValue() != newVal.floatValue()) {
-                resizeComponents();
+                resizeComponents(initialPaneWidth, initialPaneHeight, mainLayout, mapAnchorPane);
             }
             ;
         });
@@ -101,17 +99,13 @@ public class MapViewerController extends Controller {
         JsonReader jsonReader = new JsonReader();
         boroughIdToName = jsonReader.readJson("boroughIDs.json");
 
-        // store the initial size of window
-        initialPaneWidth = bp.getPrefWidth();
-        initialPaneHeight = bp.getPrefHeight();
-
         calculateHeatMapBase();
         resetBoroughHeatMapData();
 
     }
 
-    public void resizeComponents() {
-        var parentPane = bp;
+    public void resizeComponents(double initialPaneWidth, double initialPaneHeight, BorderPane parentPane,
+            Parent toScale) {
 
         double ratioX = parentPane.getWidth() / initialPaneWidth;
         double ratioY = parentPane.getHeight() / initialPaneHeight;
@@ -129,31 +123,15 @@ public class MapViewerController extends Controller {
         ratioX = Math.max(Math.min(ratioX, 2), 1);
         ratioY = Math.max(Math.min(ratioY, 2), 1);
 
-        mapAnchorPane.setScaleX(ratioX);
-        mapAnchorPane.setScaleY(ratioY);
+        toScale.setScaleX(ratioX);
+        toScale.setScaleY(ratioY);
 
-    }
-
-    /**
-     * collects dates from date picker for this window, checks if its valid, and if
-     * so, loads the
-     * data for that range
-     * 
-     * @param event
-     */
-    @FXML
-    void datePicked(ActionEvent event) {
-
-        LocalDate fromDate = fromDatePicker.getValue();
-        LocalDate toDate = toDatePicker.getValue();
-
-        dateChanged(fromDate, toDate);
     }
 
     /**
      * Execues set of instructions related to the date range selected
      */
-    protected void dateChanged(LocalDate from, LocalDate to) {
+    protected void processDateRangeData(LocalDate from, LocalDate to) {
         // reset boroughs heat map measure information when date is changed
         resetBoroughHeatMapData();
 
@@ -222,8 +200,6 @@ public class MapViewerController extends Controller {
                 compareValue = entryDeathsOnDay;
             }
             heatMapBaseValue = Math.max(compareValue, heatMapBaseValue);
-            
-
         }
 
     }
@@ -261,8 +237,15 @@ public class MapViewerController extends Controller {
                 // calculate proportion of current borough data with the base value
                 // in HSB hue is measured in degrees where: 0 -> 120 == red -> green.
                 // converts the proportion of heat map values as a % of the hueUpperBound
-                int hueUpperBound = 140;
-                double percentageOfHue = (hueUpperBound * boroughHeatMapMeasure / heatMapBaseValue);
+                int hueUpperBound = 140; // using 140 to allow more greenery
+
+                /*
+                    TODO: 
+                    proportionOfHue will be used later to determine how Bright/Dark text
+                    fill of vector path button will be (do when after SVGs made in figma) 
+                */
+                double proportionOfHue = ((double) boroughHeatMapMeasure) / heatMapBaseValue;
+                double percentageOfHue = (hueUpperBound * proportionOfHue);
 
                 // subtracting from the upper bound gives us reversed scale.
                 // green -> low deaths
@@ -270,7 +253,7 @@ public class MapViewerController extends Controller {
                 double hue = hueUpperBound - percentageOfHue;
 
                 // HSB (hue (in degrees), saturation , brightness)
-                col = Color.hsb(hue, 1, 0.85);
+                col = Color.hsb(hue, 1, 0.75);
 
             } else {
                 // color for if there's no heat map indicator for the borough in the selected
@@ -316,8 +299,8 @@ public class MapViewerController extends Controller {
 
         // change properties to indicate hovered borough
         hoveredPolygonDefaultBorderColor = poly.getStroke();
-        poly.setStrokeWidth(3);
-        poly.setStroke(new Color(1, 1, 1, 1.0));
+        poly.setStrokeWidth(2.5);
+        poly.setStroke(Color.WHITE);
 
     }
 
@@ -330,7 +313,7 @@ public class MapViewerController extends Controller {
     @FXML
     void polygonLeft(MouseEvent event) {
         Polygon poly = (Polygon) event.getSource();
-        poly.setStrokeWidth(1);
+        poly.setStrokeWidth(0.6);
         poly.setStroke(hoveredPolygonDefaultBorderColor);
 
         // remove text if no borough is selected
@@ -338,7 +321,6 @@ public class MapViewerController extends Controller {
     }
 
     /**
-     * q
      * 
      * @param label    label component to be customised
      * @param text     text to be displayed on the label
@@ -350,7 +332,5 @@ public class MapViewerController extends Controller {
         label.setFont(new Font("Comic Sans MS", fontSize));
     }
 
-    protected Parent getView() {
-        return mapPane;
-    }
+
 }
