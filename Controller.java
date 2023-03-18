@@ -3,13 +3,19 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -44,9 +50,12 @@ public abstract class Controller {
     @FXML
     protected Button rightButton;
 
+    @FXML
+    protected StackPane parentPane;
+
     // shared across all controllers to store current scene information
     public static int sceneIndex = 0;
-    public static String[] scenes = new String[] { "MainWindow.fxml", "MapWindow.fxml" };
+    public static String[] scenes = new String[] {"MainWindow.fxml", "MapWindow.fxml"};
 
     /**
      * Creates a new Controller object and initialises it with a list of
@@ -180,6 +189,50 @@ public abstract class Controller {
     }
 
     /**
+     * Used when next or previous buttons are pressed. Uses the sceneIndex to select
+     * next scene to be displayed from the array of scenes
+     * 
+     * @param event
+     * @throws IOException
+     */
+    protected void switchPanel(ActionEvent event) throws IOException {
+
+        FXMLLoader sceneLoader = new FXMLLoader(
+                getClass().getResource(scenes[sceneIndex]));
+
+        Parent root = sceneLoader.load();
+        Controller sceneController = sceneLoader.getController();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        Scene originalScene = ((Node) event.getSource()).getScene();
+
+        root.translateXProperty().set(originalScene.getWidth());
+
+        parentPane.getChildren().add(root);
+
+        Timeline timeline = new Timeline();
+        KeyValue kv = new KeyValue(root.translateXProperty(), 0, Interpolator.EASE_IN);
+        KeyFrame kf = new KeyFrame(Duration.seconds(0.7), kv);
+        timeline.getKeyFrames().add(kf);
+        timeline.setOnFinished(ev->{
+            parentPane.getChildren().remove(mainLayout);
+        });
+        timeline.play();
+
+        
+        sceneController.setDateRange(getFromDate(), getToDate());
+
+        // Scene scene = new Scene(root);
+
+        // stage.setWidth(mainLayout.getWidth());
+
+        // // causes height to shrink by 28 for some reason so adding 28 cancels out
+        // stage.setHeight(mainLayout.getHeight() + 28);
+        // stage.setScene(scene);
+
+    }
+
+    /**
      * Sets the date range of the date pickers to the given dates.
      * Calls the processDateRangeData() method which performs actions related to the
      * date picked on the current scene
@@ -194,33 +247,6 @@ public abstract class Controller {
         // do what is specified to be done with date range in current scene
         processDateRangeData(from, to);
         allowPanelSwitching(isDateRangeValid(from, to));
-    }
-
-    /**
-     * Used when next or previous buttons are pressed. Uses the sceneIndex to select
-     * next scene to be displayed from the array of scenes
-     * 
-     * @param event
-     * @throws IOException
-     */
-    protected void switchPanel(ActionEvent event) throws IOException {
-        FXMLLoader sceneLoader = new FXMLLoader(
-                getClass().getResource(scenes[sceneIndex]));
-
-        Parent root = sceneLoader.load();
-        Controller sceneController = sceneLoader.getController();
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-        sceneController.setDateRange(getFromDate(), getToDate());
-
-        Scene scene = new Scene(root);
-
-        stage.setWidth(mainLayout.getWidth());
-
-        // causes height to shrink by 28 for some reason so adding 28 cancels out
-        stage.setHeight(mainLayout.getHeight() + 28);
-        stage.setScene(scene);
-
     }
 
     // ---------------------------- Abstract Methods --------------------------- //

@@ -10,6 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
@@ -32,6 +33,7 @@ public class MapViewerController extends Controller {
 
     @FXML
     private Label selectedBoroughLabel;
+
 
     @FXML
     private Polygon brentPolygon, bexleyPolygon, bromleyPolygon, camdenPolygon, cityPolygon, croydonPolygon,
