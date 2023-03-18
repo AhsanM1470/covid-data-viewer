@@ -45,17 +45,11 @@ public class DataViewerController extends Controller {
     public void initialize() {
 
         mainLayout.widthProperty().addListener((obs, oldVal, newVal) -> {
-            if (oldVal.floatValue() != newVal.floatValue()) {
-                newVal.doubleValue();
-            }
-            ;
+            Controller.width = newVal.doubleValue();
         });
 
         mainLayout.heightProperty().addListener((obs, oldVal, newVal) -> {
-            if (oldVal.floatValue() != newVal.floatValue()) {
-                newVal.doubleValue();
-            }
-            ;
+            Controller.height = newVal.doubleValue();
         });
 
         // Create TableColumns for the TableView

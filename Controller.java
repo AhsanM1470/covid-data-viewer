@@ -53,6 +53,8 @@ public abstract class Controller {
     @FXML
     protected StackPane parentPane;
 
+    static double width,height;
+
     // shared across all controllers to store current scene information
     public static int sceneIndex = 0;
     public static String[] scenes = new String[] {"MainWindow.fxml", "MapWindow.fxml"};
@@ -206,13 +208,17 @@ public abstract class Controller {
 
         Scene originalScene = ((Node) event.getSource()).getScene();
 
-        root.translateXProperty().set(originalScene.getWidth());
+        int mult = 1;
+        if (event.getSource() == leftButton){
+            mult = -1;
+        }
+        root.translateXProperty().set(mult*originalScene.getWidth());
 
         parentPane.getChildren().add(root);
 
         Timeline timeline = new Timeline();
         KeyValue kv = new KeyValue(root.translateXProperty(), 0, Interpolator.EASE_IN);
-        KeyFrame kf = new KeyFrame(Duration.seconds(0.7), kv);
+        KeyFrame kf = new KeyFrame(Duration.seconds(0.65), kv);
         timeline.getKeyFrames().add(kf);
         timeline.setOnFinished(ev->{
             parentPane.getChildren().remove(mainLayout);
@@ -224,10 +230,10 @@ public abstract class Controller {
 
         // Scene scene = new Scene(root);
 
-        // stage.setWidth(mainLayout.getWidth());
+        // stage.setWidth(width);
 
         // // causes height to shrink by 28 for some reason so adding 28 cancels out
-        // stage.setHeight(mainLayout.getHeight() + 28);
+        // stage.setHeight(height + 28);
         // stage.setScene(scene);
 
     }
