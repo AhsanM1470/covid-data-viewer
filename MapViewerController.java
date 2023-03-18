@@ -74,14 +74,14 @@ public class MapViewerController extends Controller {
     void initialize() {
 
         // adding window size change listeneres
-        bp.widthProperty().addListener((obs, oldVal, newVal) -> {
+        mapPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             if (oldVal.floatValue() != newVal.floatValue()) {
                 resizeComponents();
             }
             ;
         });
 
-        bp.heightProperty().addListener((obs, oldVal, newVal) -> {
+        mapPane.heightProperty().addListener((obs, oldVal, newVal) -> {
             if (oldVal.floatValue() != newVal.floatValue()) {
                 resizeComponents();
             }
@@ -158,12 +158,15 @@ public class MapViewerController extends Controller {
         resetBoroughHeatMapData();
 
         if (isDateRangeValid(from, to)) {
+            heatMapBaseValue = 0;
             // filter all the data to select data from our selected range
             loadDateRangeData(from, to);
+
             // get the heat map values for each borough to colour them
             loadBoroughHeatMapData();
-            assignBoroughsColor();
         }
+
+        assignBoroughsColor();
     }
 
     /**
@@ -174,7 +177,7 @@ public class MapViewerController extends Controller {
      * @param toDate
      */
     private void loadDateRangeData(LocalDate fromDate, LocalDate toDate) {
-        dateRangeData = super.getDateRangeData(fromDate, toDate);
+        dateRangeData = getDateRangeData(fromDate, toDate);
     }
 
     /**
@@ -197,7 +200,6 @@ public class MapViewerController extends Controller {
      * each borough in the time range
      */
     private void loadBoroughHeatMapData() {
-
         for (CovidData covidEntry : dateRangeData) {
             String entryBoroughName = covidEntry.getBorough();
             Integer entryDeathsOnDay = covidEntry.getNewDeaths();
@@ -209,13 +211,18 @@ public class MapViewerController extends Controller {
             }
 
             // if there's an existing value stored for a borough, update it
+            int compareValue = 0;
             if (boroughCumulitiveDeaths != null) {
                 int deathCountInDateRange = entryDeathsOnDay + boroughCumulitiveDeaths;
+                compareValue = deathCountInDateRange;
                 boroughHeatMapData.put(entryBoroughName, deathCountInDateRange);
             } else {
                 // if the borough currently stores no new deaths, place deaths on this day
                 boroughHeatMapData.put(entryBoroughName, entryDeathsOnDay);
+                compareValue = entryDeathsOnDay;
             }
+            heatMapBaseValue = Math.max(compareValue, heatMapBaseValue);
+            
 
         }
 
@@ -229,7 +236,7 @@ public class MapViewerController extends Controller {
         for (CovidData cd : data) {
             Integer totalDeaths = cd.getTotalDeaths();
             if (totalDeaths != null) {
-                heatMapBaseValue = Math.max(heatMapBaseValue, totalDeaths);
+                // heatMapBaseValue = Math.max(heatMapBaseValue, totalDeaths);
             }
         }
     }
@@ -249,12 +256,12 @@ public class MapViewerController extends Controller {
 
             // if the borough has data available within the date range, give it a valid
             // heatMap colour.
-            if (boroughHeatMapMeasure != null) {
+            if (boroughHeatMapMeasure != null && heatMapBaseValue > 0) {
 
                 // calculate proportion of current borough data with the base value
-                // 120 is used because in HSB 0 -> 120 == red -> green.
-                // converts the proportion of heat map values as a % of the hue upper bound
-                int hueUpperBound = 120;
+                // in HSB hue is measured in degrees where: 0 -> 120 == red -> green.
+                // converts the proportion of heat map values as a % of the hueUpperBound
+                int hueUpperBound = 140;
                 double percentageOfHue = (hueUpperBound * boroughHeatMapMeasure / heatMapBaseValue);
 
                 // subtracting from the upper bound gives us reversed scale.
@@ -263,7 +270,7 @@ public class MapViewerController extends Controller {
                 double hue = hueUpperBound - percentageOfHue;
 
                 // HSB (hue (in degrees), saturation , brightness)
-                col = Color.hsb(hue, 1, 0.7);
+                col = Color.hsb(hue, 1, 0.85);
 
             } else {
                 // color for if there's no heat map indicator for the borough in the selected

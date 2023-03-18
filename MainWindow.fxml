@@ -80,16 +80,16 @@
       </VBox>
    </bottom>
    <center>
-      <StackPane fx:id="mainPanel" style="-fx-border-style: solid hidden solid hidden;" BorderPane.alignment="CENTER">
+      <StackPane fx:id="mainPanel" style="-fx-border-style: solid hidden solid hidden; -fx-background-color: #191919D1;" BorderPane.alignment="CENTER">
          <children>
             <VBox fx:id="welcomePane" alignment="CENTER" prefHeight="564.0" prefWidth="920.0">
                <children>
-                  <Label text="Welcome to the Covid Data Viewer for London!">
+                  <Label text="Welcome to the Covid Data Viewer for London!" textFill="WHITE">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <Label text="Pick a date range using the drop downs at the top to look at data for that period!">
+                  <Label text="Pick a date range using the drop downs at the top to look at data for that period!" textFill="#eeeeee">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -98,7 +98,7 @@
             </VBox>
             <VBox fx:id="tablePane" alignment="CENTER" visible="false">
                <children>
-                  <Label fx:id="dataTableInfoLabel" text="There’s no available data for the selected date range.">
+                  <Label fx:id="dataTableInfoLabel" text="There’s no available data for the selected date range." textFill="WHITE">
                      <font>
                         <Font size="20.0" />
                      </font></Label>

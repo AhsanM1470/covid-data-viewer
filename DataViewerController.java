@@ -161,12 +161,11 @@ public class DataViewerController extends Controller
             // date in CovidData is string, parse to LocalDate for easy comparison
             LocalDate date = LocalDate.parse(row.getDate());
             // check if date is between 'from' and 'to'
-            if (date.isAfter(from) && date.isBefore(to) || date.isEqual(from) || date.isEqual(to)) {
-                dataInRange = true;
+            dataInRange = isDateInRange(date, from, to);
+            if (dataInRange) {
                 break;
             } 
         }
-
         return dataInRange;
     }
 
@@ -193,11 +192,8 @@ public class DataViewerController extends Controller
      */
     private void populateTable(LocalDate from, LocalDate to) {
         // Add all CovidData objects within the given date range to the table
-        for (CovidData d : data) {
-            LocalDate date = LocalDate.parse(d.getDate());
-            if (date.isAfter(from) && date.isBefore(to) || date.isEqual(from) || date.isEqual(to)) {
-                dataTable.getItems().add(d);
-            }
+        for (CovidData d : getDateRangeData(from, to)) {
+            dataTable.getItems().add(d);
         }
     }
 
