@@ -65,9 +65,9 @@
    <center>
       <BorderPane fx:id="viewPane" prefHeight="582.0" prefWidth="920.0" style="-fx-background-color: #191919D1;" BorderPane.alignment="CENTER">
          <center>
-            <AnchorPane fx:id="mapAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onZoom="#mapZoomed" prefHeight="582.0" prefWidth="920.0" BorderPane.alignment="CENTER">
+            <AnchorPane fx:id="mapAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="920.0" BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane layoutX="148.0" layoutY="56.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="524.0" prefWidth="650.0">
+                  <AnchorPane fx:id="polygonPane" layoutX="148.0" layoutY="56.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="524.0" prefWidth="650.0">
                      <children>
                         <!-- <Polygon fill="#5be457" layoutX="143.0" layoutY="65.0" points="-45.00000762939453, 10.563316345214844, 8.788650512695312, 10.563316345214844, -12.736495971679688, -42.3526496887207" stroke="BLACK" strokeType="INSIDE" /> -->
                         <Polygon fx:id="enfieldPolygon" fill="#ababab" layoutX="277.0" layoutY="106.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="74.04810333251953, -3.7001149654388428, 13.781499862670898, -5.7509636878967285, 17.59588623046875, -29.838584899902344, -12.68701171875, -64.74803924560547, -0.069122314453125, -83.67485809326172, 28.951995849609375, -90.40438842773438, 100.54265594482422, -80.04515838623047" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />

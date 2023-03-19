@@ -48,7 +48,7 @@ public abstract class Controller {
 
     protected List<PanelType> scalePanels = Arrays.asList(new PanelType[]{PanelType.MAP});
 
-    static double width, height;
+    static boolean inTransition = false;
 
     /**
      * Creates a new Controller object and initialises it with a list of

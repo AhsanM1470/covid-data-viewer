@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Label;
-import javafx.scene.Node;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 
@@ -50,14 +49,8 @@ public class DataViewerController extends Controller {
     @FXML
     private Label dataTableInfoLabel;
 
-    // true when transitioning between views.
-    // if true, the 'stackPane' has more than one child node.
-    private boolean inTransition = false;
-
     private Controller[] controllers;
     private int controllerIndex;
-
-    private double initialPaneWidth, initialPaneHeight;
 
     protected PanelType currentPanelType = PanelType.MAIN;
 
@@ -68,27 +61,7 @@ public class DataViewerController extends Controller {
      */
     @FXML
     public void initialize() {
-        initialPaneWidth = mainLayout.getPrefWidth();
-        initialPaneHeight = mainLayout.getPrefHeight();
 
-        // adding window size change listeneres
-        mainLayout.widthProperty().addListener((obs, oldVal, newVal) -> {
-            // resizing components only takes place when 'inTransition' is false meaning
-            // that there's only one child node at index 0 within the main 'stackPane'
-            if (scalePanels.contains(currentPanelType)) {
-                resizeComponents(0);
-            }
-            ;
-        });
-
-        mainLayout.heightProperty().addListener((obs, oldVal, newVal) -> {
-            if (scalePanels.contains(currentPanelType)) {
-                // resizing components only takes place when no transitions are happening
-                // meaning there's only one child node at index 0 within the main 'stackPane'
-                resizeComponents(0);
-            }
-            ;
-        });
         // Create TableColumns for the TableView
         TableColumn<CovidData, String> dateCol = new TableColumn<CovidData, String>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<CovidData, String>("date"));
@@ -112,7 +85,7 @@ public class DataViewerController extends Controller {
         dataTable.getColumns().addAll(dateCol, boroughCol, newCasesCol, totalCasesCol, newDeathsCol, totalDeathsCol);
 
         // Make all columns equal width
-        dataTable.setColumnResizePolicy(dataTable.CONSTRAINED_RESIZE_POLICY);
+        dataTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         // Current controller to be used is in 0th index
         controllerIndex = 0;
@@ -126,45 +99,6 @@ public class DataViewerController extends Controller {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
-
-    }
-
-    /**
-     * 
-     * @param index within the stack pane to resize.
-     */
-    public void resizeComponents(int index) {
-
-        // if the window is currenly in the process of switching panels, don't resize
-        // anything
-        if (inTransition) {
-            return;
-        }
-
-        double ratioX = mainLayout.getWidth() / initialPaneWidth;
-
-        if (Double.isInfinite(ratioX) || Double.isNaN(ratioX)) {
-            return;
-        }
-
-        double ratioY = mainLayout.getHeight() / initialPaneHeight;
-
-        if (Double.isInfinite(ratioY) || Double.isNaN(ratioY)) {
-            return;
-        }
-
-        ratioY = Math.max(Math.min(ratioY, 2), 1);
-        ratioX = Math.max(Math.min(ratioX, 2), 1);
-
-        BorderPane ct = (BorderPane) stackPane.getChildren().get(index);
-        Node node = ct.getCenter();
-
-        // scale by same ratio
-        double scale = Math.min(ratioX, ratioY);
-        node.setScaleY(scale);
-        node.setScaleX(scale);
-
-        // stackPane.getChildren().set(0, ct);
 
     }
 
@@ -271,7 +205,8 @@ public class DataViewerController extends Controller {
      */
     @FXML
     private void nextPanel(ActionEvent event) {
-        if (inTransition) {
+        // if in process of switching to next panel, don't allow continuous clicking
+        if (Controller.inTransition) {
             return;
         }
         Controller oldController = controllers[controllerIndex];
@@ -295,7 +230,8 @@ public class DataViewerController extends Controller {
      */
     @FXML
     private void previousPanel(ActionEvent event) {
-        if (inTransition) {
+        // if in process of switching to next panel, don't allow continuous clicking
+        if (Controller.inTransition) {
             return;
         }
         Controller previousController = controllers[controllerIndex];
@@ -354,7 +290,7 @@ public class DataViewerController extends Controller {
         // if we're switching to a window which we want to re-scale, resize it to fit
         // the current screen before transitioning
         if (scalePanels.contains(currentPanelType)){
-            resizeComponents(1);
+            // resizeComponents(1);
         }
             
         // transitionig between panes
@@ -379,13 +315,13 @@ public class DataViewerController extends Controller {
         timeline.setOnFinished(e -> {
             // remove the previous view that was on teh stack pane
             stackPane.getChildren().remove(previousController.getView());
-            inTransition = false;
+            Controller.inTransition = false;
         });
 
-        // set 'inTransition' to true, disallowing some actions such as spamming
+        // set 'Controller.inTransition' to true, disallowing some actions such as spamming
         // left/right buttons
         timeline.play();
-        inTransition = true;
+        Controller.inTransition = true;
 
     }
 
