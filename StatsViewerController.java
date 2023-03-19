@@ -118,7 +118,7 @@ public class StatsViewerController extends Controller
      * @param from
      * @param to
      */
-    protected void dateChanged(LocalDate from, LocalDate to) {;}
+    protected void dateChanged(LocalDate fromDate, LocalDate toDate) {;}
 
     /**
      * @return the main centre panel
@@ -132,15 +132,10 @@ public class StatsViewerController extends Controller
      * This is called whenever the dates at the top right are changed.
      * For now, this changes the values of "fromDate" and "toDate" and
      */
-    protected void processDateRangeData(LocalDate fromDate, LocalDate toDate) {
+    protected void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {
         rightButton.setDisable(true);
 
         DateFormat dateFormat = new SimpleDateFormat("yy-mm-dd");
-
-        // These are initialised at the start because
-        // they are needed elsewhere
-        fromDate = fromDatePicker.getValue();
-        toDate = toDatePicker.getValue();
 
         if (fromDate != null && toDate != null) {
             if (fromDate.isBefore(toDate)) {
@@ -232,7 +227,7 @@ public class StatsViewerController extends Controller
                 // this updates the value of "dataRangeData" so that
                 // it takes into account the most recent "fromDate"
                 // and "toDate"
-                dataRangeData = getDateRangeData(fromDate, toDate);
+                dataRangeData = getDataInDateRange(fromDate, toDate);
 
                 if(fromDate.isBefore(toDate)){
                     sumTotalDeathLabel.setText("" + totalNumberOfTotalDeathsCount());
