@@ -185,6 +185,26 @@ public class DataViewerController extends Controller {
     }
 
     /**
+     * Handles the event when the date picker is changed.
+     * Once two dates are selected, check if its valid, and attempt to process data
+     * within that date range
+     * 
+     * @param event The event triggered by changing the date picker.
+     */
+    @FXML
+    @Override
+    protected void dateChanged(ActionEvent event) {
+        LocalDate fromDate = fromDatePicker.getValue();
+        LocalDate toDate = toDatePicker.getValue();
+
+        if (fromDate == null || toDate == null) {
+            return;
+        }
+
+        controllers[controllerIndex].processDataInDateRange(fromDate, toDate);
+    }
+
+    /**
      * Handles the event when the date picker is changed. Updates the data table
      * with the chosen date range if valid date chosen, otherwise shows an error
      * message to user.
