@@ -14,20 +14,22 @@ import java.util.Objects;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.Pane;
 
+import javax.swing.*;
+
 /**
- * Controls logic of DataViewer
+ * Controls logic of DataViewer.
+ *
+ * The ArrayList<Pane> contains each Pane that StatsView contains.
+ *  StatsView switches between these nested panes and checks
+ *  conditions within the panes by using the index i of the
+ *  ArrayList. One condition could lead to the average of the
+ *  total cases being refreshed and shown.
  *
  * @author Saihan Marshall
  * @version 2023.03.13
  */
 public class StatsViewerController extends Controller
 {
-//    @FXML
-//    private DatePicker fromDatePicker;
-//
-//    @FXML
-//    private DatePicker toDatePicker;
-    
     @FXML
     private Button leftButton;
     
@@ -64,7 +66,7 @@ public class StatsViewerController extends Controller
      * This pane is automatically set to invisible when
      *  "StatsViewer" is launched.
      */
-    private StackPane thirdPane;
+    private BorderPane thirdPane;
     
     @FXML
     /**
@@ -83,6 +85,13 @@ public class StatsViewerController extends Controller
      *  given date range.
      */
     private Label sumTotalDeathLabel;
+
+    @FXML
+    /**
+     * This label shows the average of the total cases for
+     *  each data value in the date range.
+     */
+    private Label averageCasesLabel;
 
     //index for statsPanes
     private int i = 0;
@@ -115,10 +124,10 @@ public class StatsViewerController extends Controller
 
     /**
      *
-     * @param from
-     * @param to
+     * @param fromDate
+     * @param toDate
      */
-    protected void dateChanged(LocalDate fromDate, LocalDate toDate) {;}
+    protected void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {;}
 
     /**
      * @return the main centre panel
@@ -132,10 +141,17 @@ public class StatsViewerController extends Controller
      * This is called whenever the dates at the top right are changed.
      * For now, this changes the values of "fromDate" and "toDate" and
      */
-    protected void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {
+    protected void processDataInDateRange(ActionEvent event) {
         rightButton.setDisable(true);
 
         DateFormat dateFormat = new SimpleDateFormat("yy-mm-dd");
+
+
+        // these are initialised at the start because
+        // they are needed elsewhere
+        fromDate = fromDatePicker.getValue();
+        toDate = toDatePicker.getValue();
+
 
         if (fromDate != null && toDate != null) {
             if (fromDate.isBefore(toDate)) {
@@ -146,6 +162,10 @@ public class StatsViewerController extends Controller
         // if the index is 1, then refreshes the label
         // showing sum of total deaths.
         refreshSumTotalDeathLabel();
+
+        //
+        //
+        refreshAverage();
     }
 
     @FXML
@@ -179,6 +199,7 @@ public class StatsViewerController extends Controller
         }
 
         refreshSumTotalDeathLabel();
+        refreshAverage();
 
     }
 
@@ -212,6 +233,7 @@ public class StatsViewerController extends Controller
         }
 
         refreshSumTotalDeathLabel();
+        refreshAverage();
     }
 
     /**
@@ -232,6 +254,10 @@ public class StatsViewerController extends Controller
                 if(fromDate.isBefore(toDate)){
                     sumTotalDeathLabel.setText("" + totalNumberOfTotalDeathsCount());
                 }
+
+                else{
+                    sumTotalDeathLabel.setText("The date field is not valid.");
+                }
             }
 
         }
@@ -251,6 +277,7 @@ public class StatsViewerController extends Controller
              // deaths so a check is necessary
              if(!Objects.isNull(c.getTotalDeaths())){
                 totalNumberOfTotalDeaths += c.getTotalDeaths();
+                System.out.println(c);
              }
 
          }
@@ -258,5 +285,65 @@ public class StatsViewerController extends Controller
 
          return totalNumberOfTotalDeaths;
      }
+
+    /**
+     *
+     */
+    private void refreshAverage(){
+        if (i == 2){
+            if(fromDate != null && toDate != null){
+                // this updates the value of "dataRangeData" so that
+                // it takes into account the most recent "fromDate"
+                // and "toDate"
+                dataRangeData = getDataInDateRange(fromDate, toDate);
+
+                if(fromDate.isBefore(toDate)){
+                    averageCasesLabel.setText("" + averageOfTotalCases());
+                }
+
+                else{
+                    averageCasesLabel.setText("The date field is not valid.");
+                }
+            }
+
+        }
+    }
+
+    /**
+     * This returns a decimal average of the total cases
+     *  of all cases in the specified data range.
+     * @return average of total cases
+     */
+    private float averageOfTotalCases(){
+        float totalCases = 0;
+        float average = 0;
+
+
+        // iterates and adds each case to number of cases
+        for(CovidData c : dataRangeData){
+
+            // some CovidData strings actually have null for the total
+            // cases so a check is necessary
+            if(!Objects.isNull(c.getTotalCases())){
+                totalCases += c.getTotalCases();
+            }
+
+
+        }
+
+        // calculates average if there is at least one
+        // data value
+        if(dataRangeData.size() > 0){
+            System.out.println(totalCases + "   " + dataRangeData.size());
+            average = totalCases / dataRangeData.size();
+        }
+
+        else{
+            average = 0;
+        }
+
+        return average;
+
+    }
 
 }
