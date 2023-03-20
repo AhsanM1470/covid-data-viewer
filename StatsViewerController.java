@@ -200,45 +200,6 @@ public class StatsViewerController extends Controller
         return statsPane;
     }
 
-    @FXML
-    /**
-     * This is called whenever the dates at the top right are changed.
-     * For now, this changes the values of "fromDate" and "toDate" and
-     */
-    protected void processDataInDateRange(ActionEvent event) {
-        System.out.println("982378416982628796");
-        rightButton.setDisable(true);
-
-        DateFormat dateFormat = new SimpleDateFormat("yy-mm-dd");
-
-
-        // these are initialised at the start because
-        // they are needed elsewhere
-        fromDate = fromDatePicker.getValue();
-        toDate = toDatePicker.getValue();
-
-
-        if (fromDate != null && toDate != null) {
-            if (fromDate.isBefore(toDate)) {
-                rightButton.setDisable(false);
-            }
-        }
-
-        // if the index is 1, then refreshes the label
-        // showing sum of total deaths.
-        refreshSumTotalDeathLabel();
-
-        //
-        //
-        refreshAverage();
-
-        //
-        //
-        refreshHighestDeathLabel();
-
-        //
-        refreshMobilityMeasureLabel();
-    }
 
     @FXML
     /**
