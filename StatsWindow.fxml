@@ -73,10 +73,24 @@
          <center>
             <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox fx:id="firstPane" prefHeight="200.0" prefWidth="100.0" visible="false">
+                  <VBox fx:id="firstPane" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label fx:id="rrGMRLabel" text="Label" />
-                        <Label fx:id="gpGMRLabel" text="Label" />
+                        <Label text="Google Mobility Statistics" underline="true">
+                           <padding>
+                              <Insets top="100.0" />
+                           </padding>
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="rrGMRLabel" text="No date range has been selected.">
+                           <padding>
+                              <Insets top="100.0" />
+                           </padding></Label>
+                        <Label fx:id="gpGMRLabel" text="No date range has been selected.">
+                           <padding>
+                              <Insets top="40.0" />
+                           </padding></Label>
                      </children>
                   </VBox>
                   <BorderPane fx:id="secondPane" prefHeight="200.0" prefWidth="200.0" visible="false">
@@ -91,7 +105,7 @@
                         </Label>
                      </top>
                      <center>
-                        <Label fx:id="sumTotalDeathLabel" alignment="CENTER" prefHeight="287.0" prefWidth="306.0" text="Label" BorderPane.alignment="CENTER">
+                        <Label fx:id="sumTotalDeathLabel" alignment="CENTER" prefHeight="287.0" prefWidth="306.0" text="No date range has been selected." BorderPane.alignment="CENTER">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -100,13 +114,19 @@
                   </BorderPane>
                   <BorderPane fx:id="thirdPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                      <center>
-                        <Label fx:id="averageCasesLabel" text="Label" BorderPane.alignment="CENTER" />
+                        <Label fx:id="averageCasesLabel" text="No date range has been selected." BorderPane.alignment="CENTER" />
                      </center>
+                     <top>
+                        <Label text="Average of total cases" BorderPane.alignment="CENTER" />
+                     </top>
                   </BorderPane>
                   <BorderPane fx:id="fourthPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                      <center>
-                        <Label fx:id="highestDeathDateLabel" text="Label" BorderPane.alignment="CENTER" />
+                        <Label fx:id="highestDeathDateLabel" text="No date range has been selected." BorderPane.alignment="CENTER" />
                      </center>
+                     <top>
+                        <Label text="Date with the highest death" BorderPane.alignment="CENTER" />
+                     </top>
                   </BorderPane>
                </children>
             </StackPane>

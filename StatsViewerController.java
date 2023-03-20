@@ -304,7 +304,7 @@ public class StatsViewerController extends Controller
              }
 
          }
-         System.out.println(totalNumberOfTotalDeaths);
+//         System.out.println(totalNumberOfTotalDeaths);
 
          return totalNumberOfTotalDeaths;
      }
@@ -360,7 +360,7 @@ public class StatsViewerController extends Controller
         // calculates average if there is at least onex
         // data value
         if(dataRangeData.size() > 0){
-            System.out.println(totalCases + "   " + dataRangeData.size());
+//            System.out.println(totalCases + "   " + dataRangeData.size());
             average = totalCases / dataRangeData.size();
         }
 
@@ -412,6 +412,10 @@ public class StatsViewerController extends Controller
         // iterates through all records in date range
         for(CovidData c : dataRangeData){
 
+            if(!Objects.isNull(c)){
+                return "No records ";
+            }
+
             // some records actually have null for the total
             // deaths so a check is necessary
             if(!Objects.isNull(c.getTotalCases())){
@@ -419,7 +423,7 @@ public class StatsViewerController extends Controller
                 if(c.getTotalDeaths() > totalDeath){
                     totalDeath = c.getTotalDeaths();
                     highestDeathDate = c.getDate();
-                    System.out.println(c);
+//                    System.out.println(c);
                 }
 
             }
@@ -443,8 +447,8 @@ public class StatsViewerController extends Controller
                 dataRangeData = getDataInDateRange(fromDate, toDate);
 
                 if(fromDate.isBefore(toDate)){
-                    rrGMRLabel.setText("" + getAverageRRGMR());
-                    gpGMRLabel.setText("" + getAverageGPGMR());
+                    rrGMRLabel.setText("The average retail recreational GMR: " + getAverageRRGMR());
+                    gpGMRLabel.setText("The average grocery pharmacy GMR: " + getAverageGPGMR());
                 }
 
                 else{
@@ -479,7 +483,7 @@ public class StatsViewerController extends Controller
         // calculates average if there is at least onex
         // data value
         if(dataRangeData.size() > 0){
-            System.out.println(sum + "   " + dataRangeData.size());
+//            System.out.println(sum + "   " + dataRangeData.size());
             average = sum / dataRangeData.size();
         }
 
@@ -511,7 +515,7 @@ public class StatsViewerController extends Controller
         // calculates average if there is at least onex
         // data value
         if(dataRangeData.size() > 0){
-            System.out.println(sum + "   " + dataRangeData.size());
+//            System.out.println(sum + "   " + dataRangeData.size());
             average = sum / dataRangeData.size();
         }
 
