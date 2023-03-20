@@ -13,6 +13,7 @@ import java.util.Objects;
 
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import javax.swing.*;
 
@@ -50,7 +51,7 @@ public class StatsViewerController extends Controller
      *   be positioned relative to one another, and
      *   only must be set as visible or invisible.
      */
-    private StackPane firstPane;
+    private VBox firstPane;
     
     @FXML
     /**
@@ -69,6 +70,19 @@ public class StatsViewerController extends Controller
      *  panes respectively.
      */
     private ArrayList<Pane> statsPanes = new ArrayList<>();
+
+
+    @FXML
+    /**
+     * These labels show average mobility statistics.
+     * They are retail recreation GMR and grocery
+     *  pharmacy GMR.
+     */
+    private Label gpGMRLabel;
+
+    @FXML
+    private Label rrGMRLabel;
+
 
     @FXML
     /**
@@ -168,6 +182,9 @@ public class StatsViewerController extends Controller
         //
         //
         refreshHighestDeathLabel();
+
+        //
+        refreshMobilityMeasureLabel();
     }
 
     @FXML
@@ -203,6 +220,7 @@ public class StatsViewerController extends Controller
         refreshSumTotalDeathLabel();
         refreshAverage();
         refreshHighestDeathLabel();
+        refreshMobilityMeasureLabel();
 
     }
 
@@ -238,6 +256,7 @@ public class StatsViewerController extends Controller
         refreshSumTotalDeathLabel();
         refreshAverage();
         refreshHighestDeathLabel();
+        refreshMobilityMeasureLabel();
     }
 
     /**
@@ -277,7 +296,7 @@ public class StatsViewerController extends Controller
          // this iterates through the data within the date range and
          // sums the total deaths
          for(CovidData c : dataRangeData){
-             // some CovidData strings actually have null for the total
+             // some records actually have null for the total
              // deaths so a check is necessary
              if(!Objects.isNull(c.getTotalDeaths())){
                 totalNumberOfTotalDeaths += c.getTotalDeaths();
@@ -329,7 +348,7 @@ public class StatsViewerController extends Controller
         // iterates and adds each case to number of cases
         for(CovidData c : dataRangeData){
 
-            // some CovidData strings actually have null for the total
+            // some records actually have null for the total
             // cases so a check is necessary
             if(!Objects.isNull(c.getTotalCases())){
                 totalCases += c.getTotalCases();
@@ -393,7 +412,7 @@ public class StatsViewerController extends Controller
         // iterates through all records in date range
         for(CovidData c : dataRangeData){
 
-            // some CovidData strings actually have null for the total
+            // some records actually have null for the total
             // deaths so a check is necessary
             if(!Objects.isNull(c.getTotalCases())){
 
@@ -410,6 +429,94 @@ public class StatsViewerController extends Controller
 
         return highestDeathDate;
 
+    }
+
+    /**
+     *
+     */
+    private void refreshMobilityMeasureLabel(){
+        if (i == 0){
+            if(fromDate != null && toDate != null){
+                // this updates the value of "dataRangeData" so that
+                // it takes into account the most recent "fromDate"
+                // and "toDate"
+                dataRangeData = getDataInDateRange(fromDate, toDate);
+
+                if(fromDate.isBefore(toDate)){
+                    rrGMRLabel.setText("" + getAverageRRGMR());
+                    gpGMRLabel.setText("" + getAverageGPGMR());
+                }
+
+                else{
+                    rrGMRLabel.setText("The date field is not valid.");
+                    gpGMRLabel.setText("The date field is not valid.");
+                }
+            }
+
+        }
+    }
+
+    /**
+     * This computes the average for retail recreation
+     *  GMR over a given data range.
+     * @return average of retail recreation GMR.
+     */
+    private float getAverageRRGMR(){
+        float sum = 0;
+        float average = 0;
+
+        // iterates through all records in date range
+        for(CovidData c : dataRangeData){
+
+            // many records have null for mobility measures
+            // so a check is necessary
+            if(!Objects.isNull(c.getRetailRecreationGMR())){
+                sum += c.getRetailRecreationGMR();
+            }
+
+        }
+
+        // calculates average if there is at least onex
+        // data value
+        if(dataRangeData.size() > 0){
+            System.out.println(sum + "   " + dataRangeData.size());
+            average = sum / dataRangeData.size();
+        }
+
+
+        return average;
+    }
+
+
+    /**
+     * This computes the average for grocery pharmacy
+     *  GMR over a given data range.
+     * @return average of grocery pharmacy GMR.
+     */
+    private float getAverageGPGMR(){
+        float sum = 0;
+        float average = 0;
+
+        // iterates through all records in date range
+        for(CovidData c : dataRangeData){
+
+            // many records have null for mobility measures
+            // so a check is necessary
+            if(!Objects.isNull(c.getGroceryPharmacyGMR())){
+                sum += c.getGroceryPharmacyGMR();
+            }
+
+        }
+
+        // calculates average if there is at least onex
+        // data value
+        if(dataRangeData.size() > 0){
+            System.out.println(sum + "   " + dataRangeData.size());
+            average = sum / dataRangeData.size();
+        }
+
+
+        return average;
     }
 
 }
