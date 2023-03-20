@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StatsViewerController">
@@ -29,14 +28,12 @@
                   <Insets right="5.0" />
                </VBox.margin>
             </HBox>
-            <Line endX="850.0" />
          </children>
       </VBox>
    </top>
    <bottom>
       <VBox prefHeight="30.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <Line endX="850.0" />
             <BorderPane prefHeight="200.0" prefWidth="200.0">
                <left>
                   <Button fx:id="leftButton" disable="true" mnemonicParsing="false" text="&lt;" BorderPane.alignment="CENTER" />
@@ -52,7 +49,7 @@
       </VBox>
    </bottom>
    <center>
-      <BorderPane fx:id="statsPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <BorderPane fx:id="statsPane" prefHeight="200.0" prefWidth="200.0" style="-fx-border-style: solid hidden solid hidden; -fx-background-color: #191919d1;" BorderPane.alignment="CENTER">
          <left>
             <Button mnemonicParsing="false" onAction="#backwardButton" prefHeight="395.0" prefWidth="127.0" text="&lt;" BorderPane.alignment="CENTER">
                <font>
@@ -75,7 +72,7 @@
                <children>
                   <VBox fx:id="firstPane" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label text="Google Mobility Statistics" underline="true">
+                        <Label text="Google Mobility Statistics" textFill="WHITE" underline="true">
                            <padding>
                               <Insets top="100.0" />
                            </padding>
@@ -83,11 +80,11 @@
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <Label fx:id="rrGMRLabel" text="No date range has been selected.">
+                        <Label fx:id="rrGMRLabel" text="No date range has been selected." textFill="WHITE">
                            <padding>
                               <Insets top="100.0" />
                            </padding></Label>
-                        <Label fx:id="gpGMRLabel" text="No date range has been selected.">
+                        <Label fx:id="gpGMRLabel" text="No date range has been selected." textFill="WHITE">
                            <padding>
                               <Insets top="40.0" />
                            </padding></Label>
@@ -95,7 +92,7 @@
                   </VBox>
                   <BorderPane fx:id="secondPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                      <top>
-                        <Label alignment="CENTER" prefHeight="154.0" prefWidth="399.0" text="Total number of total deaths" underline="true" BorderPane.alignment="CENTER">
+                        <Label alignment="CENTER" prefHeight="154.0" prefWidth="399.0" text="Total number of total deaths" textFill="WHITE" underline="true" BorderPane.alignment="CENTER">
                            <font>
                               <Font size="30.0" />
                            </font>
@@ -105,7 +102,7 @@
                         </Label>
                      </top>
                      <center>
-                        <Label fx:id="sumTotalDeathLabel" alignment="CENTER" prefHeight="287.0" prefWidth="306.0" text="No date range has been selected." BorderPane.alignment="CENTER">
+                        <Label fx:id="sumTotalDeathLabel" alignment="CENTER" prefHeight="287.0" prefWidth="306.0" text="No date range has been selected." textFill="WHITE" BorderPane.alignment="CENTER">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -114,18 +111,18 @@
                   </BorderPane>
                   <BorderPane fx:id="thirdPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                      <center>
-                        <Label fx:id="averageCasesLabel" text="No date range has been selected." BorderPane.alignment="CENTER" />
+                        <Label fx:id="averageCasesLabel" text="No date range has been selected." textFill="WHITE" BorderPane.alignment="CENTER" />
                      </center>
                      <top>
-                        <Label text="Average of total cases" BorderPane.alignment="CENTER" />
+                        <Label text="Average of total cases" textFill="WHITE" BorderPane.alignment="CENTER" />
                      </top>
                   </BorderPane>
                   <BorderPane fx:id="fourthPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                      <center>
-                        <Label fx:id="highestDeathDateLabel" text="No date range has been selected." BorderPane.alignment="CENTER" />
+                        <Label fx:id="highestDeathDateLabel" text="No date range has been selected." textFill="WHITE" BorderPane.alignment="CENTER" />
                      </center>
                      <top>
-                        <Label text="Date with the highest death" BorderPane.alignment="CENTER" />
+                        <Label text="Date with the highest death" textFill="WHITE" BorderPane.alignment="CENTER" />
                      </top>
                   </BorderPane>
                </children>

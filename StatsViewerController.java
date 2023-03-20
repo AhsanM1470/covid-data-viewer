@@ -136,10 +136,62 @@ public class StatsViewerController extends Controller
 
     /**
      *
+     */
+    private void loadDataInDateRange(LocalDate fromDate, LocalDate toDate) {
+        dataRangeData = getDataInDateRange(fromDate, toDate);
+        for(CovidData c : dataRangeData){
+            System.out.println(c);
+        }
+    }
+
+    /**
+     *
      * @param fromDate
      * @param toDate
      */
-    protected void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {;}
+    protected void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {
+        this.fromDate = fromDate;
+        this.toDate = toDate;
+
+        if(isDateRangeValid(fromDate, toDate)){
+            loadDataInDateRange(fromDate, toDate);
+        }
+        rightButton.setDisable(true);
+
+        DateFormat dateFormat = new SimpleDateFormat("yy-mm-dd");
+
+
+        // these are initialised at the start because
+        // they are needed elsewhere
+        fromDate = fromDatePicker.getValue();
+        toDate = toDatePicker.getValue();
+
+
+        if (fromDate != null && toDate != null) {
+            if (fromDate.isBefore(toDate)) {
+                rightButton.setDisable(false);
+            }
+        }
+
+        // if the index is 1, then refreshes the label
+        // showing sum of total deaths.
+        refreshSumTotalDeathLabel();
+
+        //
+        //
+        refreshAverage();
+
+        //
+        //
+        refreshHighestDeathLabel();
+
+
+
+        System.out.println(fromDate + "   " + toDate);
+        //
+        refreshMobilityMeasureLabel();
+        System.out.println("982378416982628796");
+    }
 
     /**
      * @return the main centre panel
@@ -154,6 +206,7 @@ public class StatsViewerController extends Controller
      * For now, this changes the values of "fromDate" and "toDate" and
      */
     protected void processDataInDateRange(ActionEvent event) {
+        System.out.println("982378416982628796");
         rightButton.setDisable(true);
 
         DateFormat dateFormat = new SimpleDateFormat("yy-mm-dd");
@@ -380,6 +433,8 @@ public class StatsViewerController extends Controller
      *  fourth pane, or if "i" is already 3 and the date changed.
      */
     private void refreshHighestDeathLabel(){
+
+        System.out.println("poiuy");
         if (i == 3){
             if(fromDate != null && toDate != null){
                 // this updates the value of "dataRangeData" so that
@@ -408,6 +463,7 @@ public class StatsViewerController extends Controller
     private String highestTotalDeathDate(){
         int totalDeath = 0;
         String highestDeathDate = "";
+        System.out.println("xxxxxxxxxxxxx");
 
         // iterates through all records in date range
         for(CovidData c : dataRangeData){
@@ -439,7 +495,10 @@ public class StatsViewerController extends Controller
      *
      */
     private void refreshMobilityMeasureLabel(){
+//        System.out.println(i);
+
         if (i == 0){
+            System.out.println(fromDate + "   " + toDate);
             if(fromDate != null && toDate != null){
                 // this updates the value of "dataRangeData" so that
                 // it takes into account the most recent "fromDate"
