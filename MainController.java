@@ -169,12 +169,12 @@ public class MainController implements Initializable
         // when inTransition is true, don't allow certain actions such as switching
         // panes until animation finished
 
-        nextController.setDateRange(fromDatePicker.getValue(), toDatePicker.getValue());
+        nextController.updatePanelForDateRange(fromDatePicker.getValue(), toDatePicker.getValue());
         nextController.resizeComponents(mainLayout);
 
         // Sets the date picker of the next panel to the dates chosen on the current
         // panel
-        nextController.setDateRange(fromDatePicker.getValue(), toDatePicker.getValue());
+        nextController.updatePanelForDateRange(fromDatePicker.getValue(), toDatePicker.getValue());
         nextController.resizeComponents(mainLayout);
 
         Parent nextPanel = nextController.getView();
@@ -250,7 +250,7 @@ public class MainController implements Initializable
         
         if (!(fromDate == null || toDate == null)) {
             // Update the current panel using the new date range
-            controllers[controllerIndex].processDataInDateRange(fromDate, toDate);
+            controllers[controllerIndex].updatePanelForDateRange(fromDate, toDate);
             
             // If 'from' date is before 'to' date, allow panel switching
             if (fromDate.isBefore(toDate) || fromDate.isEqual(toDate)) {
