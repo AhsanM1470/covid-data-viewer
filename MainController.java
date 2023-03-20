@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
  * @author Ishab Ahmed
  * @version 2023.03.20
  */
-public class MainController extends ViewerController implements Initializable
+public class MainController implements Initializable
 {
     @FXML
     private BorderPane mainLayout;
@@ -49,21 +49,18 @@ public class MainController extends ViewerController implements Initializable
     private int controllerIndex;
 
     /**
-     * Initializes the FXML controller class.
-     * This method is called by the FXMLLoader when the corresponding FXML file is
-     * loaded.
      * 
-     * Creates a new Controller object and initialises it with a list of
-     * CovidData objects loaded from the data source.
+     * Initialises the GUI with the necessary data and controllers for panels.
+     * initialize() used instead of constructor so that the initialisation has
+     * access to the injected @FXML components.
+     * 
+     * @param location The location of the FXML file.
      */
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
         CovidDataLoader dataLoader = new CovidDataLoader();
         data = dataLoader.load();
-        
-        // Current controller to be used is in 0th index
-        controllerIndex = 0;
 
         // Try to load the controllers for all the panels
         try {
@@ -75,6 +72,10 @@ public class MainController extends ViewerController implements Initializable
             e.printStackTrace();
         }
         
+        // Current controller to be used is in 0th index
+        controllerIndex = 0;
+        
+        // Load the first panel into the center of the screen
         stackPane.getChildren().add(controllers[controllerIndex].getView());
     }
     
@@ -84,19 +85,25 @@ public class MainController extends ViewerController implements Initializable
      * @throws Exception if the FXMLLoader fails to load any FXML file.
      */
     public void loadControllers() throws Exception {
+        // FXML files of all panels
         String[] fxmlFiles = {"WelcomeView.fxml", "MapView.fxml", "StatsView.fxml"};
         
         for (int i = 0; i < fxmlFiles.length; i++) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFiles[i]));
             loader.load();
             ViewerController controller = loader.getController();
+            
             controller.setData(data);
             controllers[i] = controller;
         }
     }
     
-    // ----------------------------- Pane Switching ---------------------------- //
-
+    // ----------------------------- Panel Switching ---------------------------- //
+    /**
+     * Changes whether the panel switching buttons are interactable or not.
+     * 
+     * @param state The state the buttons should be (true=enabled, false=disabled)
+     */
     private void allowPanelSwitching(boolean state) {
         leftButton.setDisable(!state);
         rightButton.setDisable(!state);
@@ -109,17 +116,17 @@ public class MainController extends ViewerController implements Initializable
      */
     @FXML
     private void nextPanel(ActionEvent event) {
-        // if in process of switching to next panel, don't allow continuous clicking
-        if (ViewerController.inTransition) {
-            return;
+        // prevents continuous clicking if currently in process of switching to next panel
+        if (ViewerController.inTransition == false) {
+            ViewerController currentController = controllers[controllerIndex];
+            
+            // increment the panel controller (% to prevent indexOutOfBound)
+            controllerIndex = (controllerIndex + 1) % controllers.length;
+            ViewerController nextController = controllers[controllerIndex];
+            
+            // transition from current view to the next view
+            transitionIntoNextPanel(currentController, nextController, event);
         }
-        ViewerController currentController = controllers[controllerIndex];
-        controllerIndex = (controllerIndex + 1) % controllers.length;
-
-        ViewerController nextController = controllers[controllerIndex];
-        
-        // transition from  current view to the next view
-        transitionIntoNextPanel(currentController, nextController, event);
     }
     
     /**
@@ -129,20 +136,21 @@ public class MainController extends ViewerController implements Initializable
      */
     @FXML
     private void previousPanel(ActionEvent event) {
-        // if in process of switching to next panel, don't allow continuous clicking
-        if (ViewerController.inTransition) {
-            return;
+        // prevents continuous clicking if currently in process of switching to next panel
+        if (ViewerController.inTransition == false) {
+            ViewerController currentController = controllers[controllerIndex];
+            
+            controllerIndex--;
+            // rolls index back to end of list if reaching -ve index
+            if (controllerIndex < 0) {
+                controllerIndex = controllers.length - 1;
+            }
+            ViewerController nextController = controllers[controllerIndex];
+            
+            // transition from  current view to the previous view
+            transitionIntoNextPanel(currentController, nextController, event);
         }
-        ViewerController currentController = controllers[controllerIndex];
-        controllerIndex--;
         
-        if (controllerIndex < 0) {
-            controllerIndex = controllers.length - 1;
-        }
-        ViewerController nextController = controllers[controllerIndex];
-        
-        // transition from  current view to the next view
-        transitionIntoNextPanel(currentController, nextController, event);
     }
 
     // ----------------------- Transition Between Panels ----------------------- //
@@ -240,16 +248,16 @@ public class MainController extends ViewerController implements Initializable
         LocalDate fromDate = fromDatePicker.getValue();
         LocalDate toDate = toDatePicker.getValue();
         
-        allowPanelSwitching(isDateRangeValid(fromDate, toDate));
-
-        if (fromDate == null || toDate == null) {
-            return;
+        if (!(fromDate == null || toDate == null)) {
+            // Update the current panel using the new date range
+            controllers[controllerIndex].processDataInDateRange(fromDate, toDate);
+            
+            // If 'from' date is before 'to' date, allow panel switching
+            if (fromDate.isBefore(toDate) || fromDate.isEqual(toDate)) {
+                allowPanelSwitching(true);
+            } else {
+                allowPanelSwitching(false);
+            }
         }
-        
-        controllers[controllerIndex].processDataInDateRange(fromDate, toDate);
-
     }
-    
-    public Parent getView() {return null;};
-    public void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {};
 }
