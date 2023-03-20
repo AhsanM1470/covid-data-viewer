@@ -17,9 +17,9 @@
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
                   <Label text="From:" />
-                  <DatePicker fx:id="fromDatePicker"  prefHeight="11.0" prefWidth="111.0" />
+                  <DatePicker fx:id="fromDatePicker" prefHeight="11.0" prefWidth="111.0" />
                   <Label text="To:" />
-                  <DatePicker fx:id="toDatePicker"  prefHeight="11.0" prefWidth="111.0" />
+                  <DatePicker fx:id="toDatePicker" prefHeight="11.0" prefWidth="111.0" />
                </children>
                <opaqueInsets>
                   <Insets />
@@ -97,8 +97,11 @@
                               <Font size="30.0" />
                            </font>
                            <padding>
-                              <Insets top="20.0" />
+                              <Insets top="65.0" />
                            </padding>
+                           <BorderPane.margin>
+                              <Insets />
+                           </BorderPane.margin>
                         </Label>
                      </top>
                      <center>
@@ -106,23 +109,44 @@
                            <font>
                               <Font size="20.0" />
                            </font>
+                           <padding>
+                              <Insets bottom="150.0" />
+                           </padding>
                         </Label>
                      </center>
                   </BorderPane>
                   <BorderPane fx:id="thirdPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                      <center>
-                        <Label fx:id="averageCasesLabel" text="No date range has been selected." textFill="WHITE" BorderPane.alignment="CENTER" />
+                        <Label fx:id="averageCasesLabel" text="No date range has been selected." textFill="WHITE" BorderPane.alignment="CENTER">
+                           <padding>
+                              <Insets bottom="125.0" />
+                           </padding></Label>
                      </center>
                      <top>
-                        <Label text="Average of total cases" textFill="WHITE" BorderPane.alignment="CENTER" />
+                        <Label text="Average of total cases" textFill="WHITE" underline="true" BorderPane.alignment="CENTER">
+                           <font>
+                              <Font size="23.0" />
+                           </font>
+                           <padding>
+                              <Insets top="97.0" />
+                           </padding></Label>
                      </top>
                   </BorderPane>
                   <BorderPane fx:id="fourthPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                      <center>
-                        <Label fx:id="highestDeathDateLabel" text="No date range has been selected." textFill="WHITE" BorderPane.alignment="CENTER" />
+                        <Label fx:id="highestDeathDateLabel" text="No date range has been selected." textFill="WHITE" BorderPane.alignment="CENTER">
+                           <padding>
+                              <Insets bottom="125.0" />
+                           </padding></Label>
                      </center>
                      <top>
-                        <Label text="Date with the highest death" textFill="WHITE" BorderPane.alignment="CENTER" />
+                        <Label text="Date with the highest death" textFill="WHITE" underline="true" BorderPane.alignment="CENTER">
+                           <font>
+                              <Font size="23.0" />
+                           </font>
+                           <padding>
+                              <Insets top="97.0" />
+                           </padding></Label>
                      </top>
                   </BorderPane>
                </children>
