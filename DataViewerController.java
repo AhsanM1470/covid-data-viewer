@@ -4,10 +4,13 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import java.time.LocalDate;
+
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.control.TableView;
 import java.util.ArrayList;
 import javafx.scene.control.TableColumn;
@@ -59,8 +62,9 @@ public class DataViewerController extends Controller {
      * This method is called by the FXMLLoader when the corresponding FXML file is
      * loaded.
      */
+    @SuppressWarnings("unchecked")
     @FXML
-    public void initialize() {
+    public void initialize() {        
 
         // Create TableColumns for the TableView
         TableColumn<CovidData, String> dateCol = new TableColumn<CovidData, String>("Date");
@@ -92,7 +96,7 @@ public class DataViewerController extends Controller {
 
         // Try to load the controllers for all the panels
         try {
-            controllers = new Controller[2];
+            controllers = new Controller[3];
             loadControllers();
         } catch (Exception e) {
             // Print the error message and stack trace to the console
@@ -113,9 +117,16 @@ public class DataViewerController extends Controller {
         mapLoader.load();
         Controller mapController = mapLoader.getController();
 
+        
+
         controllers[1] = mapController;
+        mapLoader = new FXMLLoader(getClass().getResource(
+                "StatsWindow.fxml"));
+        mapLoader.load();
+        mapController = mapLoader.getController();
         // Current controller responsible for first panel
         controllers[0] = this;
+        controllers[2] = mapController;
     }
 
     /**
@@ -213,10 +224,7 @@ public class DataViewerController extends Controller {
         controllerIndex++;
         controllerIndex = controllerIndex % controllers.length;
 
-        controllers[controllerIndex].setDateRange(getFromDate(), getToDate());
-
         Controller currentController = controllers[controllerIndex];
-
         transitionIntoNextPanel(oldController, currentController, event);
 
         // Switches the center of the main layout to the next panel
@@ -242,7 +250,6 @@ public class DataViewerController extends Controller {
         Controller currentController = controllers[controllerIndex];
         // Sets the date picker of the previous panel to the dates chosen on the current
         // panel
-        controllers[controllerIndex].setDateRange(getFromDate(), getToDate());
         transitionIntoNextPanel(previousController, currentController, event);
 
     }
@@ -264,8 +271,10 @@ public class DataViewerController extends Controller {
         // panel
         currentPanelType = currentController.getPanelType();
         currentController.setDateRange(getFromDate(), getToDate());
-        BorderPane nextPanel = (BorderPane) currentController.getView();
-        BorderPane oldPanel = (BorderPane) previousController.getView();
+        currentController.resizeComponents(mainLayout);
+
+        Parent nextPanel = currentController.getView();
+        Parent oldPanel = previousController.getView();
 
         // determine which direction the panes will move in depending on the button
         // pressed. 
@@ -287,11 +296,6 @@ public class DataViewerController extends Controller {
 
         stackPane.getChildren().add(nextPanel);
 
-        // if we're switching to a window which we want to re-scale, resize it to fit
-        // the current screen before transitioning
-        if (scalePanels.contains(currentPanelType)){
-            // resizeComponents(1);
-        }
             
         // transitionig between panes
         Duration transitionDuration = Duration.seconds(1);
@@ -310,7 +314,7 @@ public class DataViewerController extends Controller {
         // adding the two animations to the timeline to execute
         timeline.getKeyFrames().add(oldViewKF);
         timeline.getKeyFrames().add(newViewKF);
-
+        
 
         timeline.setOnFinished(e -> {
             // remove the previous view that was on teh stack pane

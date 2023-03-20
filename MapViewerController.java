@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
@@ -67,14 +68,14 @@ public class MapViewerController extends Controller {
         // adding window size change listeneres
         viewPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             if (scalePanels.contains(currentPanelType)) {
-                resizeComponents();
+                resizeComponents(viewPane);
             }
             ;
         });
 
         viewPane.heightProperty().addListener((obs, oldVal, newVal) -> {
             if (scalePanels.contains(currentPanelType)) {
-                resizeComponents();
+                resizeComponents(viewPane);
             }
             ;
         });
@@ -97,14 +98,14 @@ public class MapViewerController extends Controller {
     }
 
     /**
-     * resize the center of the viewPane container which contains the map Pane.
+     * resizing the 
+     * 
+     * @param parentPane pane that is to be used to scale with
      */
-    public void resizeComponents() {
-        if (Controller.inTransition) {
-            return;
-        }
-        double ratioX = viewPane.getWidth() / initialPaneWidth;
-        double ratioY = viewPane.getHeight() / initialPaneHeight;
+    protected void resizeComponents(Region parentPane) {
+
+        double ratioX = parentPane.getWidth() / initialPaneWidth;
+        double ratioY = parentPane.getHeight() / initialPaneHeight;
 
         // check if ratios are valid. Cannot be nothing, and cannot be infinity
         if (Double.isInfinite(ratioX) || Double.isNaN(ratioX)) {
@@ -116,6 +117,10 @@ public class MapViewerController extends Controller {
 
         // returns the border pane at the center which stores our map (polygonPane +
         // labels)
+
+        ratioY = Math.max(Math.min(ratioY, 2), 1);
+        ratioX = Math.max(Math.min(ratioX, 2), 1);
+
         Node toScale = viewPane.getCenter();
 
         // scale by same ratio ensuring scaling will still fit inside the window.
@@ -126,7 +131,7 @@ public class MapViewerController extends Controller {
     }
 
     /**
-     * Execues set of instructions related to the date range selected
+     * Executes set of instructions related to the date range selected
      */
     protected void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {
         // reset boroughs heat map measure information when date is changed
@@ -187,7 +192,8 @@ public class MapViewerController extends Controller {
      * Fills in the boroughHeatMapData HashMap with our chosen measure for the heat
      * map.
      * 
-     * Also calculate the heat map's base value within the range to avoid multiple iterations
+     * Also calculate the heat map's base value within the range to avoid multiple
+     * iterations
      * over potentially large data set
      * 
      * In this case, we're using deaths within the time period selected as the
@@ -222,8 +228,9 @@ public class MapViewerController extends Controller {
     }
 
     /**
-     * attempt to calculate which colour to assign to each borough based on heat map
-     * values within the date range relative to the base heat map value
+     * attempt to calculate which interpolated colour from green to red to assign to
+     * each borough based on heat map alues within the date range relative to the
+     * base heat map value
      * 
      */
     private void assignBoroughsColor() {
@@ -282,7 +289,7 @@ public class MapViewerController extends Controller {
         if (boroughHeatMapMeasure != null && heatMapBaseValue > 0) {
             double percentage = (double) (100.0 * boroughHeatMapMeasure / heatMapBaseValue);
             perc = (int) Math.round(percentage);
-        } 
+        }
         System.out.println(
                 name + " total deaths within date range: " + boroughHeatMapData.get(name) + " | Heat map base value: "
                         + heatMapBaseValue + " | percentage: " + perc + "%");

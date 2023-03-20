@@ -63,7 +63,7 @@
       </VBox>
    </bottom>
    <center>
-      <BorderPane fx:id="viewPane" prefHeight="582.0" prefWidth="920.0" style="-fx-background-color: #191919D1;" BorderPane.alignment="CENTER">
+      <BorderPane fx:id="viewPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="920.0" style="-fx-background-color: #191919D1;" BorderPane.alignment="CENTER">
          <center>
             <AnchorPane fx:id="mapAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="920.0" BorderPane.alignment="CENTER">
                <children>
@@ -193,7 +193,7 @@
                            </font>
                         </Label>
                         
-                                    <Label disable="true" layoutX="106.0" layoutY="330.0" rotate="-29.2" style="-fx-opacity: 1;" text="Richmond">
+                                                <Label disable="true" layoutX="106.0" layoutY="330.0" rotate="-29.2" style="-fx-opacity: 1;" text="Richmond">
                            <font>
                               <Font size="10.0" />
                            </font>
