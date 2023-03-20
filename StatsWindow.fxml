@@ -94,10 +94,10 @@
                      <top>
                         <Label alignment="CENTER" prefHeight="154.0" prefWidth="399.0" text="Total number of total deaths" textFill="WHITE" underline="true" BorderPane.alignment="CENTER">
                            <font>
-                              <Font size="30.0" />
+                              <Font size="23.0" />
                            </font>
                            <padding>
-                              <Insets top="65.0" />
+                              <Insets top="73.0" />
                            </padding>
                            <BorderPane.margin>
                               <Insets />
@@ -106,9 +106,6 @@
                      </top>
                      <center>
                         <Label fx:id="sumTotalDeathLabel" alignment="CENTER" prefHeight="287.0" prefWidth="306.0" text="No date range has been selected." textFill="WHITE" BorderPane.alignment="CENTER">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
                            <padding>
                               <Insets bottom="150.0" />
                            </padding>
