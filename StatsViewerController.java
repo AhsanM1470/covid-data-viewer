@@ -54,29 +54,20 @@ public class StatsViewerController extends Controller
     
     @FXML
     /**
-     * This is the second pane that the user sees.
-     * This pane is automatically set to invisible when
+     * These are the second, third, and fourth panes that
+     *  the user sees.
+     * These panes are automatically set to invisible when
      *  "StatsViewer" is launched.
      */
-    private BorderPane secondPane;
-    
-    @FXML
+    private BorderPane secondPane, thirdPane, fourthPane;
+
     /**
-     * This is the third pane that the user sees.
-     * This pane is automatically set to invisible when
-     *  "StatsViewer" is launched.
+     * This is an ArrayList that contains all the nested panes
+     *  of "StatsViewer". Its index is used to switch between
+     *  and refer to certain panes.
+     * i = 0, 1, 2, 3 for first, second, third, and fourth
+     *  panes respectively.
      */
-    private BorderPane thirdPane;
-    
-    @FXML
-    /**
-     * This is the fourth pane that the user sees.
-     * This pane is automatically set to invisible when
-     *  "StatsViewer" is launched.
-     */
-    private StackPane fourthPane;
-    
-    
     private ArrayList<Pane> statsPanes = new ArrayList<>();
 
     @FXML
@@ -92,6 +83,13 @@ public class StatsViewerController extends Controller
      *  each data value in the date range.
      */
     private Label averageCasesLabel;
+
+    @FXML
+    /**
+     * This label shows the date of the case which has the
+     *  highest death in the date range.
+     */
+    private Label highestDeathDateLabel;
 
     //index for statsPanes
     private int i = 0;
@@ -166,6 +164,10 @@ public class StatsViewerController extends Controller
         //
         //
         refreshAverage();
+
+        //
+        //
+        refreshHighestDeathLabel();
     }
 
     @FXML
@@ -200,6 +202,7 @@ public class StatsViewerController extends Controller
 
         refreshSumTotalDeathLabel();
         refreshAverage();
+        refreshHighestDeathLabel();
 
     }
 
@@ -234,6 +237,7 @@ public class StatsViewerController extends Controller
 
         refreshSumTotalDeathLabel();
         refreshAverage();
+        refreshHighestDeathLabel();
     }
 
     /**
@@ -277,7 +281,7 @@ public class StatsViewerController extends Controller
              // deaths so a check is necessary
              if(!Objects.isNull(c.getTotalDeaths())){
                 totalNumberOfTotalDeaths += c.getTotalDeaths();
-                System.out.println(c);
+//                System.out.println(c);
              }
 
          }
@@ -287,7 +291,10 @@ public class StatsViewerController extends Controller
      }
 
     /**
-     *
+     * This updates the label in the third pane to show
+     *  the average of total cases in the given date range.
+     * This is called whenever index "i" changes to show the
+     *  third pane, or if "i" is already 2 and the date changed.
      */
     private void refreshAverage(){
         if (i == 2){
@@ -311,7 +318,7 @@ public class StatsViewerController extends Controller
 
     /**
      * This returns a decimal average of the total cases
-     *  of all cases in the specified data range.
+     *  of all records in the specified data range.
      * @return average of total cases
      */
     private float averageOfTotalCases(){
@@ -331,7 +338,7 @@ public class StatsViewerController extends Controller
 
         }
 
-        // calculates average if there is at least one
+        // calculates average if there is at least onex
         // data value
         if(dataRangeData.size() > 0){
             System.out.println(totalCases + "   " + dataRangeData.size());
@@ -343,6 +350,65 @@ public class StatsViewerController extends Controller
         }
 
         return average;
+
+    }
+
+    /**
+     * This updates the label in the fourth pane to show
+     *  the date with the highest number of deaths in the
+     *  given date range.
+     * This is called whenever index "i" changes to show the
+     *  fourth pane, or if "i" is already 3 and the date changed.
+     */
+    private void refreshHighestDeathLabel(){
+        if (i == 3){
+            if(fromDate != null && toDate != null){
+                // this updates the value of "dataRangeData" so that
+                // it takes into account the most recent "fromDate"
+                // and "toDate"
+                dataRangeData = getDataInDateRange(fromDate, toDate);
+
+                if(fromDate.isBefore(toDate)){
+                    highestDeathDateLabel.setText("" + highestTotalDeathDate());
+                }
+
+                else{
+                    highestDeathDateLabel.setText("The date field is not valid.");
+                }
+            }
+
+        }
+    }
+
+    /**
+     * This returns the date with the highest total death
+     *  as a String.
+     *
+     * @return date with highest total death.
+     */
+    private String highestTotalDeathDate(){
+        int totalDeath = 0;
+        String highestDeathDate = "";
+
+        // iterates through all records in date range
+        for(CovidData c : dataRangeData){
+
+            // some CovidData strings actually have null for the total
+            // deaths so a check is necessary
+            if(!Objects.isNull(c.getTotalCases())){
+
+                if(c.getTotalDeaths() > totalDeath){
+                    totalDeath = c.getTotalDeaths();
+                    highestDeathDate = c.getDate();
+                    System.out.println(c);
+                }
+
+            }
+
+
+        }
+
+        return highestDeathDate;
 
     }
 

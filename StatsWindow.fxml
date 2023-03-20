@@ -106,11 +106,11 @@
                         <Label fx:id="averageCasesLabel" text="Label" BorderPane.alignment="CENTER" />
                      </center>
                   </BorderPane>
-                  <StackPane fx:id="fourthPane" prefHeight="150.0" prefWidth="200.0" visible="false">
-                     <children>
-                        <Label text="oafjoa" />
-                     </children>
-                  </StackPane>
+                  <BorderPane fx:id="fourthPane" prefHeight="200.0" prefWidth="200.0" visible="false">
+                     <center>
+                        <Label fx:id="highestDeathDateLabel" text="Label" BorderPane.alignment="CENTER" />
+                     </center>
+                  </BorderPane>
                </children>
             </StackPane>
          </center>
