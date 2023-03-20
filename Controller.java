@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Parent;
 
@@ -48,7 +49,7 @@ public abstract class Controller {
 
     protected List<PanelType> scalePanels = Arrays.asList(new PanelType[]{PanelType.MAP});
 
-    static double width, height;
+    static boolean inTransition = false;
 
     /**
      * Creates a new Controller object and initialises it with a list of
@@ -57,6 +58,15 @@ public abstract class Controller {
     public Controller() {
         CovidDataLoader dataLoader = new CovidDataLoader();
         data = dataLoader.load();
+    }
+
+
+    /**
+     * resize certiain components (not mandatory) in certain panels 
+     * @param parentPane pane that is to be used to scale with
+     */
+    protected void resizeComponents(Region parentPane){
+
     }
 
     /**
