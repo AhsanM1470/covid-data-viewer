@@ -71,13 +71,11 @@ public class MainController extends ViewerController implements Initializable
             loadControllers();
         } catch (Exception e) {
             // Print the error message and stack trace to the console
-            System.out.println("test");
             System.out.println(e.getMessage());
-            System.out.println("er");
             e.printStackTrace();
         }
         
-        mainLayout.setCenter(controllers[controllerIndex].getView());
+        stackPane.getChildren().add(controllers[controllerIndex].getView());
     }
     
     /**
@@ -95,11 +93,10 @@ public class MainController extends ViewerController implements Initializable
             controller.setData(data);
             controllers[i] = controller;
         }
-        
-        System.out.println("X");
-        System.out.println(controllers);
     }
     
+    // ----------------------------- Pane Switching ---------------------------- //
+
     private void allowPanelSwitching(boolean state) {
         leftButton.setDisable(!state);
         rightButton.setDisable(!state);
@@ -116,15 +113,13 @@ public class MainController extends ViewerController implements Initializable
         if (ViewerController.inTransition) {
             return;
         }
-        ViewerController oldController = controllers[controllerIndex];
+        ViewerController currentController = controllers[controllerIndex];
         controllerIndex = (controllerIndex + 1) % controllers.length;
 
-        ViewerController currentController = controllers[controllerIndex];
+        ViewerController nextController = controllers[controllerIndex];
         
-        //transitionIntoNextPanel(oldController, currentController, event);
-        mainLayout.setCenter(currentController.getView());
-        currentController.setDateRange(fromDatePicker.getValue(), toDatePicker.getValue());
-        currentController.resizeComponents(mainLayout);
+        // transition from  current view to the next view
+        transitionIntoNextPanel(currentController, nextController, event);
     }
     
     /**
@@ -138,24 +133,21 @@ public class MainController extends ViewerController implements Initializable
         if (ViewerController.inTransition) {
             return;
         }
-        ViewerController previousController = controllers[controllerIndex];
+        ViewerController currentController = controllers[controllerIndex];
         controllerIndex--;
         
         if (controllerIndex < 0) {
             controllerIndex = controllers.length - 1;
         }
-        ViewerController currentController = controllers[controllerIndex];
+        ViewerController nextController = controllers[controllerIndex];
         
-        // Sets the date picker of the previous panel to the dates chosen on the current
-        // panel
-        
-        //transitionIntoNextPanel(previousController, currentController, event);
-        mainLayout.setCenter(currentController.getView());
-        currentController.setDateRange(fromDatePicker.getValue(), toDatePicker.getValue());
-        currentController.resizeComponents(mainLayout);
+        // transition from  current view to the next view
+        transitionIntoNextPanel(currentController, nextController, event);
     }
+
+    // ----------------------- Transition Between Panels ----------------------- //
     
-        /**
+    /**
      * set the center of the screen (contents of stackPane) to new view
      * show a transition between the the old view and  new view 
      * 
@@ -163,27 +155,32 @@ public class MainController extends ViewerController implements Initializable
      * @param currentController controller class of the view being switched in
      * @param event button that triggered the series of events.
      */
-    private void transitionIntoNextPanel(ViewerController previousController, ViewerController currentController,
+    private void transitionIntoNextPanel(ViewerController currentController, ViewerController nextController,
             ActionEvent event) {
+                
         // when inTransition is true, don't allow certain actions such as switching
         // panes until animation finished
 
+        nextController.setDateRange(fromDatePicker.getValue(), toDatePicker.getValue());
+        nextController.resizeComponents(mainLayout);
+
         // Sets the date picker of the next panel to the dates chosen on the current
         // panel
-        currentController.setDateRange(fromDatePicker.getValue(), toDatePicker.getValue());
-        currentController.resizeComponents(mainLayout);
+        nextController.setDateRange(fromDatePicker.getValue(), toDatePicker.getValue());
+        nextController.resizeComponents(mainLayout);
 
-        Parent nextPanel = currentController.getView();
-        Parent oldPanel = previousController.getView();
+        Parent nextPanel = nextController.getView();
+        Parent oldPanel = currentController.getView();
 
         // determine which direction the panes will move in depending on the button
         // pressed. 
 
         // animation to move panels from right to left.
         double oldPanelStartX = 0;
-        double oldPanelEndX = -stackPane.getWidth();
-        double newPanelStartX = stackPane.getWidth();
+        double oldPanelEndX = -mainLayout.getWidth();
+        double newPanelStartX = mainLayout.getWidth();
         double newPanelEndX = 0;
+
 
         // if instead we're moving from left to right, inverse values
         if (event.getSource() == leftButton) {
@@ -194,6 +191,7 @@ public class MainController extends ViewerController implements Initializable
         oldPanel.translateXProperty().set(oldPanelStartX);
         nextPanel.translateXProperty().set(newPanelStartX);
 
+        // add you held 
         stackPane.getChildren().add(nextPanel);
 
         // transitionig between panes
@@ -217,7 +215,7 @@ public class MainController extends ViewerController implements Initializable
 
         timeline.setOnFinished(e -> {
             // remove the previous view that was on teh stack pane
-            stackPane.getChildren().remove(previousController.getView());
+            stackPane.getChildren().remove(currentController.getView());
             ViewerController.inTransition = false;
         });
 
@@ -228,6 +226,8 @@ public class MainController extends ViewerController implements Initializable
 
     }
     
+    // ----------------------------- Date Changing ----------------------------- //
+
     /**
      * Handles the event when the date picker is changed.
      * Once two dates are selected, check if its valid, and attempt to process data
@@ -236,9 +236,7 @@ public class MainController extends ViewerController implements Initializable
      * @param event The event triggered by changing the date picker.
      */
     @FXML
-    void dateChanged(ActionEvent event) {
-        
-        
+    void dateChanged(ActionEvent event) {        
         LocalDate fromDate = fromDatePicker.getValue();
         LocalDate toDate = toDatePicker.getValue();
         

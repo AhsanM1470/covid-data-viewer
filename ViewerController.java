@@ -30,7 +30,7 @@ public abstract class ViewerController {
 
     @FXML
     protected StackPane parentPane;
-    
+
     protected LocalDate fromDate;
     protected LocalDate toDate;
 
@@ -51,13 +51,12 @@ public abstract class ViewerController {
     protected LocalDate getToDate() {
         return toDate;
     }
-    
+
     // -------------------------------- Setters -------------------------------- //
-    
+
     protected void setData(ArrayList<CovidData> data) {
         this.data = data;
     }
-    
 
     // ----------------------- Ranged Data Helper Methods ---------------------- //
 
@@ -119,13 +118,14 @@ public abstract class ViewerController {
     protected boolean isDateInRange(LocalDate date, LocalDate fromDate, LocalDate toDate) {
         return (date.isAfter(fromDate) && date.isBefore(toDate)) || date.isEqual(fromDate) || date.isEqual(toDate);
     }
-    
+
     /**
      * Resize certain components (not mandatory) in certain panels.
      * 
      * @param parentPane pane that is to be used to scale with
      */
-    protected void resizeComponents(Region parentPane) {};
+    protected void resizeComponents(Region parentPane) {
+    };
 
     // ---------------------------- Abstract Methods --------------------------- //
 
@@ -136,7 +136,7 @@ public abstract class ViewerController {
      * @param to   the ending date of the range
      */
     abstract protected void processDataInDateRange(LocalDate fromDate, LocalDate toDate);
-    
+
     /**
      * @return the main pane that we've all added components onto.
      */
