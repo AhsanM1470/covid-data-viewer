@@ -1,6 +1,8 @@
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.Parent;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
@@ -14,6 +16,8 @@ import java.util.Objects;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+
+import javafx.fxml.Initializable;
 
 import javax.swing.*;
 
@@ -29,7 +33,7 @@ import javax.swing.*;
  * @author Saihan Marshall
  * @version 2023.03.13
  */
-public class StatsViewerController extends Controller
+public class StatsViewerController extends ViewerController implements Initializable
 {
     @FXML
     private Button leftButton;
@@ -120,13 +124,14 @@ public class StatsViewerController extends Controller
      */
     private ArrayList<CovidData> dataRangeData = new ArrayList<>();
 
-    @FXML
+    
     /**
      * This creates an arraylist of all the panes,
      *  which allows the panes to be systematically
      *  selected.
      */
-    public void initialize(){
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         statsPanes.add(firstPane);
         statsPanes.add(secondPane);
         statsPanes.add(thirdPane);
@@ -140,7 +145,7 @@ public class StatsViewerController extends Controller
     private void loadDataInDateRange(LocalDate fromDate, LocalDate toDate) {
         dataRangeData = getDataInDateRange(fromDate, toDate);
         for(CovidData c : dataRangeData){
-            System.out.println(c);
+            ;
         }
     }
 
@@ -154,17 +159,11 @@ public class StatsViewerController extends Controller
         this.toDate = toDate;
 
         if(isDateRangeValid(fromDate, toDate)){
-            loadDataInDateRange(fromDate, toDate);
+            getDataInDateRange(fromDate, toDate);
         }
         rightButton.setDisable(true);
 
         DateFormat dateFormat = new SimpleDateFormat("yy-mm-dd");
-
-
-        // these are initialised at the start because
-        // they are needed elsewhere
-        fromDate = fromDatePicker.getValue();
-        toDate = toDatePicker.getValue();
 
 
         if (fromDate != null && toDate != null) {
@@ -200,45 +199,6 @@ public class StatsViewerController extends Controller
         return statsPane;
     }
 
-    @FXML
-    /**
-     * This is called whenever the dates at the top right are changed.
-     * For now, this changes the values of "fromDate" and "toDate" and
-     */
-    protected void processDataInDateRange(ActionEvent event) {
-        System.out.println("982378416982628796");
-        rightButton.setDisable(true);
-
-        DateFormat dateFormat = new SimpleDateFormat("yy-mm-dd");
-
-
-        // these are initialised at the start because
-        // they are needed elsewhere
-        fromDate = fromDatePicker.getValue();
-        toDate = toDatePicker.getValue();
-
-
-        if (fromDate != null && toDate != null) {
-            if (fromDate.isBefore(toDate)) {
-                rightButton.setDisable(false);
-            }
-        }
-
-        // if the index is 1, then refreshes the label
-        // showing sum of total deaths.
-        refreshSumTotalDeathLabel();
-
-        //
-        //
-        refreshAverage();
-
-        //
-        //
-        refreshHighestDeathLabel();
-
-        //
-        refreshMobilityMeasureLabel();
-    }
 
     @FXML
     /**

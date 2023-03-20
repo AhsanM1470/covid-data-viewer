@@ -4,14 +4,12 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DataViewerController">
+<BorderPane fx:id="mainLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainController">
    <top>
       <VBox prefHeight="30.0" BorderPane.alignment="CENTER">
          <children>
@@ -80,41 +78,6 @@
       </VBox>
    </bottom>
    <center>
-      <StackPane fx:id="stackPane" BorderPane.alignment="CENTER">
-         <children>
-            <BorderPane fx:id="viewPane" prefHeight="565.0" prefWidth="911.0" style="-fx-background-color: #191919D1;">
-               <center>
-                  <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <VBox fx:id="tablePane" alignment="CENTER" visible="false">
-                           <children>
-                              <Label fx:id="dataTableInfoLabel" text="There’s no available data for the selected date range." textFill="WHITE">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Label>
-                              <TableView fx:id="dataTable" />
-                           </children>
-                        </VBox>
-                        <VBox fx:id="welcomePane" alignment="CENTER" prefHeight="580.0" prefWidth="920.0">
-                           <children>
-                              <Label text="Welcome to the Covid Data Viewer for London!" textFill="WHITE">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Label>
-                              <Label text="Pick a date range using the drop downs at the top to look at data for that period!" textFill="#eeeeee">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </VBox>
-                     </children>
-                  </StackPane>
-               </center>
-            </BorderPane>
-         </children>
-      </StackPane>
+      <StackPane fx:id="stackPane" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

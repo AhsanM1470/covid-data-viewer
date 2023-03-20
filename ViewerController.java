@@ -20,11 +20,7 @@ import javafx.scene.Parent;
  * @author Ishab Ahmed
  * @version 2023.03.16
  */
-public abstract class Controller {
-
-    protected enum PanelType {
-        MAIN, MAP, STATS, GRAPH;
-    }
+public abstract class ViewerController {
 
     @FXML
     protected StackPane stackPane;
@@ -32,73 +28,13 @@ public abstract class Controller {
     // stores all the covid data
     protected ArrayList<CovidData> data;
 
-    // FXML attributes which all controllers will have
-    @FXML
-    protected DatePicker toDatePicker;
-
-    @FXML
-    protected DatePicker fromDatePicker;
-
-    @FXML
-    protected BorderPane viewPane;
-
     @FXML
     protected StackPane parentPane;
-
-    protected PanelType currentPanelType;
-
-    protected List<PanelType> scalePanels = Arrays.asList(new PanelType[]{PanelType.MAP});
+    
+    protected LocalDate fromDate;
+    protected LocalDate toDate;
 
     static boolean inTransition = false;
-
-    /**
-     * Creates a new Controller object and initialises it with a list of
-     * CovidData objects loaded from the data source.
-     */
-    public Controller() {
-        CovidDataLoader dataLoader = new CovidDataLoader();
-        data = dataLoader.load();
-    }
-
-
-    /**
-     * resize certiain components (not mandatory) in certain panels 
-     * @param parentPane pane that is to be used to scale with
-     */
-    protected void resizeComponents(Region parentPane){
-
-    }
-
-    /**
-     * Handles the event when the date picker is changed.
-     * Once two dates are selected, check if its valid, and attempt to process data
-     * within that date range
-     * 
-     * @param event The event triggered by changing the date picker.
-     */
-    @FXML
-    protected void dateChanged(ActionEvent event) {
-        LocalDate fromDate = fromDatePicker.getValue();
-        LocalDate toDate = toDatePicker.getValue();
-
-        if (fromDate == null || toDate == null) {
-            return;
-        }
-
-        // allowPanelSwitching(isDateRangeValid(fromDate, toDate));
-        processDataInDateRange(fromDate, toDate);
-    }
-
-    protected PanelType getPanelType(){
-        return currentPanelType;
-    }
-
-    /**
-     * @return the main pane that we've all added components onto.
-     */
-    protected Parent getView() {
-        return viewPane;
-    };
 
     // -------------------------------- Getters -------------------------------- //
 
@@ -106,15 +42,22 @@ public abstract class Controller {
      * @return the currently selected date in 'fromDatePicker'
      */
     protected LocalDate getFromDate() {
-        return fromDatePicker.getValue();
+        return fromDate;
     }
 
     /**
      * @return the currently selected date in 'toDatePicker'
      */
     protected LocalDate getToDate() {
-        return toDatePicker.getValue();
+        return toDate;
     }
+    
+    // -------------------------------- Setters -------------------------------- //
+    
+    protected void setData(ArrayList<CovidData> data) {
+        this.data = data;
+    }
+    
 
     // ----------------------- Ranged Data Helper Methods ---------------------- //
 
@@ -141,8 +84,8 @@ public abstract class Controller {
      * @param toDate The ending date of the date range to be set.
      */
     public void setDateRange(LocalDate fromDate, LocalDate toDate) {
-        fromDatePicker.setValue(fromDate);
-        toDatePicker.setValue(toDate);
+        this.fromDate = fromDate;
+        this.toDate = toDate;
 
         // do what is specified to be done within the date range
         processDataInDateRange(fromDate, toDate);
@@ -176,6 +119,13 @@ public abstract class Controller {
     protected boolean isDateInRange(LocalDate date, LocalDate fromDate, LocalDate toDate) {
         return (date.isAfter(fromDate) && date.isBefore(toDate)) || date.isEqual(fromDate) || date.isEqual(toDate);
     }
+    
+    /**
+     * Resize certain components (not mandatory) in certain panels.
+     * 
+     * @param parentPane pane that is to be used to scale with
+     */
+    protected void resizeComponents(Region parentPane) {};
 
     // ---------------------------- Abstract Methods --------------------------- //
 
@@ -186,5 +136,9 @@ public abstract class Controller {
      * @param to   the ending date of the range
      */
     abstract protected void processDataInDateRange(LocalDate fromDate, LocalDate toDate);
-
+    
+    /**
+     * @return the main pane that we've all added components onto.
+     */
+    abstract protected Parent getView();
 }

@@ -13,8 +13,12 @@ import javafx.scene.paint.Paint;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javafx.scene.Parent;
+import javafx.fxml.Initializable;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MapViewerController extends Controller {
+public class MapViewerController extends ViewerController implements Initializable {
 
     Paint hoveredPolygonDefaultBorderColor;
     Double hoveredPolygonDefaultStroke;
@@ -23,7 +27,7 @@ public class MapViewerController extends Controller {
     private AnchorPane mapAnchorPane, polygonPane;
 
     @FXML
-    private BorderPane bp;
+    private BorderPane viewPane;
 
     @FXML
     private Label selectedBoroughLabel;
@@ -58,28 +62,26 @@ public class MapViewerController extends Controller {
     // starting size of our pane to be used when scaling map view
     private double initialPaneWidth, initialPaneHeight;
 
-    protected PanelType controllerType = PanelType.MAP;
-
-    @FXML
-    void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         initialPaneWidth = viewPane.getPrefWidth();
         initialPaneHeight = viewPane.getPrefHeight();
 
         // adding window size change listeneres
         viewPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-            if (scalePanels.contains(currentPanelType)) {
+            if (oldVal != newVal) {
                 resizeComponents(viewPane);
             }
             ;
         });
 
         viewPane.heightProperty().addListener((obs, oldVal, newVal) -> {
-            if (scalePanels.contains(currentPanelType)) {
+            if (oldVal != newVal) {
                 resizeComponents(viewPane);
             }
             ;
         });
-        currentPanelType = PanelType.MAP;
+
         // an array of all the borough polygons which will be used when assigning
         // colours
         boroughPolygons = new Polygon[] { brentPolygon, bexleyPolygon, bromleyPolygon, camdenPolygon, cityPolygon,
@@ -92,8 +94,6 @@ public class MapViewerController extends Controller {
         // load the mapping of polygon IDs to their respective borough names
         JsonReader jsonReader = new JsonReader();
         boroughIdToName = jsonReader.readJson("boroughIDs.json");
-
-        resetBoroughHeatMapData();
 
     }
 
@@ -368,6 +368,10 @@ public class MapViewerController extends Controller {
         label.setText(text);
         label.setAlignment(Pos.CENTER);
         label.setFont(new Font("Comic Sans MS", fontSize));
+    }
+    
+    protected Parent getView() {
+        return viewPane;
     }
 
 }

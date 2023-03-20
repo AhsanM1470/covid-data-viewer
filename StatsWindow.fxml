@@ -17,9 +17,9 @@
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
                   <Label text="From:" />
-                  <DatePicker fx:id="fromDatePicker" onAction="#processDataInDateRange" prefHeight="11.0" prefWidth="111.0" />
+                  <DatePicker fx:id="fromDatePicker"  prefHeight="11.0" prefWidth="111.0" />
                   <Label text="To:" />
-                  <DatePicker fx:id="toDatePicker" onAction="#processDataInDateRange" prefHeight="11.0" prefWidth="111.0" />
+                  <DatePicker fx:id="toDatePicker"  prefHeight="11.0" prefWidth="111.0" />
                </children>
                <opaqueInsets>
                   <Insets />
