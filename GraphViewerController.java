@@ -3,6 +3,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.layout.AnchorPane;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -29,13 +31,16 @@ public class GraphViewerController implements Initializable
     private AnchorPane graphPane;
     
     @FXML
-    private Label deathAxis;
-    
-    @FXML
     private ChoiceBox<String> choiceBox;
     
     @FXML
     private LineChart<?,?> chart;
+    
+    @FXML
+    CategoryAxis xAxis = new CategoryAxis();
+    
+    @FXML
+    NumberAxis yAxis = new NumberAxis();
     
     @FXML
     private DatePicker fromDatePicker;
@@ -51,20 +56,19 @@ public class GraphViewerController implements Initializable
     private XYChart.Series series;
     
     //remove all? or fix it
-    private String[] boroughs = {"All", "Barking and Dagenham", "Barnet", "Bexley", "Brent", "Bromley", "Camden",
-        "Croydon", "Ealing", "Enfield", "Greenwich", "Hackney", "Hammersmith and Fulham", "Haringey",
-        "Harrow", "Havering", "Hillingdon", "Hounslow", "Kensington and Chelsea", "Kingston upon Thames",
-        "Lambeth", "Lewisham", "Merton", "Newham", "Redbridge", "Richmond upon Thames", "Southwark",
+    private String[] boroughs = {"All", "Barking And Dagenham", "Barnet", "Bexley", "Brent", "Bromley", "Camden",
+        "Croydon", "Ealing", "Enfield", "Greenwich", "Hackney", "Hammersmith And Fulham", "Haringey",
+        "Harrow", "Havering", "Hillingdon", "Hounslow", "Kensington and Chelsea", "Kingston Upon Thames",
+        "Lambeth", "Lewisham", "Merton", "Newham", "Redbridge", "Richmond Upon Thames", "Southwark",
         "Sutton", "Tower Hamlets", "Waltham Forest", "Wandsworth", "Westminster"};
         
     private String borough;
-        
+    
     /**
      * Constructor for objects of class GraphViewerController
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb){
-        deathAxis.setRotate(-90);
+    public void initialize(URL url, ResourceBundle rb){ 
         choiceBox.getItems().addAll(boroughs);
         choiceBox.setOnAction(this::selectBorough);
     }
@@ -79,9 +83,7 @@ public class GraphViewerController implements Initializable
         series = new XYChart.Series();
         chart.getData().clear();
         constructChart(dataController.getFromDate(), dataController.getToDate());
-        //series.getData().add(new XYChart.Data("hi", 5));
         chart.getData().add(series);
-        
         //System.out.println(dataController.getFromDate());
     }
     
@@ -98,7 +100,32 @@ public class GraphViewerController implements Initializable
             }
         }
         
-        for(int i = 0; i < dates.size() - 1; i++){
+        //Last index in the arraylist has the smallest total deaths
+        //First index in the arryalist has the largest total deaths
+        //int lowerInt = ((totalDeaths.get(totalDeaths.size() - 1))/ 10)*10;
+        //int upperInt = ((totalDeaths.get(0))/10)*10;
+        
+        //tk maybe its not unwrapping the int properly. also should i divide by 100/1000??
+        //double lower = totalDeaths.get(totalDeaths.size() - 1);
+        //double upper = totalDeaths.get(0);
+        int index = totalDeaths.size() - 1;
+        int lowerValue = Integer.valueOf(totalDeaths.get(index));
+        //int lowerValue = Integer.valueOf(totalDeaths.get(size));
+        int upperValue = Integer.valueOf(totalDeaths.get(0));
+        
+        double lowerBound = (lowerValue/100)*100;
+        double upperBound = ((upperValue + 99)/100)*100;
+        System.out.println(lowerValue);
+        System.out.println(lowerBound);
+        System.out.println(upperBound);
+        
+        yAxis.setAutoRanging(false);
+        yAxis.setLowerBound(lowerBound);
+        yAxis.setUpperBound(upperBound);
+        yAxis.setTickUnit(50);
+        yAxis.setMinorTickVisible(false);
+        
+        for(int i = dates.size() - 1; i >= 0; i--){
             series.getData().add(new XYChart.Data(dates.get(i),totalDeaths.get(i)));
         }
     }
