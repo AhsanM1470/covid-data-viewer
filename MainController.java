@@ -64,7 +64,7 @@ public class MainController implements Initializable
 
         // Try to load the controllers for all the panels
         try {
-            controllers = new ViewerController[3];
+            controllers = new ViewerController[4];
             loadControllers();
         } catch (Exception e) {
             // Print the error message and stack trace to the console
@@ -86,7 +86,7 @@ public class MainController implements Initializable
      */
     public void loadControllers() throws Exception {
         // FXML files of all panels
-        String[] fxmlFiles = {"WelcomeView.fxml", "MapView.fxml", "StatsView.fxml"};
+        String[] fxmlFiles = {"WelcomeView.fxml", "MapView.fxml", "StatsView.fxml", "GraphView.fxml"};
         
         for (int i = 0; i < fxmlFiles.length; i++) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFiles[i]));

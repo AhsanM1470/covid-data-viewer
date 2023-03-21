@@ -7,7 +7,6 @@
  */ 
 
 public class CovidData {
-
     /*
     The date the COVID information (cases & deaths) was collected
     */
@@ -18,7 +17,6 @@ public class CovidData {
     */
     private String borough;
     
-    
     /*
     The COVID information that's collected daily for each London borough
     */
@@ -26,7 +24,6 @@ public class CovidData {
     private Integer totalCases;
     private Integer newDeaths;
     private Integer totalDeaths;
-    
     
     /*
     Google analysed location data from Android smartphones to measure movement
@@ -40,12 +37,9 @@ public class CovidData {
     private Integer workplacesGMR;
     private Integer residentialGMR;
 
-
-
     public CovidData(String date, String borough, Integer retailRecreationGMR, Integer groceryPharmacyGMR, 
                         Integer parksGMR, Integer transitGMR, Integer workplacesGMR, Integer residentialGMR, 
                         Integer newCases, Integer totalCases, Integer newDeaths, Integer totalDeaths) {
-
         this.date = date;
         this.borough = borough;
         this.retailRecreationGMR = retailRecreationGMR;
@@ -59,7 +53,7 @@ public class CovidData {
         this.newDeaths = newDeaths;
         this.totalDeaths = totalDeaths;
     }
-
+    
 
     public String getDate() {
         return date;
