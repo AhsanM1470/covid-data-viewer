@@ -4,81 +4,80 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/17.0.3" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DataViewerController">
+<BorderPane fx:id="mainLayout" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainController">
    <top>
       <VBox prefHeight="30.0" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="CENTER_RIGHT" spacing="10.0">
                <children>
-                  <Label text="From:" />
-                  <DatePicker fx:id="fromDatePicker" onAction="#dateChanged" prefHeight="11.0" prefWidth="111.0" />
-                  <Label text="To:" />
-                  <DatePicker fx:id="toDatePicker" onAction="#dateChanged" prefHeight="11.0" prefWidth="111.0" />
+                  <Label text="From:">
+                     <opaqueInsets>
+                        <Insets bottom="10.0" />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets bottom="2.0" />
+                     </HBox.margin></Label>
+                  <DatePicker fx:id="fromDatePicker" onAction="#dateChanged" prefHeight="11.0" prefWidth="111.0">
+                     <opaqueInsets>
+                        <Insets bottom="10.0" />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </HBox.margin></DatePicker>
+                  <Label text="To:">
+                     <opaqueInsets>
+                        <Insets bottom="10.0" />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets bottom="2.0" />
+                     </HBox.margin></Label>
+                  <DatePicker fx:id="toDatePicker" onAction="#dateChanged" prefHeight="11.0" prefWidth="111.0">
+                     <opaqueInsets>
+                        <Insets bottom="10.0" />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </HBox.margin></DatePicker>
                </children>
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
                <VBox.margin>
-                  <Insets right="5.0" />
+                  <Insets />
                </VBox.margin>
             </HBox>
-            <Line endX="920.0" />
          </children>
       </VBox>
    </top>
    <bottom>
-      <VBox prefHeight="30.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="31.0" prefWidth="920.0" BorderPane.alignment="CENTER">
          <children>
-            <Line endX="920.0" />
-            <BorderPane prefHeight="200.0" prefWidth="200.0">
+            <BorderPane prefHeight="60.0" prefWidth="920.0">
                <left>
-                  <Button fx:id="leftButton" disable="true" mnemonicParsing="false" onAction="#previousPanel" text="&lt;" BorderPane.alignment="CENTER" />
+                  <Button id="SwitchButton" fx:id="leftButton" disable="true" mnemonicParsing="false" onAction="#previousPanel" text="&lt;" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </BorderPane.margin></Button>
                </left>
                <right>
-                  <Button fx:id="rightButton" disable="true" mnemonicParsing="false" onAction="#nextPanel" text="&gt;" BorderPane.alignment="CENTER" />
+                  <Button fx:id="rightButton" disable="true" mnemonicParsing="false" onAction="#nextPanel" text="&gt;" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </BorderPane.margin></Button>
                </right>
                <VBox.margin>
-                  <Insets left="5.0" right="5.0" />
+                  <Insets />
                </VBox.margin>
             </BorderPane>
          </children>
       </VBox>
    </bottom>
    <center>
-      <StackPane fx:id="mainPanel" BorderPane.alignment="CENTER">
-         <children>
-            <VBox fx:id="welcomePane" alignment="CENTER">
-               <children>
-                  <Label text="Welcome to the Covid Data Viewer for London!">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label text="Pick a date range using the drop downs at the top to look at data for that period!">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </VBox>
-            <VBox fx:id="tablePane" alignment="CENTER" visible="false">
-               <children>
-                  <Label fx:id="dataTableInfoLabel" text="There’s no available data for the selected date range.">
-                     <font>
-                        <Font size="20.0" />
-                     </font></Label>
-                  <TableView fx:id="dataTable" />
-               </children>
-            </VBox>
-         </children>
-      </StackPane>
+      <StackPane fx:id="stackPane" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

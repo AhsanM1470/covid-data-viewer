@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="viewPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="920.0" style="-fx-background-color: #191919D1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MapViewerController">
+   <center>
+      <AnchorPane fx:id="mapAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="582.0" prefWidth="920.0" BorderPane.alignment="CENTER">
+         <children>
+            <AnchorPane fx:id="polygonPane" layoutX="148.0" layoutY="56.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="524.0" prefWidth="650.0">
+               <children>
+                  <Polygon fx:id="enfieldPolygon" fill="#ababab" layoutX="277.0" layoutY="106.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="74.04810333251953, -3.7001149654388428, 13.781499862670898, -5.7509636878967285, 17.59588623046875, -29.838584899902344, -12.68701171875, -64.74803924560547, -0.069122314453125, -83.67485809326172, 28.951995849609375, -90.40438842773438, 100.54265594482422, -80.04515838623047" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="barnetPolygon" fill="#ababab" layoutX="182.0" layoutY="146.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="51.856903076171875, 27.1138973236084, 36.497379302978516, 7.10001277923584, 19.02678108215332, 7.10001277923584, 24.14030647277832, -9.21894359588623, -8.827484130859375, -65.78820037841797, 67.70001220703125, -96.69999694824219, 97.29998779296875, -62.099998474121094, 88.15673828125, -0.6561092138290405, 90.30783081054688, 2.5705275535583496, 86.27452087402344, 5.369997978210449" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="harrowPolygon" fill="#ababab" layoutX="78.0" layoutY="172.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="69.07374572753906, -30.36996841430664, 60.518402099609375, -0.8960723876953125, 30.300003051757812, -0.8960723876953125, 13.300003051757812, -60.30000305175781, 80.6932373046875, -88.77680969238281, 103.16397857666016, -50.472389221191406" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="walthamPolygon" fill="#ababab" layoutX="342.0" layoutY="146.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="55.48994064331055, 16.829988479614258, 32.85285949707031, 28.967191696166992, 8.0795316696167, -1.8624751567840576, 37.43906784057617, -88.4693603515625, 58.76030731201172, -63.77617263793945" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="redbridgePolygon" fill="#ababab" layoutX="416.0" layoutY="171.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="81.48538208007812, -57.02973556518555, 55.271270751953125, -4.26186990737915, 29.80607795715332, 6.63914155960083, 21.205799102783203, -7.194490909576416, -5.081777095794678, -7.194490909576416, -0.73260498046875, -86.93003845214844, 35.29974365234375, -54.31964111328125, 81.48536682128906, -74.6190185546875" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="haringeyPolygon" fill="#ababab" layoutX="285.0" layoutY="162.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="53.333866119384766, -14.099997520446777, -0.818799614906311, -14.099984169006348, 5.70001220703125, -49.85224914550781, 65.69918823242188, -47.48662567138672" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="haveringPolygon" fill="#ababab" layoutX="532.0" layoutY="171.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="105.6353759765625, 18.965972900390625, 48.904296875, 29.725326538085938, 32.82253646850586, 68.90760803222656, 7.041446685791016, 68.8262939453125, -8.784650802612305, 47.16847610473633, 10.432772636413574, -1.5271759033203125, -14.999674797058105, -10.918496131896973, -14.99969482421875, -69.06501770019531, 38.79705810546875, -76.2379150390625, 73.35736083984375, -13.779998779296875, 86.07293701171875, -16.246414184570312" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="hillingdonPolygon" fill="#ababab" layoutX="25.0" layoutY="191.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="45.08375549316406, 6.015304088592529, 66.9968490600586, 30.88487434387207, 54.660064697265625, 49.38910675048828, 21.584224700927734, 107.3853530883789, -5.7988128662109375, 90.94586181640625, 3.257716655731201, 41.667476654052734, 10.091354370117188, -11.494949340820312, -0.72747802734375, -33.470703125, -0.72747802734375, -81.81736755371094, 52.292022705078125, -68.25083923339844, 69.08380126953125, -8.59338092803955" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="brentPolygon" fill="#ababab" layoutX="149.0" layoutY="211.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="44.77445602416992, -49.2236213684082, 64.45545196533203, -47.92500686645508, 88.86715698242188, -14.840576171875, 78.00995635986328, -12.393072128295898, 73.2300796508789, -12.393072128295898, 68.45018005371094, -14.055643081665039, 25.811809539794922, -10.675040245056152, -0.3944593369960785, -34.90403747558594, 7.44752311706543, -62.155250549316406, 39.59933090209961, -81.72428131103516, 49.3377571105957, -66.50396728515625" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="ealingPolygon" fill="#ababab" layoutX="102.0" layoutY="253.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="93.07571411132812, -45.510894775390625, 93.07571411132812, -18.41116714477539, 93.07571411132812, -13.130777359008789, 47.2227783203125, -4.127288818359375, -9.561420440673828, -8.312954902648926, 4.357327938079834, -29.641477584838867, -17.060871124267578, -53.52233123779297, 7.782554626464844, -67.53560638427734, 38.71210861206055, -67.53560638427734, 64.7440185546875, -42.45112609863281" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="camdenPolygon" fill="#ababab" layoutX="245.0" layoutY="215.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="55.5362663269043, 12.327230453491211, 49.63167190551758, 5.246338367462158, 30.6171875, -13.207626342773438, 5.5331339836120605, -17.411317825317383, -3.811431884765625, -29.193115234375, 22.654052734375, -45.78570556640625, 34.394195556640625, -52.63410949707031, 59.367340087890625, 1.545989990234375, 59.36733627319336, 12.240860939025879" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="islingtonPolygon" fill="#ababab" layoutX="296.0" layoutY="196.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="32.406951904296875, -9.623779296875, 28.91143798828125, 12.269607543945312, 16.07049560546875, 18.3521728515625, -10.576299667358398, -37.975425720214844, 17.132543563842773, -37.97542953491211" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="hackneyPolygon" fill="#ababab" layoutX="334.0" layoutY="196.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="34.69392013549805, -9.643874168395996, -1.6104736328125, 10.593780517578125, 1.7197608947753906, -9.64388656616211, -13.399993896484375, -38.291961669921875, 12.877279281616211, -38.174041748046875" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="newhamPolygon" fill="#ababab" layoutX="412.0" layoutY="227.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="47.607276916503906, -5.114472389221191, 32.7399787902832, 13.127901077270508, 7.000817775726318, 10.293478012084961, -10.0, 6.0, -17.45294952392578, -3.4999899864196777, -25.802637100219727, -40.7613410949707, -6.390348434448242, -50.50000762939453, 20.0999755859375, -50.5, 28.360252380371094, -37.138668060302734, 30.779743194580078, -37.138668060302734" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="barkDagPolygon" fill="#ababab" layoutX="479.0" layoutY="210.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="49.29998779296875, -39.100006103515625, 29.449796676635742, 4.9812798500061035, 13.449828147888184, 2.5488076210021973, -7.767584800720215, 5.099678993225098, -25.736122131347656, -25.79079818725586, -0.5213847160339355, -36.174522399902344, 24.29522705078125, -86.5, 24.29522705078125, -47.617431640625" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="hamletsPolygon" fill="#ababab" layoutX="354.0" layoutY="235.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="30.715038299560547, 2.546107530593872, 30.715038299560547, 16.356796264648438, 25.234983444213867, 18.200109481811523, 7.0608367919921875, -5.530515670776367, -4.265085697174072, -5.530515670776367, -13.117013931274414, -5.530515670776367, -13.117013931274414, -8.237044334411621, -14.79998779296875, -22.899993896484375, 22.5, -44.100006103515625, 30.71502685546875, -9.870010375976562, 38.600006103515625, 1.0" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="cityPolygon" fill="#ababab" layoutX="310.0" layoutY="243.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="21.20001220703125, -30.406219482421875, 22.238502502441406, -12.999970436096191, 2.7516989707946777, -12.92650318145752, 2.7516980171203613, -21.158235549926758" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="westminsterPolygon" fill="#ababab" layoutX="255.0" layoutY="249.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="32.568634033203125, 9.72828197479248, 23.69908332824707, 11.40921688079834, 23.69907569885254, -2.775433301925659, 1.6072413921356201, -23.048208236694336, -15.911246299743652, -40.13941192626953, -7.060541152954102, -42.24222946166992, -2.6563031673431396, -42.242225646972656, 18.406829833984375, -40.13941955566406, 36.2651252746582, -23.048208236694336, 43.075958251953125, -15.38216495513916" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="kensChelsPolygon" fill="#ababab" layoutX="229.0" layoutY="263.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="29.999977111816406, -28.10614585876465, 44.80638885498047, -15.931329727172852, 44.80638885498047, -1.3785851001739502, 29.999980926513672, 1.69533109664917, 26.851163864135742, 1.79595947265625, 3.2693655490875244, -31.05340003967285, 0.891510009765625, -53.60076904296875, 6.4511637687683105, -52.09548568725586" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="hammfullPolygon" fill="#ababab" layoutX="211.0" layoutY="264.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="40.56275939941406, 3.273407220840454, 35.62462615966797, 16.743547439575195, 21.711584091186523, 12.283660888671875, 11.638649940490723, -1.5455572605133057, 2.2333285808563232, -9.629365921020508, -1.2672765254974365, -15.399991035461426, -1.2672765254974365, -18.145246505737305, -1.26727294921875, -31.78924560546875, -1.2672765254974365, -52.98458480834961, 8.782666206359863, -54.675899505615234, 14.000004768371582, -52.98458480834961, 16.94374656677246, -29.544612884521484" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="hounslowPolygon" fill="#ababab" layoutX="98.0" layoutY="303.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="41.365596771240234, -16.908700942993164, 42.93083190917969, -4.908685207366943, 39.437034606933594, 4.656531810760498, 6.938640117645264, 6.743483066558838, 3.1111650466918945, 15.613032341003418, 11.871806144714355, 22.65651512145996, 1.600006103515625, 45.399993896484375, -42.5687141418457, 14.569411277770996, -8.997758865356445, -44.82175064086914, 50.13267517089844, -40.64781951904297, 94.07571411132812, -50.0, 97.93641662597656, -38.647830963134766, 88.49604034423828, -28.50495719909668, 69.01779174804688, -32.908695220947266" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="richmondPolygon" fill="#ababab" layoutX="156.0" layoutY="343.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="37.600013732910156, -54.43157958984375, 47.9869270324707, -64.21649932861328, 51.81282043457031, -62.26604461669922, 54.33024215698242, -50.552310943603516, 37.600006103515625, -39.358062744140625, 42.27227783203125, -18.132965087890625, 21.8592529296875, -1.45404052734375, -1.114471435546875, -4.9732666015625, -2.899993896484375, -4.9732666015625, -1.1144638061523438, -1.4540395736694336, -2.8999810218811035, -8.291436195373535, -9.02187442779541, 27.747642517089844, -22.330272674560547, 16.093616485595703, -50.600006103515625, 10.600006103515625, -39.0, -14.899993896484375, -48.530433654785156, -21.549989700317383, -44.948204040527344, -27.70786476135254, -13.317634582519531, -29.57451057434082, -7.24110746383667, -39.35807418823242, -2.8999953269958496, -46.61799240112305, 17.638891220092773, -59.31365203857422" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="kingstonPolygon" fill="#ababab" layoutX="203.0" layoutY="407.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-36.00545120239258, -9.648686408996582, -30.316802978515625, -5.156341552734375, -45.925811767578125, 48.474639892578125, -33.518646240234375, 46.0732421875, -0.699676513671875, -7.5577392578125, 4.600006103515625, -3.79998779296875, 11.0, -17.0, -0.6996665596961975, -70.49066162109375, -20.79949951171875, -54.04295349121094, -32.134735107421875, -56.295814514160156" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="wandsworthPolygon" fill="#ababab" layoutX="265.0" layoutY="336.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-57.87113952636719, -32.79998016357422, -52.819976806640625, -10.959320068359375, -9.799988746643066, -13.376411437988281, -3.799835205078125, 0.6673272252082825, 21.023012161254883, 16.27937126159668, 14.100006103515625, -40.20001220703125, 14.099997520446777, -53.59888458251953, -2.6639978885650635, -49.04258346557617, -9.799989700317383, -34.259971618652344, -41.790531158447266, -41.91213607788086" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="lambethPolygon" fill="#ababab" layoutX="325.0" layoutY="324.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-25.803035736083984, -44.50497055053711, -35.39999008178711, -43.14823532104492, -35.399993896484375, -28.706085205078125, -27.70001220703125, 32.20001220703125, 1.08685302734375, 11.46844482421875, -7.767822265625, -17.666229248046875, -2.250762939453125, -26.743682861328125, -15.020432472229004, -67.70698547363281" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="mertonPolygon" fill="#ababab" layoutX="264.0" layoutY="386.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-38.5, 0.0, 26.29998779296875, 0.0, 22.7493896484375, -25.890716552734375, -2.98236083984375, -41.792388916015625, -9.343048095703125, -55.959320068359375, -49.819976806640625, -53.35723876953125" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="southwarkPolygon" fill="#ababab" layoutX="360.0" layoutY="304.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-44.56566619873047, -50.62392807006836, -30.29998779296875, -9.70001220703125, -36.2651481628418, 0.6746658682823181, -26.52600860595703, 32.01947784423828, -0.26515406370162964, 4.593462944030762, -12.265143394470215, -36.02099609375, 1.0768141746520996, -40.962867736816406, -5.783052444458008, -52.116722106933594" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="lewishamPolygon" fill="#ababab" layoutX="403.0" layoutY="338.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-46.52635192871094, -66.86824035644531, -35.02608108520508, -27.56120491027832, -59.600006103515625, -1.40216064453125, -8.0, 6.0, 21.20001220703125, -6.732452392578125, -0.20001220703125, -46.567230224609375, -17.895662307739258, -46.567237854003906, -25.113203048706055, -61.50792694091797, -28.678266525268555, -63.594905853271484, -34.765193939208984, -71.78836822509766" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="greenwichPolygon" fill="#ababab" layoutX="456.0" layoutY="304.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-61.956016540527344, -17.499996185302734, -44.69071960449219, -17.499996185302734, -21.79998779296875, 24.267547607421875, 0.33880615234375, 24.267547607421875, 12.5999755859375, -22.399993896484375, 36.5999755859375, -29.399993896484375, 30.064083099365234, -64.85836791992188, 11.455418586730957, -60.560298919677734, -3.3271896839141846, -40.734195709228516, -35.84894943237305, -43.8646354675293, -51.32720184326172, -48.647220611572266, -49.2402229309082, -35.082000732421875, -70.2837142944336, -31.51682472229004" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="bexleyPolygon" fill="#ababab" layoutX="540.0" layoutY="313.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-35.41917419433594, -35.7258186340332, -59.897491455078125, -28.257320404052734, -72.15272521972656, 16.809289932250977, -27.78619384765625, 37.365753173828125, 5.0262451171875, -10.848480224609375, 12.547414779663086, -46.185813903808594, -14.430766105651855, -44.79450607299805, -29.909069061279297, -67.4031982421875, -42.08298110961914, -70.88150787353516" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="bromleyPolygon" fill="#ababab" layoutX="461.0" layoutY="438.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-60.786346435546875, 15.1541748046875, -41.93450927734375, 54.5716552734375, -1.0888671875, 62.283782958984375, 4.90948486328125, 31.149658203125, 34.90106201171875, 3.728790283203125, 40.4000244140625, -68.0, -5.4413347244262695, -88.63123321533203, -32.1031494140625, -88.6312255859375, -60.786346435546875, -76.29998779296875, -115.0, -84.10000610351562, -71.0, 15.1541748046875" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="croydonPolygon" fill="#ababab" layoutX="358.0" layoutY="456.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-48.32838821411133, -15.505212783813477, -69.86204528808594, 12.755337715148926, -44.059814453125, 46.3702392578125, 3.934295654296875, 0.978240966796875, 16.663665771484375, -1.8212890625, -27.91314697265625, -102.40216064453125, -57.79998779296875, -81.39999389648438" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="suttonPolygon" fill="#ababab" layoutX="283.0" layoutY="449.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-36.43841552734375, -5.188690185546875, -5.791595458984375, 19.3865966796875, 14.4468994140625, -7.790771484375, 7.600006103515625, -50.399993896484375, -57.399993896484375, -50.399993896484375, -62.748443603515625, -38.72674560546875, -45.97943115234375, -1.71923828125" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon fx:id="thamesPolygon" fill="#59bce3" layoutX="167.0" layoutY="389.0" points="-31.36505126953125, -23.46124267578125, -16.113296508789062, -23.46124267578125, 11.5047607421875, -2.8131103515625, 17.20001220703125, -5.399993896484375, 21.0, -51.20001220703125, 18.67413330078125, -55.9881591796875, 10.26812744140625, -98.85800170898438, 28.600006103515625, -110.29998779296875, 49.20001220703125, -105.0, 59.92012023925781, -115.50000762939453, 65.96180725097656, -111.70001220703125, 68.79998779296875, -98.85800170898438, 98.71953582763672, -90.9757080078125, 104.60000610351562, -105.0, 108.20001220703125, -106.20001220703125, 123.0, -109.60000610351562, 134.20001220703125, -111.70001220703125, 146.0, -136.5, 187.20001220703125, -138.29998779296875, 203.16941833496094, -115.50000762939453, 223.29708862304688, -118.89999389648438, 221.22879028320312, -132.97467041015625, 239.62954711914062, -128.11907958984375, 270.780517578125, -124.95968627929688, 285.53704833984375, -144.5, 305.40081787109375, -148.42431640625, 320.8504638671875, -144.5, 336.6759033203125, -121.89999389648438, 362.78521728515625, -123.29998779296875, 365.8751220703125, -128.11907958984375, 339.3900146484375, -128.11907958984375, 320.8504943847656, -152.5, 305.40081787109375, -155.6999969482422, 283.5, -152.5, 266.99749755859375, -132.97467041015625, 239.62954711914062, -136.5, 223.29708862304688, -140.10000610351562, 215.05055236816406, -138.29998779296875, 215.05055236816406, -123.29998016357422, 206.20001220703125, -121.89999389648438, 192.39999389648438, -140.10000610351562, 188.79998779296875, -144.5, 142.39999389648438, -144.5, 130.0, -117.5, 100.0, -111.70001220703125, 94.20001220703125, -97.29998779296875, 76.04900360107422, -102.54248046875, 68.79999542236328, -115.50000762939453, 58.600006103515625, -123.29998779296875, 47.20001220703125, -110.29998779296875, 27.0, -115.5, 1.3711395263671875, -100.63924407958984, 7.400006294250488, -52.824886322021484, 10.268128395080566, -47.344940185546875, 4.477271556854248, -16.292003631591797, -12.0, -29.20001220703125, -35.100006103515625, -34.29998779296875" scaleX="1.15" scaleY="1.15" stroke="#ffffff00" strokeType="INSIDE" style="-fx-stroke: #161616D1;" />
+                  <Label fx:id="hillingdonLabel" alignment="CENTER" cacheShape="false" centerShape="false" disable="true" focusTraversable="false" layoutX="29.0" layoutY="213.0" scaleShape="false" style="-fx-opacity: 1;" text="Hillingdon">
+                     <font>
+                        <Font name="Comic Sans MS" size="13.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </Label>
+                  <Label alignment="CENTER" disable="true" layoutX="106.0" layoutY="116.0" style="-fx-opacity: 1;" text="Harrow" />
+                  <Label alignment="CENTER" disable="true" layoutX="216.0" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="36.0" style="-fx-opacity: 1;" text="Barnet" />
+                  <Label alignment="CENTER" disable="true" layoutX="306.0" layoutY="50.0" style="-fx-opacity: 1;" text="Enfield" />
+                  <Label alignment="CENTER" disable="true" layoutX="356.0" layoutY="121.0" prefHeight="41.0" prefWidth="50.0" style="-fx-opacity: 1;" text="Waltham Forest" wrapText="true">
+                     <font>
+                        <Font size="11.5" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" disable="true" layoutX="417.0" layoutY="131.0" style="-fx-opacity: 1;" text="Redbridge" />
+                  <Label alignment="CENTER" disable="true" layoutX="535.0" layoutY="140.0" style="-fx-opacity: 1;" text="Havering" />
+                  <Label alignment="CENTER" disable="true" layoutX="464.0" layoutY="164.0" prefHeight="60.0" prefWidth="62.0" style="-fx-opacity: 1;" text="Barking &amp; Dagenham" wrapText="true">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" disable="true" layoutX="393.0" layoutY="196.0" style="-fx-opacity: 1;" text="Newham" />
+                  <Label alignment="CENTER" disable="true" layoutX="324.0" layoutY="168.0" rotate="38.7" snapToPixel="false" style="-fx-opacity: 1;" text="Hackney">
+                     <font>
+                        <Font name="System Bold" size="11.3" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" disable="true" layoutX="291.0" layoutY="119.0" style="-fx-opacity: 1;" text="Haringey" />
+                  <Label alignment="CENTER" disable="true" layoutX="288.0" layoutY="174.0" rotate="63.4" style="-fx-opacity: 1;" text="Islington" />
+                  <Label alignment="CENTER" disable="true" layoutX="245.0" layoutY="181.0" style="-fx-opacity: 1;" text="Camden" />
+                  <Label alignment="CENTER" disable="true" layoutX="168.0" layoutY="167.0" prefHeight="21.0" prefWidth="40.0" style="-fx-opacity: 1;" text="Brent" />
+                  <Label disable="true" layoutX="121.0" layoutY="210.0" style="-fx-opacity: 1;" text="Ealing" />
+                  <Label disable="true" layoutX="70.0" layoutY="285.0" style="-fx-opacity: 1;" text="Hounslow" />
+                  <Label disable="true" layoutX="210.0" layoutY="301.0" style="-fx-opacity: 1;" text="Wandswroth" />
+                  <Label disable="true" layoutX="170.0" layoutY="350.0" prefHeight="62.0" prefWidth="52.0" rotate="21.2" style="-fx-opacity: 1;" text="Kingston Upon Thames" wrapText="true">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label disable="true" layoutX="229.0" layoutY="350.0" style="-fx-opacity: 1;" text="Merton" />
+                  <Label disable="true" layoutX="241.0" layoutY="416.0" style="-fx-opacity: 1;" text="Sutton" />
+                  <Label disable="true" layoutX="309.0" layoutY="416.0" style="-fx-opacity: 1;" text="Croydon" />
+                  <Label disable="true" layoutX="403.0" layoutY="389.0" style="-fx-opacity: 1;" text="Bromley" />
+                  <Label disable="true" layoutX="251.0" layoutY="222.0" rotate="42.3" style="-fx-opacity: 1;" text="Westminster">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Label>
+                  <Label disable="true" focusTraversable="false" layoutX="228.0" layoutY="239.0" prefHeight="26.0" prefWidth="68.0" rotate="47.1" style="-fx-opacity: 1;" text="Kensington &amp; Chelsea" wrapText="true">
+                     <font>
+                        <Font size="7.5" />
+                     </font>
+                  </Label>
+                  <Label disable="true" layoutX="196.0" layoutY="237.0" prefHeight="13.0" prefWidth="62.0" rotate="63.4" style="-fx-opacity: 1;" text="Hammersmith &amp;">
+                     <font>
+                        <Font size="8.0" />
+                     </font>
+                  </Label>
+                  <Label disable="true" layoutX="287.0" layoutY="308.0" rotate="49.8" style="-fx-opacity: 1;" text="Lambeth">
+                     <font>
+                        <Font size="10.5" />
+                     </font>
+                  </Label>
+                  <Label disable="true" layoutX="318.0" layoutY="279.0" rotate="55.0" style="-fx-opacity: 1;" text="Southwark">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label disable="true" layoutX="360.0" layoutY="317.0" style="-fx-opacity: 1;" text="Lewisham" />
+                  <Label disable="true" layoutX="408.0" layoutY="269.0" style="-fx-opacity: 1;" text="Greenwich" />
+                  <Label disable="true" layoutX="486.0" layoutY="301.0" style="-fx-opacity: 1;" text="Bexley" />
+                  <Label disable="true" layoutX="348.0" layoutY="199.0" prefHeight="37.0" prefWidth="50.0" style="-fx-opacity: 1;" text="Tower Hamlets" wrapText="true">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label disable="true" layoutX="206.0" layoutY="243.0" rotate="61.2" style="-fx-opacity: 1;" text="Fullham">
+                     <font>
+                        <Font size="8.0" />
+                     </font>
+                  </Label>
+                  <Label disable="true" layoutX="317.0" layoutY="220.0" style="-fx-opacity: 1;" text="City">
+                     <font>
+                        <Font size="7.0" />
+                     </font>
+                  </Label>
+                  <Label disable="true" layoutX="106.0" layoutY="330.0" rotate="-29.2" style="-fx-opacity: 1;" text="Richmond">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label disable="true" layoutX="123.0" layoutY="338.0" rotate="-32.3" style="-fx-opacity: 1;" text="Upon">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label disable="true" layoutX="163.0" layoutY="312.0" rotate="-27.3" style="-fx-opacity: 1;" text="Thames">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" layoutX="133.0" layoutY="5.0" prefHeight="16.0" prefWidth="652.0" text="Click on a borough to view more information" textFill="WHITE">
+               <font>
+                  <Font name="Comic Sans MS" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="selectedBoroughLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="134.0" layoutY="23.0" prefHeight="33.0" prefWidth="650.0" textFill="WHITE" underline="true">
+               <font>
+                  <Font name="Wawati TC Regular" size="15.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
