@@ -7,6 +7,6 @@ public class AnimationInterpolator extends Interpolator {
      */
     @Override
     protected double curve(double timePassedRatio){
-        return (timePassedRatio >= 0.98)? 1.0 : 1 - Math.pow(2.0, -9.8 * timePassedRatio);
+        return (timePassedRatio >= 1.0)? 1.0 : 1 - Math.pow(2.0, -8 * timePassedRatio);
     }
 }

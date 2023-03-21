@@ -22,18 +22,19 @@ import javafx.scene.Parent;
  */
 public abstract class ViewerController {
 
-    @FXML
-    protected StackPane stackPane;
-
-    // stores all the covid data
+    // Stores all the covid data
     protected ArrayList<CovidData> data;
 
     @FXML
     protected StackPane parentPane;
     
+    @FXML
+    protected StackPane stackPane;
+
     protected LocalDate fromDate;
     protected LocalDate toDate;
-
+    
+    // If the view is transitioning from one panel to another
     static boolean inTransition = false;
 
     // -------------------------------- Getters -------------------------------- //
@@ -51,13 +52,30 @@ public abstract class ViewerController {
     protected LocalDate getToDate() {
         return toDate;
     }
-    
+
     // -------------------------------- Setters -------------------------------- //
     
+    /**
+     * Sets the `data` attribute to the CovidData list passed in
+     * 
+     * @param data The data to be stored in the controller
+     */
     protected void setData(ArrayList<CovidData> data) {
         this.data = data;
     }
     
+    /**
+     * Sets the date range of the date pickers to the given dates.
+     * Calls the processDateRangeData() method which performs actions related to the
+     * date picked on the current scene
+     *
+     * @param from   The starting date of the date range to be set.
+     * @param toDate The ending date of the date range to be set.
+     */
+    public void setDateRange(LocalDate fromDate, LocalDate toDate) {
+        this.fromDate = fromDate;
+        this.toDate = toDate;
+    }
 
     // ----------------------- Ranged Data Helper Methods ---------------------- //
 
@@ -74,20 +92,9 @@ public abstract class ViewerController {
                 .filter((covidData) -> isDateInRange(LocalDate.parse(covidData.getDate()), fromDate, toDate))
                 .collect(Collectors.toList()));
     }
-
-    /**
-     * Sets the date range of the date pickers to the given dates.
-     * Calls the processDateRangeData() method which performs actions related to the
-     * date picked on the current scene
-     *
-     * @param from   The starting date of the date range to be set.
-     * @param toDate The ending date of the date range to be set.
-     */
-    public void setDateRange(LocalDate fromDate, LocalDate toDate) {
-        this.fromDate = fromDate;
-        this.toDate = toDate;
-
-        // do what is specified to be done within the date range
+    
+    protected void updatePanelForDateRange(LocalDate fromDate, LocalDate toDate) {
+        setDateRange(fromDate, toDate);
         processDataInDateRange(fromDate, toDate);
     }
 
@@ -119,13 +126,14 @@ public abstract class ViewerController {
     protected boolean isDateInRange(LocalDate date, LocalDate fromDate, LocalDate toDate) {
         return (date.isAfter(fromDate) && date.isBefore(toDate)) || date.isEqual(fromDate) || date.isEqual(toDate);
     }
-    
+
     /**
      * Resize certain components (not mandatory) in certain panels.
      * 
      * @param parentPane pane that is to be used to scale with
      */
-    protected void resizeComponents(Region parentPane) {};
+    protected void resizeComponents(Region parentPane) {
+    };
 
     // ---------------------------- Abstract Methods --------------------------- //
 
@@ -136,7 +144,7 @@ public abstract class ViewerController {
      * @param to   the ending date of the range
      */
     abstract protected void processDataInDateRange(LocalDate fromDate, LocalDate toDate);
-    
+
     /**
      * @return the main pane that we've all added components onto.
      */
