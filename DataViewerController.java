@@ -57,7 +57,6 @@ public class DataViewerController extends ViewerController implements Initializa
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {      
-
         // Create TableColumns for the TableView
         TableColumn<CovidData, String> dateCol = new TableColumn<CovidData, String>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<CovidData, String>("date"));
@@ -92,7 +91,6 @@ public class DataViewerController extends ViewerController implements Initializa
      * @param event The event triggered by changing the date picker.
      */
     protected void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {
-
         // Clear any existing items from the table
         dataTable.getItems().clear();
 

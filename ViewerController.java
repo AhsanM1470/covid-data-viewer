@@ -22,18 +22,19 @@ import javafx.scene.Parent;
  */
 public abstract class ViewerController {
 
-    @FXML
-    protected StackPane stackPane;
-
-    // stores all the covid data
+    // Stores all the covid data
     protected ArrayList<CovidData> data;
 
     @FXML
     protected StackPane parentPane;
+    
+    @FXML
+    protected StackPane stackPane;
 
     protected LocalDate fromDate;
     protected LocalDate toDate;
-
+    
+    // If the view is transitioning from one panel to another
     static boolean inTransition = false;
 
     // -------------------------------- Getters -------------------------------- //
@@ -53,9 +54,27 @@ public abstract class ViewerController {
     }
 
     // -------------------------------- Setters -------------------------------- //
-
+    
+    /**
+     * Sets the `data` attribute to the CovidData list passed in
+     * 
+     * @param data The data to be stored in the controller
+     */
     protected void setData(ArrayList<CovidData> data) {
         this.data = data;
+    }
+    
+    /**
+     * Sets the date range of the date pickers to the given dates.
+     * Calls the processDateRangeData() method which performs actions related to the
+     * date picked on the current scene
+     *
+     * @param from   The starting date of the date range to be set.
+     * @param toDate The ending date of the date range to be set.
+     */
+    public void setDateRange(LocalDate fromDate, LocalDate toDate) {
+        this.fromDate = fromDate;
+        this.toDate = toDate;
     }
 
     // ----------------------- Ranged Data Helper Methods ---------------------- //
@@ -73,20 +92,9 @@ public abstract class ViewerController {
                 .filter((covidData) -> isDateInRange(LocalDate.parse(covidData.getDate()), fromDate, toDate))
                 .collect(Collectors.toList()));
     }
-
-    /**
-     * Sets the date range of the date pickers to the given dates.
-     * Calls the processDateRangeData() method which performs actions related to the
-     * date picked on the current scene
-     *
-     * @param from   The starting date of the date range to be set.
-     * @param toDate The ending date of the date range to be set.
-     */
-    public void setDateRange(LocalDate fromDate, LocalDate toDate) {
-        this.fromDate = fromDate;
-        this.toDate = toDate;
-
-        // do what is specified to be done within the date range
+    
+    protected void updatePanelForDateRange(LocalDate fromDate, LocalDate toDate) {
+        setDateRange(fromDate, toDate);
         processDataInDateRange(fromDate, toDate);
     }
 
