@@ -102,22 +102,16 @@ public class GraphViewerController implements Initializable
         
         //Last index in the arraylist has the smallest total deaths
         //First index in the arryalist has the largest total deaths
-        //int lowerInt = ((totalDeaths.get(totalDeaths.size() - 1))/ 10)*10;
-        //int upperInt = ((totalDeaths.get(0))/10)*10;
         
-        //tk maybe its not unwrapping the int properly. also should i divide by 100/1000??
-        //double lower = totalDeaths.get(totalDeaths.size() - 1);
-        //double upper = totalDeaths.get(0);
         int index = totalDeaths.size() - 1;
         int lowerValue = Integer.valueOf(totalDeaths.get(index));
-        //int lowerValue = Integer.valueOf(totalDeaths.get(size));
         int upperValue = Integer.valueOf(totalDeaths.get(0));
+        System.out.println(index);
         
         double lowerBound = (lowerValue/100)*100;
         double upperBound = ((upperValue + 99)/100)*100;
-        System.out.println(lowerValue);
-        System.out.println(lowerBound);
-        System.out.println(upperBound);
+        
+        //System.out.println(upperBound);
         
         yAxis.setAutoRanging(false);
         yAxis.setLowerBound(lowerBound);
