@@ -98,10 +98,12 @@ public abstract class ViewerController {
         // filters data to only include data that falls within the specified date range
         return new ArrayList<CovidData>(data.stream()
                 .filter((covidData) -> 
-                isDateInRange(LocalDate.parse(covidData.getDate()), fromDate, toDate)
-                && covidData.getBorough().equals(boroughName))
+                isDateInRange(LocalDate.parse(covidData.getDate()), fromDate, toDate) && covidData.getBorough().equals(boroughName))
                 .collect(Collectors.toList()));
     }
+
+
+
 
     protected void updatePanelForDateRange(LocalDate fromDate, LocalDate toDate) {
         setDateRange(fromDate, toDate);

@@ -304,9 +304,6 @@ public class MapViewerController extends ViewerController implements Initializab
     }
 
     private void showData(String boroughName) {
-        Stage stage = new Stage();
-        stage.setTitle("Covid Data");
-
         TableView tableView = new TableView<CovidData>();
 
         TableColumn<CovidData, String> boroughColumn = new TableColumn<>("Date");
@@ -343,6 +340,9 @@ public class MapViewerController extends ViewerController implements Initializab
 
         ObservableList<CovidData> obsData = FXCollections.observableArrayList(data);
         tableView.setItems(obsData);
+
+        Stage stage = new Stage();
+        stage.setTitle("Covid Data");
 
         Scene scene = new Scene(tableView);
         stage.setScene(scene);
