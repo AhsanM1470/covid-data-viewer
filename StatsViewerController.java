@@ -161,16 +161,6 @@ public class StatsViewerController extends ViewerController implements Initializ
         if(isDateRangeValid(fromDate, toDate)){
             getDataInDateRange(fromDate, toDate);
         }
-        rightButton.setDisable(true);
-
-        DateFormat dateFormat = new SimpleDateFormat("yy-mm-dd");
-
-
-        if (fromDate != null && toDate != null) {
-            if (fromDate.isBefore(toDate)) {
-                rightButton.setDisable(false);
-            }
-        }
 
         // if the index is 1, then refreshes the label
         // showing sum of total deaths.
