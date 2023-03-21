@@ -21,6 +21,7 @@ public class BoroughInfoController {
     private Label message;
 
     @FXML
+    @SuppressWarnings("unchecked")
     public void initialize(){
         
         TableColumn<CovidData, String> dateColumn = new TableColumn<>("Date");

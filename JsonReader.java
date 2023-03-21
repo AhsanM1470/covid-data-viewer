@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonReader {
 
+    @SuppressWarnings("unchecked")
     public HashMap<String,String> readJson(String fileName) {
 
         // Create an instance of ObjectMapper to read JSON file

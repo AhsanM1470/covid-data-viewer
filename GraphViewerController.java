@@ -78,6 +78,9 @@ public class GraphViewerController extends ViewerController implements Initializ
     public void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {
         from = fromDate;
         to = toDate;
+        if (borough != null){
+            constructChart(from, to);
+        }
     }
     
     public void selectBorough(ActionEvent event){
