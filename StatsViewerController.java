@@ -7,6 +7,8 @@ import java.util.ResourceBundle;
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -148,6 +150,10 @@ public class StatsViewerController extends ViewerController implements Initializ
     protected void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {
         this.fromDate = fromDate;
         this.toDate = toDate;
+
+        // // TODO: Go over with saihan over how the averages are caluclated using this: sum of new cases/number of days
+        // long daysBetween = ChronoUnit.DAYS.between(fromDate, toDate);
+        // System.out.println(daysBetween);
 
         if (isDateRangeValid(fromDate, toDate)) {
             getDataInDateRange(fromDate, toDate);

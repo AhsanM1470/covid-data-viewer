@@ -1,6 +1,7 @@
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -13,6 +14,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -22,6 +24,8 @@ import java.util.HashMap;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.Initializable;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -208,6 +212,7 @@ public class MapViewerController extends ViewerController implements Initializab
      * each borough in the time range
      */
     private void loadBoroughHeatMapData() {
+
         for (CovidData covidEntry : dataInDateRange) {
             String entryBoroughName = covidEntry.getBorough();
             Integer entryDeathsOnDay = covidEntry.getNewDeaths();
@@ -255,11 +260,9 @@ public class MapViewerController extends ViewerController implements Initializab
                 // calculate proportion of current borough data with the base value
                 // in HSB hue is measured in degrees where: 0 -> 120 == red -> green.
                 // converts the proportion of heat map values as a % of the hueUpperBound
-                int hueUpperBound = 135;
+                double hueUpperBound = 135.0;
 
-                // TODO: use percentage later to determine the colour of text maybe?
-                double percentage = (1.0 * boroughHeatMapMeasure / heatMapBaseValue);
-                double percentageOfHue = (hueUpperBound * percentage);
+                double percentageOfHue = (hueUpperBound * boroughHeatMapMeasure / heatMapBaseValue);
 
                 // subtracting from the upper bound gives us reversed scale.
                 // green -> low deaths
@@ -285,69 +288,42 @@ public class MapViewerController extends ViewerController implements Initializab
      * mapped to
      * 
      * @param event
+     * @throws IOException
      */
     @FXML
-    void polygonClicked(MouseEvent event) {
+    void polygonClicked(MouseEvent event) throws IOException {
         Polygon poly = (Polygon) event.getSource();
         String name = boroughIdToName.get(poly.getId());
-        Integer boroughHeatMapMeasure = boroughHeatMapData.get(name);
+        // Integer boroughHeatMapMeasure = boroughHeatMapData.get(name);
 
-        Integer perc = null;
-        if (boroughHeatMapMeasure != null && heatMapBaseValue > 0) {
-            double percentage = (double) (100.0 * boroughHeatMapMeasure / heatMapBaseValue);
-            perc = (int) Math.round(percentage);
-        }
-        System.out.println(
-                name + " total deaths within date range: " + boroughHeatMapData.get(name) + " | Heat map base value: "
-                        + heatMapBaseValue + " | percentage: " + perc + "%");
+        // Integer perc = null;
+        // if (boroughHeatMapMeasure != null && heatMapBaseValue > 0) {
+        //     double percentage = (double) (100.0 * boroughHeatMapMeasure / heatMapBaseValue);
+        //     perc = (int) Math.round(percentage);
+        // }
+        // System.out.println(
+        //         name + " total deaths within date range: " + boroughHeatMapData.get(name) + " | Heat map base value: "
+        //                 + heatMapBaseValue + " | percentage: " + perc + "%");
         showData(name);
     }
 
-    private void showData(String boroughName) {
-        TableView tableView = new TableView<CovidData>();
-
-        TableColumn<CovidData, String> boroughColumn = new TableColumn<>("Date");
-        boroughColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-
-        TableColumn<CovidData, Integer> retailRecreationGMR = new TableColumn<>("retailRecreationGMR");
-        retailRecreationGMR.setCellValueFactory(new PropertyValueFactory<>("retailRecreationGMR"));
-        
-        TableColumn<CovidData, Integer> groceryPharmacyGMR = new TableColumn<>("groceryPharmacyGMR");
-        groceryPharmacyGMR.setCellValueFactory(new PropertyValueFactory<>("groceryPharmacyGMR"));
-        
-        TableColumn<CovidData, Integer> parksGMR = new TableColumn<>("parksGMR");
-        parksGMR.setCellValueFactory(new PropertyValueFactory<>("parksGMR"));
-        
-        TableColumn<CovidData, Integer> transitGMR = new TableColumn<>("transitGMR");
-        transitGMR.setCellValueFactory(new PropertyValueFactory<>("transitGMR"));
-        
-        TableColumn<CovidData, Integer> workplacesGMR = new TableColumn<>("workplacesGMR");
-        workplacesGMR.setCellValueFactory(new PropertyValueFactory<>("workplacesGMR"));
-
-        TableColumn<CovidData, Integer> residentialGMR = new TableColumn<>("residentialGMR");
-        residentialGMR.setCellValueFactory(new PropertyValueFactory<>("residentialGMR"));
-
-        TableColumn<CovidData, Integer> newCasesColumn = new TableColumn<>("New Covid Deaths");
-        newCasesColumn.setCellValueFactory(new PropertyValueFactory<>("newDeaths"));
-
-        TableColumn<CovidData, Integer> totalCovidCases = new TableColumn<>("Total Covid Cases");
-        newCasesColumn.setCellValueFactory(new PropertyValueFactory<>("totalCases"));
-
-        TableColumn<CovidData, Integer> newCovidDeaths = new TableColumn<>("New Covid Deaths");
-        newCovidDeaths.setCellValueFactory(new PropertyValueFactory<>("newDeaths"));
-
-        tableView.getColumns().addAll(boroughColumn, retailRecreationGMR, groceryPharmacyGMR,parksGMR,transitGMR,workplacesGMR, residentialGMR, newCasesColumn, totalCovidCases, newCovidDeaths);
-
-        ObservableList<CovidData> obsData = FXCollections.observableArrayList(data);
-        tableView.setItems(obsData);
-
+    /**
+     * create a pop up window for the borough data
+     * @param boroughName
+     * @throws IOException
+     */
+    private void showData(String boroughName) throws IOException {
         Stage stage = new Stage();
-        stage.setTitle("Covid Data");
-
-        Scene scene = new Scene(tableView);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("BoroughInfo.fxml"));
+        Parent root = loader.load();
+        BoroughInfoController controller = loader.getController();
+        
+        Scene scene = new Scene(root);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(mapAnchorPane.getScene().getWindow());
         stage.setScene(scene);
         stage.setTitle(boroughName);
-        stage.setWidth(tableView.getWidth());
+        controller.showData(getBoroughData(boroughName, fromDate, toDate), stage);
         stage.show();
     }
 

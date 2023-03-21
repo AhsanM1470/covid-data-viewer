@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StatsViewerController">
+<BorderPane prefHeight="650.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StatsViewerController">
    <top>
       <VBox prefHeight="30.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -57,31 +57,37 @@
          <center>
             <StackPane prefHeight="588.0" prefWidth="794.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox fx:id="firstPane" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                  <VBox fx:id="firstPane" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="597.0">
                      <children>
                         <Label text="Google Mobility Statistics" textFill="WHITE" underline="true">
                            <padding>
                               <Insets top="100.0" />
                            </padding>
                            <font>
-                              <Font size="20.0" />
+                              <Font size="29.0" />
                            </font>
                         </Label>
                         <Label fx:id="rrGMRLabel" text="No date range has been selected." textFill="WHITE">
                            <padding>
                               <Insets top="100.0" />
-                           </padding></Label>
+                           </padding>
+                           <font>
+                              <Font size="29.0" />
+                           </font></Label>
                         <Label fx:id="gpGMRLabel" text="No date range has been selected." textFill="WHITE">
                            <padding>
                               <Insets top="40.0" />
-                           </padding></Label>
+                           </padding>
+                           <font>
+                              <Font size="29.0" />
+                           </font></Label>
                      </children>
                   </VBox>
-                  <BorderPane fx:id="secondPane" prefHeight="200.0" prefWidth="200.0" visible="false">
+                  <BorderPane fx:id="secondPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="597.0" visible="false">
                      <top>
                         <Label alignment="CENTER" prefHeight="154.0" prefWidth="399.0" text="Total number of total deaths" textFill="WHITE" underline="true" BorderPane.alignment="CENTER">
                            <font>
-                              <Font size="23.0" />
+                              <Font size="29.0" />
                            </font>
                            <padding>
                               <Insets top="73.0" />
@@ -96,37 +102,46 @@
                            <padding>
                               <Insets bottom="150.0" />
                            </padding>
+                           <font>
+                              <Font size="29.0" />
+                           </font>
                         </Label>
                      </center>
                   </BorderPane>
-                  <BorderPane fx:id="thirdPane" prefHeight="200.0" prefWidth="200.0" visible="false">
+                  <BorderPane fx:id="thirdPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="597.0" visible="false">
                      <center>
                         <Label fx:id="averageCasesLabel" text="No date range has been selected." textFill="WHITE" BorderPane.alignment="CENTER">
                            <padding>
                               <Insets bottom="125.0" />
-                           </padding></Label>
+                           </padding>
+                           <font>
+                              <Font size="29.0" />
+                           </font></Label>
                      </center>
                      <top>
                         <Label text="Average of total cases" textFill="WHITE" underline="true" BorderPane.alignment="CENTER">
                            <font>
-                              <Font size="23.0" />
+                              <Font size="29.0" />
                            </font>
                            <padding>
                               <Insets top="97.0" />
                            </padding></Label>
                      </top>
                   </BorderPane>
-                  <BorderPane fx:id="fourthPane" prefHeight="200.0" prefWidth="200.0" visible="false">
+                  <BorderPane fx:id="fourthPane" prefHeight="581.0" prefWidth="597.0" visible="false">
                      <center>
                         <Label fx:id="highestDeathDateLabel" text="No date range has been selected." textFill="WHITE" BorderPane.alignment="CENTER">
                            <padding>
                               <Insets bottom="125.0" />
-                           </padding></Label>
+                           </padding>
+                           <font>
+                              <Font size="29.0" />
+                           </font></Label>
                      </center>
                      <top>
                         <Label text="Date with the highest death" textFill="WHITE" underline="true" BorderPane.alignment="CENTER">
                            <font>
-                              <Font size="23.0" />
+                              <Font size="29.0" />
                            </font>
                            <padding>
                               <Insets top="97.0" />
@@ -137,9 +152,9 @@
             </StackPane>
          </center>
          <left>
-            <AnchorPane prefHeight="588.0" prefWidth="147.0" BorderPane.alignment="CENTER">
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="147.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button layoutX="1.0" layoutY="110.0" mnemonicParsing="false" onAction="#backwardButton" prefHeight="402.0" prefWidth="127.0" text="&lt;">
+                  <Button alignment="CENTER" layoutX="1.0" layoutY="110.0" mnemonicParsing="false" onAction="#backwardButton" prefHeight="402.0" prefWidth="127.0" text="&lt;">
                      <font>
                         <Font size="20.0" />
                      </font>

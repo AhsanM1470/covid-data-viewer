@@ -133,6 +133,7 @@ public class DataViewerController extends ViewerController implements Initializa
         for (CovidData covidData : dataToShow) {
             dataTable.getItems().add(covidData);
         }
+        
     }
 
 
