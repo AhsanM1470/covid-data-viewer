@@ -15,16 +15,16 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/17.0.3" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphViewerController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphViewerController">
    <top>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="30.0" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
                   <Label text="From:" />
-                  <DatePicker fx:id="fromDatePicker" onAction="#dateChanged" prefHeight="11.0" prefWidth="111.0" />
+                  <DatePicker fx:id="fromDatePicker" prefHeight="11.0" prefWidth="111.0" />
                   <Label text="To:" />
-                  <DatePicker fx:id="toDatePicker" onAction="#dateChanged" prefHeight="11.0" prefWidth="111.0" />
+                  <DatePicker fx:id="toDatePicker" prefHeight="11.0" prefWidth="111.0" />
                </children>
                <opaqueInsets>
                   <Insets />
@@ -56,20 +56,20 @@
       </VBox>
    </bottom>
    <center>
-      <AnchorPane fx:id="graphPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <AnchorPane fx:id="graphPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #191919D1;" BorderPane.alignment="CENTER">
          <children>
             <ChoiceBox fx:id="choiceBox" layoutX="14.0" layoutY="35.0" />
-            <Label layoutX="15.0" layoutY="14.0" text="Select the borough">
+            <Label layoutX="15.0" layoutY="14.0" text="Select the borough" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
             <LineChart fx:id="chart" layoutX="225.0" layoutY="56.0" prefHeight="415.0" prefWidth="563.0">
               <xAxis>
-                <CategoryAxis label="Date" side="BOTTOM" fx:id="xAxis" />
+                <CategoryAxis label="Date" side="BOTTOM" tickLabelFill="WHITE" fx:id="xAxis" />
               </xAxis>
               <yAxis>
-                <NumberAxis fx:id="yAxis" label="Number of Deaths" prefWidth="41.0" side="LEFT" />
+                <NumberAxis fx:id="yAxis" label="Number of Deaths" prefWidth="41.0" side="LEFT" tickLabelFill="WHITE" />
               </yAxis>
             </LineChart>
          </children>

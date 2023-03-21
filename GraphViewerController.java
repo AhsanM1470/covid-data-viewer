@@ -25,7 +25,7 @@ import javafx.scene.input.MouseEvent;
  * @author (your name)
  * @version (a version number or a date)
  */
-public class GraphViewerController implements Initializable
+public class GraphViewerController extends ViewerController implements Initializable
 {
     @FXML
     private AnchorPane graphPane;
@@ -50,7 +50,7 @@ public class GraphViewerController implements Initializable
     
     private ArrayList<CovidData> data;
     
-    private DataViewerController dataController;
+    private LocalDate from, to;
     
     //does this line work
     private XYChart.Series series;
@@ -73,29 +73,34 @@ public class GraphViewerController implements Initializable
         choiceBox.setOnAction(this::selectBorough);
     }
     
+    //
     @FXML
-    public void dateChanged(ActionEvent event) {
-        System.out.println("graph");
+    public void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {
+        from = fromDate;
+        to = toDate;
     }
     
     public void selectBorough(ActionEvent event){
         borough = choiceBox.getValue();
         series = new XYChart.Series();
         chart.getData().clear();
-        constructChart(dataController.getFromDate(), dataController.getToDate());
+        constructChart(from, to);
         chart.getData().add(series);
         //System.out.println(dataController.getFromDate());
     }
     
     public void constructChart(LocalDate from, LocalDate to){
         ArrayList<String> dates = new ArrayList<>();
-        ArrayList<Integer> totalDeaths = new ArrayList<>();
+        ArrayList<Integer> totalDeathsArray = new ArrayList<>();
         for (CovidData d : data) {
             if(d.getBorough().equals(borough)){
                 LocalDate date = LocalDate.parse(d.getDate());
+                Integer totalDeaths = d.getTotalDeaths();
                 if(date.isAfter(from.minusDays(1)) && date.isBefore(to.plusDays(1))){
-                    dates.add(date.toString());
-                    totalDeaths.add(d.getTotalDeaths());
+                    if(totalDeaths != null){
+                        dates.add(date.toString());
+                        totalDeathsArray.add(totalDeaths);
+                    }
                 }   
             }
         }
@@ -103,10 +108,10 @@ public class GraphViewerController implements Initializable
         //Last index in the arraylist has the smallest total deaths
         //First index in the arryalist has the largest total deaths
         
-        int index = totalDeaths.size() - 1;
-        int lowerValue = Integer.valueOf(totalDeaths.get(index));
-        int upperValue = Integer.valueOf(totalDeaths.get(0));
-        System.out.println(index);
+        int index = totalDeathsArray.size() - 1;
+        int lowerValue = Integer.valueOf(totalDeathsArray.get(index));
+        int upperValue = Integer.valueOf(totalDeathsArray.get(0));
+        //System.out.println(index);
         
         double lowerBound = (lowerValue/100)*100;
         double upperBound = ((upperValue + 99)/100)*100;
@@ -120,16 +125,12 @@ public class GraphViewerController implements Initializable
         yAxis.setMinorTickVisible(false);
         
         for(int i = dates.size() - 1; i >= 0; i--){
-            series.getData().add(new XYChart.Data(dates.get(i),totalDeaths.get(i)));
+            series.getData().add(new XYChart.Data(dates.get(i),totalDeathsArray.get(i)));
         }
     }
     
-    public Parent getGraphPane(){
+    protected Parent getView(){
         return graphPane;
-    }
-    
-    public void setDataController(DataViewerController controller) {
-        dataController = controller;
     }
     
     public void setData(ArrayList<CovidData> data){
