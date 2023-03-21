@@ -1,19 +1,26 @@
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -293,6 +300,55 @@ public class MapViewerController extends ViewerController implements Initializab
         System.out.println(
                 name + " total deaths within date range: " + boroughHeatMapData.get(name) + " | Heat map base value: "
                         + heatMapBaseValue + " | percentage: " + perc + "%");
+        showData(name);
+    }
+
+    private void showData(String boroughName) {
+        Stage stage = new Stage();
+        stage.setTitle("Covid Data");
+
+        TableView tableView = new TableView<CovidData>();
+
+        TableColumn<CovidData, String> boroughColumn = new TableColumn<>("Date");
+        boroughColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+
+        TableColumn<CovidData, Integer> retailRecreationGMR = new TableColumn<>("retailRecreationGMR");
+        retailRecreationGMR.setCellValueFactory(new PropertyValueFactory<>("retailRecreationGMR"));
+        
+        TableColumn<CovidData, Integer> groceryPharmacyGMR = new TableColumn<>("groceryPharmacyGMR");
+        groceryPharmacyGMR.setCellValueFactory(new PropertyValueFactory<>("groceryPharmacyGMR"));
+        
+        TableColumn<CovidData, Integer> parksGMR = new TableColumn<>("parksGMR");
+        parksGMR.setCellValueFactory(new PropertyValueFactory<>("parksGMR"));
+        
+        TableColumn<CovidData, Integer> transitGMR = new TableColumn<>("transitGMR");
+        transitGMR.setCellValueFactory(new PropertyValueFactory<>("transitGMR"));
+        
+        TableColumn<CovidData, Integer> workplacesGMR = new TableColumn<>("workplacesGMR");
+        workplacesGMR.setCellValueFactory(new PropertyValueFactory<>("workplacesGMR"));
+
+        TableColumn<CovidData, Integer> residentialGMR = new TableColumn<>("residentialGMR");
+        residentialGMR.setCellValueFactory(new PropertyValueFactory<>("residentialGMR"));
+
+        TableColumn<CovidData, Integer> newCasesColumn = new TableColumn<>("New Covid Deaths");
+        newCasesColumn.setCellValueFactory(new PropertyValueFactory<>("newDeaths"));
+
+        TableColumn<CovidData, Integer> totalCovidCases = new TableColumn<>("Total Covid Cases");
+        newCasesColumn.setCellValueFactory(new PropertyValueFactory<>("totalCases"));
+
+        TableColumn<CovidData, Integer> newCovidDeaths = new TableColumn<>("New Covid Deaths");
+        newCovidDeaths.setCellValueFactory(new PropertyValueFactory<>("newDeaths"));
+
+        tableView.getColumns().addAll(boroughColumn, retailRecreationGMR, groceryPharmacyGMR,parksGMR,transitGMR,workplacesGMR, residentialGMR, newCasesColumn, totalCovidCases, newCovidDeaths);
+
+        ObservableList<CovidData> obsData = FXCollections.observableArrayList(data);
+        tableView.setItems(obsData);
+
+        Scene scene = new Scene(tableView);
+        stage.setScene(scene);
+        stage.setTitle(boroughName);
+        stage.setWidth(tableView.getWidth());
+        stage.show();
     }
 
     /**
