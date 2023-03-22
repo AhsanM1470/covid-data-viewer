@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import javafx.scene.control.DatePicker;
 
 //necessary?
+import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -51,8 +52,7 @@ public class GraphViewerController extends ViewerController implements Initializ
     private ArrayList<CovidData> data;
     
     private LocalDate from, to;
-    
-    //does this line work
+
     private XYChart.Series series;
     
     //remove all? or fix it
@@ -65,7 +65,8 @@ public class GraphViewerController extends ViewerController implements Initializ
     private String borough;
     
     /**
-     * Constructor for objects of class GraphViewerController
+     * Add all the boroughs to the choice box and respond to the selection made
+     * by the user
      */
     @Override
     public void initialize(URL url, ResourceBundle rb){ 
@@ -78,18 +79,30 @@ public class GraphViewerController extends ViewerController implements Initializ
     public void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {
         from = fromDate;
         to = toDate;
+        if(borough != null){
+            constructChart(from, to);
+        }
     }
     
+    /**
+     * Gets the selected borough from the choice box and creates a chart from it
+     */
     public void selectBorough(ActionEvent event){
         borough = choiceBox.getValue();
-        series = new XYChart.Series();
-        chart.getData().clear();
         constructChart(from, to);
-        chart.getData().add(series);
         //System.out.println(dataController.getFromDate());
     }
     
+    /**
+     * Creates a line chart for the total deaths vs date of a borough
+     */
     public void constructChart(LocalDate from, LocalDate to){
+        series = new XYChart.Series();
+        //Clears the previous chart before creating a new one
+        series.setName("deaths in borough");
+        chart.setCreateSymbols(false);
+        chart.getData().clear();
+        
         ArrayList<String> dates = new ArrayList<>();
         ArrayList<Integer> totalDeathsArray = new ArrayList<>();
         for (CovidData d : data) {
@@ -107,16 +120,11 @@ public class GraphViewerController extends ViewerController implements Initializ
         
         //Last index in the arraylist has the smallest total deaths
         //First index in the arryalist has the largest total deaths
-        
-        int index = totalDeathsArray.size() - 1;
-        int lowerValue = Integer.valueOf(totalDeathsArray.get(index));
+        int lowerValue = Integer.valueOf(totalDeathsArray.get(totalDeathsArray.size() - 1));
         int upperValue = Integer.valueOf(totalDeathsArray.get(0));
-        //System.out.println(index);
         
         double lowerBound = (lowerValue/100)*100;
         double upperBound = ((upperValue + 99)/100)*100;
-        
-        //System.out.println(upperBound);
         
         yAxis.setAutoRanging(false);
         yAxis.setLowerBound(lowerBound);
@@ -126,13 +134,49 @@ public class GraphViewerController extends ViewerController implements Initializ
         
         for(int i = dates.size() - 1; i >= 0; i--){
             series.getData().add(new XYChart.Data(dates.get(i),totalDeathsArray.get(i)));
+            final Label label = createDataThresholdLabel(dates.get(i), totalDeathsArray.get(i));
+            // setOnMouseEntered(new EventHandler<MouseEvent>() {
+                // @override
+                // public void handle(MouseEvent event){
+                    // getChildren().setAll(label);
+                    // setCursor(Cursor.NONE);
+                    // toFront();
+                // }
+            // });
+            // setOnMouseExited(new EventHandler<MouseEvent>() {
+                // @override
+                // public void handle(MouseEvent event){
+                    // getChildren().clear();
+                    // setCursor(Cursor.CROSSHAIR);
+                // }
+            // });
         }
+        
+        chart.getData().add(series);
     }
     
+    /**
+     * Create a label for the nodes on the line chart
+     */
+    private Label createDataThresholdLabel(String date, int deaths){
+        final Label label = new Label( "(" + date + ", " + deaths + ")" );
+        label.getStyleClass().addAll("default-color0", "chart-line-symbol", "chart-series-line");
+        label.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
+        label.setMinSize(Label.USE_PREF_SIZE, Label.USE_PREF_SIZE);
+        return label;
+    }
+    
+    /**
+     * Returns the anchor pane of GraphView.fxml
+     * @return graphPane
+     */
     protected Parent getView(){
         return graphPane;
     }
     
+    /**
+     * 
+     */
     public void setData(ArrayList<CovidData> data){
         this.data = data;
     }

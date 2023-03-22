@@ -58,18 +58,18 @@
    <center>
       <AnchorPane fx:id="graphPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #191919D1;" BorderPane.alignment="CENTER">
          <children>
-            <ChoiceBox fx:id="choiceBox" layoutX="14.0" layoutY="35.0" />
+            <ChoiceBox fx:id="choiceBox" layoutX="14.0" layoutY="35.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
             <Label layoutX="15.0" layoutY="14.0" text="Select the borough" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <LineChart fx:id="chart" layoutX="225.0" layoutY="56.0" prefHeight="415.0" prefWidth="563.0">
+            <LineChart fx:id="chart" layoutX="214.0" layoutY="49.0" prefHeight="493.0" prefWidth="679.0" style="-fx-background-color: #FFFFFF;">
               <xAxis>
-                <CategoryAxis label="Date" side="BOTTOM" tickLabelFill="WHITE" fx:id="xAxis" />
+                <CategoryAxis animated="false" label="Date" side="BOTTOM" fx:id="xAxis" />
               </xAxis>
               <yAxis>
-                <NumberAxis fx:id="yAxis" label="Number of Deaths" prefWidth="41.0" side="LEFT" tickLabelFill="WHITE" />
+                <NumberAxis fx:id="yAxis" label="Number of Deaths" prefWidth="41.0" side="LEFT" />
               </yAxis>
             </LineChart>
          </children>
