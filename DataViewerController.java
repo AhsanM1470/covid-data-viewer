@@ -1,22 +1,13 @@
 import javafx.fxml.FXML;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import java.time.LocalDate;
-
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.control.TableView;
 import java.util.ArrayList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Label;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.Initializable;
 import java.net.URL;
@@ -56,6 +47,7 @@ public class DataViewerController extends ViewerController implements Initializa
      * CovidData objects loaded from the data source.
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void initialize(URL location, ResourceBundle resources) {      
         // Create TableColumns for the TableView
         TableColumn<CovidData, String> dateCol = new TableColumn<CovidData, String>("Date");
@@ -133,6 +125,7 @@ public class DataViewerController extends ViewerController implements Initializa
         for (CovidData covidData : dataToShow) {
             dataTable.getItems().add(covidData);
         }
+        
     }
 
 

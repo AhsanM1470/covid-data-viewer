@@ -233,7 +233,7 @@ public class MainController implements Initializable
         ViewerController.inTransition = true;
 
     }
-    
+
     // ----------------------------- Date Changing ----------------------------- //
 
     /**

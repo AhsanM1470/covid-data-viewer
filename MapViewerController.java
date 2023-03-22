@@ -1,24 +1,33 @@
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.fxml.Initializable;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MapViewerController extends ViewerController implements Initializable {
+public class MapViewerController extends ViewerController{
 
     Paint hoveredPolygonDefaultBorderColor;
     Double hoveredPolygonDefaultStroke;
@@ -59,14 +68,7 @@ public class MapViewerController extends ViewerController implements Initializab
     // stores the data within the date range selected
     private ArrayList<CovidData> dataInDateRange;
 
-    // starting size of our pane to be used when scaling map view
-    private double initialPaneWidth, initialPaneHeight;
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        initialPaneWidth = viewPane.getPrefWidth();
-        initialPaneHeight = viewPane.getPrefHeight();
-
+    public void initialize() {
         // adding window size change listeneres
         viewPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             if (oldVal != newVal) {
@@ -104,8 +106,9 @@ public class MapViewerController extends ViewerController implements Initializab
      */
     protected void resizeComponents(Region parentPane) {
 
-        double ratioX = parentPane.getWidth() / initialPaneWidth;
-        double ratioY = parentPane.getHeight() / initialPaneHeight;
+        // calculate current width/height relative to its original width/height
+        double ratioX = parentPane.getWidth() / parentPane.getPrefWidth();
+        double ratioY = parentPane.getHeight() / parentPane.getPrefHeight();
 
         // check if ratios are valid. Cannot be nothing, and cannot be infinity
         if (Double.isInfinite(ratioX) || Double.isNaN(ratioX)) {
@@ -201,6 +204,7 @@ public class MapViewerController extends ViewerController implements Initializab
      * each borough in the time range
      */
     private void loadBoroughHeatMapData() {
+
         for (CovidData covidEntry : dataInDateRange) {
             String entryBoroughName = covidEntry.getBorough();
             Integer entryDeathsOnDay = covidEntry.getNewDeaths();
@@ -248,11 +252,9 @@ public class MapViewerController extends ViewerController implements Initializab
                 // calculate proportion of current borough data with the base value
                 // in HSB hue is measured in degrees where: 0 -> 120 == red -> green.
                 // converts the proportion of heat map values as a % of the hueUpperBound
-                int hueUpperBound = 135;
+                double hueUpperBound = 135.0;
 
-                // TODO: use percentage later to determine the colour of text maybe?
-                double percentage = (1.0 * boroughHeatMapMeasure / heatMapBaseValue);
-                double percentageOfHue = (hueUpperBound * percentage);
+                double percentageOfHue = (hueUpperBound * boroughHeatMapMeasure / heatMapBaseValue);
 
                 // subtracting from the upper bound gives us reversed scale.
                 // green -> low deaths
@@ -278,21 +280,43 @@ public class MapViewerController extends ViewerController implements Initializab
      * mapped to
      * 
      * @param event
+     * @throws IOException
      */
     @FXML
-    void polygonClicked(MouseEvent event) {
+    void polygonClicked(MouseEvent event) throws IOException {
         Polygon poly = (Polygon) event.getSource();
         String name = boroughIdToName.get(poly.getId());
-        Integer boroughHeatMapMeasure = boroughHeatMapData.get(name);
+        // Integer boroughHeatMapMeasure = boroughHeatMapData.get(name);
 
-        Integer perc = null;
-        if (boroughHeatMapMeasure != null && heatMapBaseValue > 0) {
-            double percentage = (double) (100.0 * boroughHeatMapMeasure / heatMapBaseValue);
-            perc = (int) Math.round(percentage);
-        }
-        System.out.println(
-                name + " total deaths within date range: " + boroughHeatMapData.get(name) + " | Heat map base value: "
-                        + heatMapBaseValue + " | percentage: " + perc + "%");
+        // Integer perc = null;
+        // if (boroughHeatMapMeasure != null && heatMapBaseValue > 0) {
+        //     double percentage = (double) (100.0 * boroughHeatMapMeasure / heatMapBaseValue);
+        //     perc = (int) Math.round(percentage);
+        // }
+        // System.out.println(
+        //         name + " total deaths within date range: " + boroughHeatMapData.get(name) + " | Heat map base value: "
+        //                 + heatMapBaseValue + " | percentage: " + perc + "%");
+        showData(name);
+    }
+
+    /**
+     * create a pop up window for the borough data
+     * @param boroughName
+     * @throws IOException
+     */
+    private void showData(String boroughName) throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("BoroughInfo.fxml"));
+        Parent root = loader.load();
+        BoroughInfoController controller = loader.getController();
+        
+        Scene scene = new Scene(root);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(mapAnchorPane.getScene().getWindow());
+        stage.setScene(scene);
+        stage.setTitle(boroughName);
+        controller.showData(getBoroughData(boroughName, fromDate, toDate));
+        stage.show();
     }
 
     /**
@@ -304,16 +328,6 @@ public class MapViewerController extends ViewerController implements Initializab
     @FXML
     void polygonHovered(MouseEvent event) {
         Polygon poly = (Polygon) event.getSource();
-
-        // double scaleTo = 1.15;
-
-        // ObservableList<Node> workingCollection = FXCollections.observableArrayList(
-        // polygonPane.getChildren()
-        // );
-
-        // // get which pane is at the top
-        // Collections.sort(workingCollection, new ScaleComparator());
-        // polygonPane.getChildren().setAll(workingCollection);
 
         // change label text
         title.setAlignment(Pos.CENTER);
@@ -327,17 +341,6 @@ public class MapViewerController extends ViewerController implements Initializab
 
     }
 
-    // private class ScaleComparator implements Comparator<Node> {
-    // @Override
-    // public int compare(Node o1, Node o2) {
-
-    // double o1B = o1.getScaleX();
-    // double o2B = o2.getScaleX();
-
-    // return (o1B > o2B ? 1 : 0);
-    // }
-    // }
-
     /**
      * If a polygon was being hovered, and is no long being hovered,
      * reset its attributes to default polygon state
@@ -348,14 +351,17 @@ public class MapViewerController extends ViewerController implements Initializab
     void polygonLeft(MouseEvent event) {
         Polygon poly = (Polygon) event.getSource();
 
-        // poly.setScaleX(1.15);
-        // poly.setScaleY(1.15);
-
         poly.setStrokeWidth(1);
         poly.setStroke(hoveredPolygonDefaultBorderColor);
 
         // remove text if no borough is selected
         setLabelText(selectedBoroughLabel, null, 0);
+    }
+
+    @FXML
+    void onClick(MouseEvent event){
+        Button bt = (Button) event.getSource();
+        // TODO: create a CSS file for button hovering
     }
 
     /**
@@ -369,6 +375,8 @@ public class MapViewerController extends ViewerController implements Initializab
         label.setAlignment(Pos.CENTER);
         label.setFont(new Font("Comic Sans MS", fontSize));
     }
+
+
     
     protected Parent getView() {
         return viewPane;

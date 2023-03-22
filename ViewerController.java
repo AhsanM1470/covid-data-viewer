@@ -1,13 +1,7 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
-
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Parent;
@@ -27,13 +21,13 @@ public abstract class ViewerController {
 
     @FXML
     protected StackPane parentPane;
-    
+
     @FXML
     protected StackPane stackPane;
 
     protected LocalDate fromDate;
     protected LocalDate toDate;
-    
+
     // If the view is transitioning from one panel to another
     static boolean inTransition = false;
 
@@ -54,7 +48,7 @@ public abstract class ViewerController {
     }
 
     // -------------------------------- Setters -------------------------------- //
-    
+
     /**
      * Sets the `data` attribute to the CovidData list passed in
      * 
@@ -63,7 +57,7 @@ public abstract class ViewerController {
     protected void setData(ArrayList<CovidData> data) {
         this.data = data;
     }
-    
+
     /**
      * Sets the date range of the date pickers to the given dates.
      * Calls the processDateRangeData() method which performs actions related to the
@@ -92,7 +86,25 @@ public abstract class ViewerController {
                 .filter((covidData) -> isDateInRange(LocalDate.parse(covidData.getDate()), fromDate, toDate))
                 .collect(Collectors.toList()));
     }
-    
+
+    /**
+     * Returns an ArrayList of CovidData that fall within the specified date range for a certain borough
+     * @param boroughName
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
+    protected ArrayList<CovidData> getBoroughData(String boroughName, LocalDate fromDate, LocalDate toDate) {
+        // filters data to only include data that falls within the specified date range
+        return new ArrayList<CovidData>(data.stream()
+                .filter((covidData) -> 
+                isDateInRange(LocalDate.parse(covidData.getDate()), fromDate, toDate) && covidData.getBorough().equals(boroughName))
+                .collect(Collectors.toList()));
+    }
+
+
+
+
     protected void updatePanelForDateRange(LocalDate fromDate, LocalDate toDate) {
         setDateRange(fromDate, toDate);
         processDataInDateRange(fromDate, toDate);
