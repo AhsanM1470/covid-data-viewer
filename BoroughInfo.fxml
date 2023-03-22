@@ -3,25 +3,25 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="677.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BoroughInfoController">
-   <children>
-      <AnchorPane prefHeight="35.0" prefWidth="677.0">
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BoroughInfoController">
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <ComboBox fx:id="sortBy" layoutX="556.0" layoutY="5.0" prefHeight="28.0" prefWidth="116.0" promptText="Sort By" />
-            <Label fx:id="message" layoutX="11.0" layoutY="5.0" prefHeight="33.0" prefWidth="334.0" />
-            <ToggleButton fx:id="order" layoutX="465.0" layoutY="5.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="74.0" text="Ascending">
-               <font>
-                  <Font size="12.0" />
-               </font>
-            </ToggleButton>
-            <Label layoutX="423.0" layoutY="11.0" prefHeight="17.0" prefWidth="42.0" text="order:" />
+            <TableView fx:id="boroughTable" pickOnBounds="false" prefHeight="399.0" prefWidth="600.0" />
+         </children>
+      </VBox>
+   </center>
+   <top>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="54.0" prefWidth="600.0" BorderPane.alignment="CENTER_LEFT">
+         <children>
+            <ComboBox fx:id="filterComboBox" layoutX="14.0" layoutY="15.0" onAction="#filterSelected" prefHeight="25.0" prefWidth="179.0" promptText="Sort By" visibleRowCount="20" />
+            <Label layoutX="197.0" layoutY="19.0" text="Order:" />
+            <ComboBox fx:id="orderComboBox" layoutX="242.0" layoutY="15.0" onAction="#orderButtonClick" prefHeight="25.0" prefWidth="117.0" />
          </children>
       </AnchorPane>
-      <TableView fx:id="boroughTable" prefWidth="677.0" />
-   </children>
-</VBox>
+   </top>
+</BorderPane>

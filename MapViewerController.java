@@ -1,13 +1,16 @@
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -24,7 +27,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MapViewerController extends ViewerController implements Initializable {
+public class MapViewerController extends ViewerController{
 
     Paint hoveredPolygonDefaultBorderColor;
     Double hoveredPolygonDefaultStroke;
@@ -65,14 +68,7 @@ public class MapViewerController extends ViewerController implements Initializab
     // stores the data within the date range selected
     private ArrayList<CovidData> dataInDateRange;
 
-    // starting size of our pane to be used when scaling map view
-    private double initialPaneWidth, initialPaneHeight;
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        initialPaneWidth = viewPane.getPrefWidth();
-        initialPaneHeight = viewPane.getPrefHeight();
-
+    public void initialize() {
         // adding window size change listeneres
         viewPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             if (oldVal != newVal) {
@@ -110,8 +106,9 @@ public class MapViewerController extends ViewerController implements Initializab
      */
     protected void resizeComponents(Region parentPane) {
 
-        double ratioX = parentPane.getWidth() / initialPaneWidth;
-        double ratioY = parentPane.getHeight() / initialPaneHeight;
+        // calculate current width/height relative to its original width/height
+        double ratioX = parentPane.getWidth() / parentPane.getPrefWidth();
+        double ratioY = parentPane.getHeight() / parentPane.getPrefHeight();
 
         // check if ratios are valid. Cannot be nothing, and cannot be infinity
         if (Double.isInfinite(ratioX) || Double.isNaN(ratioX)) {
@@ -318,7 +315,7 @@ public class MapViewerController extends ViewerController implements Initializab
         stage.initOwner(mapAnchorPane.getScene().getWindow());
         stage.setScene(scene);
         stage.setTitle(boroughName);
-        controller.showData(getBoroughData(boroughName, fromDate, toDate), stage);
+        controller.showData(getBoroughData(boroughName, fromDate, toDate));
         stage.show();
     }
 
@@ -332,16 +329,6 @@ public class MapViewerController extends ViewerController implements Initializab
     void polygonHovered(MouseEvent event) {
         Polygon poly = (Polygon) event.getSource();
 
-        // double scaleTo = 1.15;
-
-        // ObservableList<Node> workingCollection = FXCollections.observableArrayList(
-        // polygonPane.getChildren()
-        // );
-
-        // // get which pane is at the top
-        // Collections.sort(workingCollection, new ScaleComparator());
-        // polygonPane.getChildren().setAll(workingCollection);
-
         // change label text
         title.setAlignment(Pos.CENTER);
         String name = boroughIdToName.get(poly.getId());
@@ -354,17 +341,6 @@ public class MapViewerController extends ViewerController implements Initializab
 
     }
 
-    // private class ScaleComparator implements Comparator<Node> {
-    // @Override
-    // public int compare(Node o1, Node o2) {
-
-    // double o1B = o1.getScaleX();
-    // double o2B = o2.getScaleX();
-
-    // return (o1B > o2B ? 1 : 0);
-    // }
-    // }
-
     /**
      * If a polygon was being hovered, and is no long being hovered,
      * reset its attributes to default polygon state
@@ -375,14 +351,17 @@ public class MapViewerController extends ViewerController implements Initializab
     void polygonLeft(MouseEvent event) {
         Polygon poly = (Polygon) event.getSource();
 
-        // poly.setScaleX(1.15);
-        // poly.setScaleY(1.15);
-
         poly.setStrokeWidth(1);
         poly.setStroke(hoveredPolygonDefaultBorderColor);
 
         // remove text if no borough is selected
         setLabelText(selectedBoroughLabel, null, 0);
+    }
+
+    @FXML
+    void onClick(MouseEvent event){
+        Button bt = (Button) event.getSource();
+        // TODO: create a CSS file for button hovering
     }
 
     /**
@@ -396,6 +375,8 @@ public class MapViewerController extends ViewerController implements Initializab
         label.setAlignment(Pos.CENTER);
         label.setFont(new Font("Comic Sans MS", fontSize));
     }
+
+
     
     protected Parent getView() {
         return viewPane;
