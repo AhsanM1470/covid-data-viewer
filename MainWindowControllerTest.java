@@ -25,7 +25,7 @@ import javafx.scene.Scene;
 
 public class MainWindowControllerTest {
     
-    private MainWindowControllerTest mainController;
+    private MainWindowController mainController;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -42,9 +42,9 @@ public class MainWindowControllerTest {
     @Test
     public void testInitialize() throws Exception {
         // Accessing the private fields using reflection
-        Field dataField = MainWindowControllerTest.class.getDeclaredField("data");
-        Field controllersField = MainWindowControllerTest.class.getDeclaredField("controllers");
-        Field controllerIndexField = MainWindowControllerTest.class.getDeclaredField("controllerIndex");
+        Field dataField = MainWindowController.class.getDeclaredField("data");
+        Field controllersField = MainWindowController.class.getDeclaredField("controllers");
+        Field controllerIndexField = MainWindowController.class.getDeclaredField("controllerIndex");
         
         // Allow access to private methods
         dataField.setAccessible(true);
@@ -61,7 +61,7 @@ public class MainWindowControllerTest {
 
     @Test
     public void testLoadControllers() throws Exception {
-        Field controllersField = MainWindowControllerTest.class.getDeclaredField("controllers");
+        Field controllersField = MainWindowController.class.getDeclaredField("controllers");
         controllersField.setAccessible(true);
         ViewerController[] controllers = (ViewerController[]) controllersField.get(mainController);
         
@@ -75,11 +75,11 @@ public class MainWindowControllerTest {
 
     @Test
     public void testAllowPanelSwitching() throws Exception {
-        Field leftButtonField = MainWindowControllerTest.class.getDeclaredField("leftButton");
-        Field rightButtonField = MainWindowControllerTest.class.getDeclaredField("rightButton");
+        Field leftButtonField = MainWindowController.class.getDeclaredField("leftButton");
+        Field rightButtonField = MainWindowController.class.getDeclaredField("rightButton");
         
         // Accessing the private method using reflection
-        Method allowPanelSwitchingMethod = MainWindowControllerTest.class.getDeclaredMethod("allowPanelSwitching", boolean.class);
+        Method allowPanelSwitchingMethod = MainWindowController.class.getDeclaredMethod("allowPanelSwitching", boolean.class);
         allowPanelSwitchingMethod.setAccessible(true);
         
         leftButtonField.setAccessible(true);
@@ -106,13 +106,13 @@ public class MainWindowControllerTest {
     
     @Test
     public void testNextPanel() throws Exception {
-        Field controllerIndexField = MainWindowControllerTest.class.getDeclaredField("controllerIndex");
+        Field controllerIndexField = MainWindowController.class.getDeclaredField("controllerIndex");
         controllerIndexField.setAccessible(true);
         
         // Ensure that controller index is 0 at start
         assertEquals(0, ((int) controllerIndexField.get(mainController)));
 
-        Method nextPanelMethod = MainWindowControllerTest.class.getDeclaredMethod("nextPanel", ActionEvent.class);
+        Method nextPanelMethod = MainWindowController.class.getDeclaredMethod("nextPanel", ActionEvent.class);
         nextPanelMethod.setAccessible(true);
         // Call next panel method
         nextPanelMethod.invoke(mainController, new ActionEvent());
@@ -124,16 +124,16 @@ public class MainWindowControllerTest {
     @Test
     public void testPreviousPanel() throws Exception {
         // Ensure that controller index is 0 at start
-        Field controllerIndexField = MainWindowControllerTest.class.getDeclaredField("controllerIndex");
+        Field controllerIndexField = MainWindowController.class.getDeclaredField("controllerIndex");
         controllerIndexField.setAccessible(true);
         assertEquals(0, ((int) controllerIndexField.get(mainController)));
         
-        Method previousPanelMethod = MainWindowControllerTest.class.getDeclaredMethod("previousPanel", ActionEvent.class);
+        Method previousPanelMethod = MainWindowController.class.getDeclaredMethod("previousPanel", ActionEvent.class);
         previousPanelMethod.setAccessible(true);
         // Call previous panel method
         previousPanelMethod.invoke(mainController, new ActionEvent());
         
-        Field controllersField = MainWindowControllerTest.class.getDeclaredField("controllers");
+        Field controllersField = MainWindowController.class.getDeclaredField("controllers");
         controllersField.setAccessible(true);
         ViewerController[] controllers = (ViewerController[]) controllersField.get(mainController);
         
@@ -145,16 +145,16 @@ public class MainWindowControllerTest {
     @Test
     public void testTransitionIntoNextPanel() throws Exception {
         // Access the private method transitionIntoNextPanel
-        Method transitionIntoNextPanelMethod = MainWindowControllerTest.class.getDeclaredMethod(
+        Method transitionIntoNextPanelMethod = MainWindowController.class.getDeclaredMethod(
             "transitionIntoNextPanel", ViewerController.class, ViewerController.class, ActionEvent.class);
         transitionIntoNextPanelMethod.setAccessible(true);
         
         // Access the private field stackPane
-        Field stackPaneField = MainWindowControllerTest.class.getDeclaredField("stackPane");
+        Field stackPaneField = MainWindowController.class.getDeclaredField("stackPane");
         stackPaneField.setAccessible(true);
         StackPane stackPane = (StackPane) stackPaneField.get(mainController);
         
-        Field controllersField = MainWindowControllerTest.class.getDeclaredField("controllers");
+        Field controllersField = MainWindowController.class.getDeclaredField("controllers");
         controllersField.setAccessible(true);
         ViewerController[] controllers = (ViewerController[]) controllersField.get(mainController);
         
