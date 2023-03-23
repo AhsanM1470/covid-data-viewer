@@ -54,6 +54,7 @@ public abstract class ViewerController {
      */
     protected void setData(ArrayList<CovidData> data) {
         Collections.sort(data);
+        Collections.reverse(data);
         this.data = data;
     }
 

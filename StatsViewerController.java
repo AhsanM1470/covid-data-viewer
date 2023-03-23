@@ -2,20 +2,15 @@ import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.Parent;
 
-import java.lang.reflect.Array;
 import java.net.URL;
-import java.util.Collections;
 import java.util.ResourceBundle;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -125,8 +120,7 @@ public class StatsViewerController extends ViewerController implements Initializ
      * Initialises "dataRangeData" which is used to
      * contain data inside a give data range.
      */
-    private ArrayList<CovidData> dataRangeData = new ArrayList<>();
-    private ArrayList<CovidData> reversedDataRangeData = new ArrayList<>();
+    private ArrayList<CovidData> dateRangeData = new ArrayList<>();
 
     /**
      * This contains the records that have the latest date in dataRangeData.
@@ -176,22 +170,7 @@ public class StatsViewerController extends ViewerController implements Initializ
             getDataInDateRange(fromDate, toDate);
         }
 
-        // if the index is 1, then refreshes the label
-        // showing sum of total deaths.
         refreshLabels();
-
-//        //
-//        //
-//        refreshAverage();
-//
-//        //
-//        //
-//        refreshHighestDeathLabel();
-//
-//        System.out.println(fromDate + "   " + toDate);
-//        //
-//        refreshMobilityMeasureLabel();
-//        System.out.println("982378416982628796");
     }
 
     /**
@@ -284,29 +263,21 @@ public class StatsViewerController extends ViewerController implements Initializ
             // this updates the value of "dataRangeData" so that
             // it takes into account the most recent "fromDate"
             // and "toDate"
-            dataRangeData = getDataInDateRange(fromDate, toDate);
-//            Collections.sort(dataRangeData);
-
+            dateRangeData = getDataInDateRange(fromDate, toDate);
 
             // this generates a new ArrayList for the records for each borough on the last
             // date in the date range
-            // could also compare the boroughs on final date to make sure they're unique
+            finalDateString = getFinalDateString(dateRangeData);
 
-//            String finalDateString = dataRangeData.get(dataRangeData.size() - 1).getDate();
 
-            reversedDataRangeData = dataRangeData;
-            Collections.reverse(reversedDataRangeData);
-            finalDateString = getFinalDateString(reversedDataRangeData);
-
-            // this assumes you can't have multiple records on the same day
             // finalDateRecords will not have nulls for total deaths cases in most cases
-            ArrayList<CovidData> covidData = new ArrayList<>();
-            for (CovidData dataRangeDatum : dataRangeData) {
-                if (dataRangeDatum.getDate().equals(finalDateString)) {
-                    covidData.add(dataRangeDatum);
+            // finalDateRecords must be cleared every time this is called
+            finalDateRecords.clear();
+            for (CovidData d : dateRangeData) {
+                if (d.getDate().equals(finalDateString)) {
+                    finalDateRecords.add(d);
                 }
             }
-            finalDateRecords = covidData;
 
             if(!isDateRangeValid(fromDate, toDate)){
                 rrGMRLabel.setText("The date field is not valid.");
@@ -327,7 +298,7 @@ public class StatsViewerController extends ViewerController implements Initializ
                 averageCasesLabel.setText("" + averageOfTotalCases());
             }
             else if(i == 3){
-                highestDeathDateLabel.setText("" + getFinalRecordWithCondition(reversedDataRangeData, "deaths"));
+                highestDeathDateLabel.setText("" + getFinalRecordWithCondition(dateRangeData, "deaths").getDate());
             }
 
         }
@@ -342,10 +313,12 @@ public class StatsViewerController extends ViewerController implements Initializ
      * @return date as String of final record that has values for total deaths and total cases.
      */
     private String getFinalDateString(ArrayList<CovidData> cd){
-        for(CovidData x : cd){
-            if(x.getTotalDeaths() != null && x.getTotalCases() != null){
-               return x.getDate();
+        // datarangedata is newest at i == 0
+        for(int i = 0; i < cd.size(); i++){
+            if(cd.get(i).getTotalDeaths() != null && cd.get(i).getTotalCases() != null){
+                return cd.get(i).getDate();
             }
+
         }
 
         System.out.println("error has occurred with finding final date string");
@@ -360,17 +333,17 @@ public class StatsViewerController extends ViewerController implements Initializ
      */
     private CovidData getFinalRecordWithCondition(ArrayList<CovidData> cd, String condition){
         if(condition.equals("deaths")){
-            for(CovidData x : cd){
-                if(x.getTotalDeaths() != null){
-                    return x;
+            for(int i = 0; i < cd.size(); i++){
+                if(cd.get(i).getTotalDeaths() != null && cd.get(i).getTotalDeaths() != 0){
+                    return cd.get(i);
                 }
             }
         }
 
         else if(condition.equals("cases")){
-            for(CovidData x : cd){
-                if(x.getTotalDeaths() != null){
-                    return x;
+            for(int i = cd.size() - 1; i > 0; i--){
+                if(cd.get(i).getTotalCases() != null && cd.get(i).getTotalCases() != 0){
+                    return cd.get(i);
                 }
             }
         }
@@ -391,11 +364,7 @@ public class StatsViewerController extends ViewerController implements Initializ
     public int totalNumberOfDeaths() {
         int totalNumberOfDeaths = 0;
 
-//        int numberOfBoroughsLeft = 32;
-//        for(int i = dataRangeData.size() - 1; numberOfBoroughsLeft > 0; i--){
-//            System.out.println(dataRangeData.get(i).getBorough());
-//            numberOfBoroughsLeft--;
-//        }
+        System.out.println(finalDateRecords.size());
 
 
         // this iterates through the records within the final date and
@@ -411,11 +380,9 @@ public class StatsViewerController extends ViewerController implements Initializ
 
             if (!Objects.isNull(c.getTotalDeaths())) {
                 totalNumberOfDeaths += c.getTotalDeaths();
-                // System.out.println(c);
             }
 
         }
-        // System.out.println(totalNumberOfDeaths);
 
         return totalNumberOfDeaths;
     }
@@ -432,7 +399,7 @@ public class StatsViewerController extends ViewerController implements Initializ
                 // this updates the value of "dataRangeData" so that
                 // it takes into account the most recent "fromDate"
                 // and "toDate"
-                dataRangeData = getDataInDateRange(fromDate, toDate);
+                dateRangeData = getDataInDateRange(fromDate, toDate);
 
                 if (fromDate.isBefore(toDate)) {
                     averageCasesLabel.setText("" + averageOfTotalCases());
@@ -458,12 +425,8 @@ public class StatsViewerController extends ViewerController implements Initializ
         float average;
         float sum = 0;
 
-        System.out.println(finalDateRecords);
-
         // iterates and adds each case to number of cases
         for (CovidData c : finalDateRecords) {
-                System.out.println(c.toString());
-
             // some records actually have null for the total
             // cases so a check is necessary
             if (!Objects.isNull(c.getTotalCases())) {
@@ -471,6 +434,8 @@ public class StatsViewerController extends ViewerController implements Initializ
             }
 
         }
+
+        System.out.println(totalCases);
 
         // calculates average if there is at least one
         // data value
@@ -485,12 +450,12 @@ public class StatsViewerController extends ViewerController implements Initializ
 
 
 
-        for (CovidData c : dataRangeData){
+        for (CovidData c : dateRangeData){
             if (!Objects.isNull(c.getTotalCases())) {
                 sum += c.getNewCases();
             }
         }
-        if(dataRangeData.size() > 0){
+        if(dateRangeData.size() > 0){
 //            average = sum / dataRangeData.size();
             average = sum / 32;
         }
@@ -533,44 +498,7 @@ public class StatsViewerController extends ViewerController implements Initializ
 //        }
 //    }
 
-    /**
-     * This returns the date with the highest total death
-     * as a String.
-     *
-     * @return date with the highest total death.
-     */
-    private String highestTotalDeathDate() {
-        int newDeaths = 0;
-        String highestDeathDate = "";
 
-        return finalDateString;
-
-
-        // iterates through all records in date range
-//        for (CovidData c : dataRangeData) {
-//            // some records actually have null for the total
-//            // deaths so a check is necessary
-//            if (!Objects.isNull(c.getNewDeaths())) {
-//
-//                if (c.getNewDeaths() > newDeaths) {
-//                    newDeaths = c.getNewDeaths();
-//                    highestDeathDate = c.getDate();
-//                    // System.out.println(c);
-//                }
-//
-//            }
-//
-//        }
-//
-//        // in the case that there is no highest death date
-//        if(highestDeathDate.equals("")){
-//            return "Not applicable.";
-//        }
-//
-//        return highestDeathDate;
-//
-//    }
-//
 //    /**
 //     *
 //     */
@@ -597,7 +525,7 @@ public class StatsViewerController extends ViewerController implements Initializ
 //            }
 //
 //        }
-    }
+
 
     /**
      * This computes the average for retail recreation
@@ -610,7 +538,7 @@ public class StatsViewerController extends ViewerController implements Initializ
         float average = 0;
 
         // iterates through all records in date range
-        for (CovidData c : dataRangeData) {
+        for (CovidData c : dateRangeData) {
 
             // many records have null for mobility measures
             // so a check is necessary
@@ -622,9 +550,9 @@ public class StatsViewerController extends ViewerController implements Initializ
 
         // calculates average if there is at least onex
         // data value
-        if (dataRangeData.size() > 0) {
+        if (dateRangeData.size() > 0) {
             // System.out.println(sum + " " + dataRangeData.size());
-            average = sum / dataRangeData.size();
+            average = sum / dateRangeData.size();
         }
 
         return average;
@@ -641,7 +569,7 @@ public class StatsViewerController extends ViewerController implements Initializ
         float average = 0;
 
         // iterates through all records in date range
-        for (CovidData c : dataRangeData) {
+        for (CovidData c : dateRangeData) {
 
             // many records have null for mobility measures
             // so a check is necessary
@@ -653,9 +581,9 @@ public class StatsViewerController extends ViewerController implements Initializ
 
         // calculates average if there is at least onex
         // data value
-        if (dataRangeData.size() > 0) {
+        if (dateRangeData.size() > 0) {
             // System.out.println(sum + " " + dataRangeData.size());
-            average = sum / dataRangeData.size();
+            average = sum / dateRangeData.size();
         }
 
         return average;
