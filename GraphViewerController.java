@@ -10,13 +10,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
-import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import javafx.scene.control.DatePicker;
 
-//necessary?
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
@@ -35,7 +34,7 @@ public class GraphViewerController extends ViewerController implements Initializ
     private ChoiceBox<String> choiceBox;
     
     @FXML
-    private LineChart<?,?> chart;
+    private LineChart<String,Number> chart;
     
     @FXML
     CategoryAxis xAxis = new CategoryAxis();
@@ -100,11 +99,12 @@ public class GraphViewerController extends ViewerController implements Initializ
         series = new XYChart.Series();
         //Clears the previous chart before creating a new one
         series.setName("deaths in borough");
-        chart.setCreateSymbols(false);
+        //chart.setCreateSymbols(false);
         chart.getData().clear();
         
         ArrayList<String> dates = new ArrayList<>();
         ArrayList<Integer> totalDeathsArray = new ArrayList<>();
+        ArrayList<CovidData> boroughData = new ArrayList<>();
         for (CovidData d : data) {
             if(d.getBorough().equals(borough)){
                 LocalDate date = LocalDate.parse(d.getDate());
@@ -117,11 +117,35 @@ public class GraphViewerController extends ViewerController implements Initializ
                 }   
             }
         }
+        // boroughData = getBoroughData(borough, from, to);
+        // for(CovidData data : boroughData){
+            // LocalDate date = LocalDate.parse
+        // }
         
+        for(int i = dates.size() - 1; i >= 0; i--){
+            series.getData().add(new XYChart.Data(dates.get(i),totalDeathsArray.get(i)));
+        }
+        chart.getData().add(series);
+        setBounds(totalDeathsArray);
+        
+        // for(final XYChart.Data<String, Number> data : series.getData()){
+            // data.getNode().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                // @Override
+                // public void handle(MouseEvent event){
+                    // Label label = new Label("Hi");
+                // }
+            // });
+        // }
+    }
+    
+    /**
+     * Sets the upper and lower bound of the y-axis on the line chart
+     */
+    private void setBounds(ArrayList<Integer> deaths){
         //Last index in the arraylist has the smallest total deaths
         //First index in the arryalist has the largest total deaths
-        int lowerValue = Integer.valueOf(totalDeathsArray.get(totalDeathsArray.size() - 1));
-        int upperValue = Integer.valueOf(totalDeathsArray.get(0));
+        int lowerValue = Integer.valueOf(deaths.get(deaths.size() - 1));
+        int upperValue = Integer.valueOf(deaths.get(0));
         
         double lowerBound = (lowerValue/100)*100;
         double upperBound = ((upperValue + 99)/100)*100;
@@ -131,28 +155,6 @@ public class GraphViewerController extends ViewerController implements Initializ
         yAxis.setUpperBound(upperBound);
         yAxis.setTickUnit(50);
         yAxis.setMinorTickVisible(false);
-        
-        for(int i = dates.size() - 1; i >= 0; i--){
-            series.getData().add(new XYChart.Data(dates.get(i),totalDeathsArray.get(i)));
-            final Label label = createDataThresholdLabel(dates.get(i), totalDeathsArray.get(i));
-            // setOnMouseEntered(new EventHandler<MouseEvent>() {
-                // @override
-                // public void handle(MouseEvent event){
-                    // getChildren().setAll(label);
-                    // setCursor(Cursor.NONE);
-                    // toFront();
-                // }
-            // });
-            // setOnMouseExited(new EventHandler<MouseEvent>() {
-                // @override
-                // public void handle(MouseEvent event){
-                    // getChildren().clear();
-                    // setCursor(Cursor.CROSSHAIR);
-                // }
-            // });
-        }
-        
-        chart.getData().add(series);
     }
     
     /**
