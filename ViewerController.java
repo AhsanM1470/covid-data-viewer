@@ -28,9 +28,6 @@ public abstract class ViewerController {
     protected LocalDate fromDate;
     protected LocalDate toDate;
 
-    // If the view is transitioning from one panel to another
-    static boolean inTransition = false;
-
     // -------------------------------- Getters -------------------------------- //
 
     /**
