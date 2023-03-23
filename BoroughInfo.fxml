@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BoroughInfoController">
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <TableView fx:id="boroughTable" pickOnBounds="false" prefHeight="399.0" prefWidth="600.0" />
+         </children>
+      </VBox>
+   </center>
+   <top>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="54.0" prefWidth="600.0" BorderPane.alignment="CENTER_LEFT">
+         <children>
+            <ComboBox fx:id="filterComboBox" layoutX="14.0" layoutY="15.0" onAction="#filterSelected" prefHeight="25.0" prefWidth="179.0" promptText="Sort By" visibleRowCount="20" />
+            <Label layoutX="197.0" layoutY="19.0" text="Order:" />
+            <ComboBox fx:id="orderComboBox" layoutX="242.0" layoutY="15.0" onAction="#orderButtonClick" prefHeight="25.0" prefWidth="117.0" />
+         </children>
+      </AnchorPane>
+   </top>
+</BorderPane>
