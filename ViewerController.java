@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Parent;
+import java.util.Collections;
 
 /**
  * Serves as a template of common functionality for the Controllers of each
@@ -27,9 +28,6 @@ public abstract class ViewerController {
 
     protected LocalDate fromDate;
     protected LocalDate toDate;
-
-    // If the view is transitioning from one panel to another
-    static boolean inTransition = false;
 
     // -------------------------------- Getters -------------------------------- //
 
@@ -55,6 +53,7 @@ public abstract class ViewerController {
      * @param data The data to be stored in the controller
      */
     protected void setData(ArrayList<CovidData> data) {
+        Collections.sort(data);
         this.data = data;
     }
 
@@ -102,9 +101,11 @@ public abstract class ViewerController {
                 .collect(Collectors.toList()));
     }
 
-
-
-
+    /**
+     * Sets the data within a date range and processes the data.
+     * @param fromDate
+     * @param toDate
+     */
     protected void updatePanelForDateRange(LocalDate fromDate, LocalDate toDate) {
         setDateRange(fromDate, toDate);
         processDataInDateRange(fromDate, toDate);
