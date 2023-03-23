@@ -97,13 +97,11 @@ public class GraphViewerController extends ViewerController implements Initializ
         
         ArrayList<String> dates = new ArrayList<>();
         ArrayList<Integer> totalDeathsArray = new ArrayList<>();
-        ArrayList<CovidData> boroughData = new ArrayList<>();
 
         ArrayList<CovidData> dataInDateRange = getDataInDateRange(from, to);
+        ArrayList<CovidData> boroughData = getBoroughData(borough, from, to);
 
-        Collections.sort(dataInDateRange);
-        Collections.reverse(dataInDateRange);
-        for (CovidData d : dataInDateRange) {
+        for (CovidData d : boroughData) {
             if(d.getBorough().equals(borough) && isDateRangeValid(from, to)){
                 LocalDate date = LocalDate.parse(d.getDate());
                 Integer totalDeaths = d.getTotalDeaths();
