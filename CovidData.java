@@ -132,6 +132,9 @@ public class CovidData implements Comparable<CovidData>{
         "}";
     }
 
+    /**
+     * Comparing two LocalDates; used when sorting data
+     */
     @Override
     public int compareTo(CovidData cd) {
         LocalDate d = LocalDate.parse(this.date);
