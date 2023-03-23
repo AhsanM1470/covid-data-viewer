@@ -109,7 +109,7 @@ public class MainWindowController implements Initializable
      * 
      * @throws Exception if the FXMLLoader fails to load any FXML file.
      */
-    public void loadControllers() throws Exception {
+    private void loadControllers() throws Exception {
         // FXML files of all panels
         String[] fxmlFiles = {"WelcomeView.fxml", "MapView.fxml", "StatsView.fxml", "GraphView.fxml"};
         
@@ -282,7 +282,7 @@ public class MainWindowController implements Initializable
      * @param event The event triggered by changing the date picker.
      */
     @FXML
-    void dateChanged(ActionEvent event) {        
+    private void dateChanged(ActionEvent event) {        
         LocalDate fromDate = fromDatePicker.getValue();
         LocalDate toDate = toDatePicker.getValue();
         

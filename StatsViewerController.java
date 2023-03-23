@@ -285,11 +285,11 @@ public class StatsViewerController extends ViewerController implements Initializ
             // could also compare the boroughs on final date to make sure they're unique
             String recordsOnFinalDate = dataRangeData.get(dataRangeData.size() - 1).getDate();
             // this assumes you can't have multiple records on the same day
-            finalDateRecords = new ArrayList<>(dataRangeData.stream()
-                    .filter(i -> {
-                        return i.getDate().equals(recordsOnFinalDate) && i.;
-                    })
-                    .collect(Collectors.toList()) );
+            // finalDateRecords = new ArrayList<>(dataRangeData.stream()
+                    // .filter(i -> {
+                        // return i.getDate().equals(recordsOnFinalDate) && i.;
+                    // })
+                    // .collect(Collectors.toList()) );
 
 
             if(!fromDate.isBefore(toDate)){
