@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import javafx.scene.control.DatePicker;
+import java.util.Collections;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -41,14 +42,6 @@ public class GraphViewerController extends ViewerController implements Initializ
     
     @FXML
     NumberAxis yAxis = new NumberAxis();
-    
-    @FXML
-    private DatePicker fromDatePicker;
-    
-    @FXML
-    private DatePicker toDatePicker;
-    
-    private ArrayList<CovidData> data;
     
     private LocalDate from, to;
 
@@ -105,15 +98,18 @@ public class GraphViewerController extends ViewerController implements Initializ
         ArrayList<String> dates = new ArrayList<>();
         ArrayList<Integer> totalDeathsArray = new ArrayList<>();
         ArrayList<CovidData> boroughData = new ArrayList<>();
-        for (CovidData d : data) {
-            if(d.getBorough().equals(borough)){
+
+        ArrayList<CovidData> dataInDateRange = getDataInDateRange(from, to);
+
+        Collections.sort(dataInDateRange);
+        Collections.reverse(dataInDateRange);
+        for (CovidData d : dataInDateRange) {
+            if(d.getBorough().equals(borough) && isDateRangeValid(from, to)){
                 LocalDate date = LocalDate.parse(d.getDate());
                 Integer totalDeaths = d.getTotalDeaths();
-                if(date.isAfter(from.minusDays(1)) && date.isBefore(to.plusDays(1))){
-                    if(totalDeaths != null){
-                        dates.add(date.toString());
-                        totalDeathsArray.add(totalDeaths);
-                    }
+                if(totalDeaths != null){
+                    dates.add(date.toString());
+                    totalDeathsArray.add(totalDeaths);
                 }   
             }
         }

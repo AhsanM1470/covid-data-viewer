@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Parent;
+import java.util.Collections;
 
 /**
  * Serves as a template of common functionality for the Controllers of each
@@ -52,6 +53,7 @@ public abstract class ViewerController {
      * @param data The data to be stored in the controller
      */
     protected void setData(ArrayList<CovidData> data) {
+        Collections.sort(data);
         this.data = data;
     }
 

@@ -141,10 +141,11 @@ public class MainWindowController implements Initializable
     private boolean canSwitchPanels(){
         Stage stage = (Stage) mainLayout.getScene().getWindow();
         int panelsInStackPane = stackPane.getChildren().size();
+        stage.setResizable(true);
         if (panelsInStackPane > 1){
             stage.setResizable(false);
         }
-        stage.setResizable(true);
+        
         return !(panelsInStackPane > 1);
     }
     
