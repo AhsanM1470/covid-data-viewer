@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -42,27 +41,26 @@ public class BoroughInfoController {
     String[] orderStrings;
     boolean orderByAscending;
     String filterSelected;
-    
 
     @FXML
     // @SuppressWarnings("unchecked")
-    public void initialize(){
-        
+    public void initialize() {
+
         TableColumn<CovidData, String> dateColumn = new TableColumn<>("Date");
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
 
         TableColumn<CovidData, Integer> retailRecreationGMR = new TableColumn<>("Retail Recreation GMR");
         retailRecreationGMR.setCellValueFactory(new PropertyValueFactory<>("retailRecreationGMR"));
-        
+
         TableColumn<CovidData, Integer> groceryPharmacyGMR = new TableColumn<>("Grocery Pharmacy GMR");
         groceryPharmacyGMR.setCellValueFactory(new PropertyValueFactory<>("groceryPharmacyGMR"));
-        
+
         TableColumn<CovidData, Integer> parksGMR = new TableColumn<>("Parks GMR");
         parksGMR.setCellValueFactory(new PropertyValueFactory<>("parksGMR"));
-        
+
         TableColumn<CovidData, Integer> transitGMR = new TableColumn<>("Transit GMR");
         transitGMR.setCellValueFactory(new PropertyValueFactory<>("transitGMR"));
-        
+
         TableColumn<CovidData, Integer> workplacesGMR = new TableColumn<>("WorkPlaces GMR");
         workplacesGMR.setCellValueFactory(new PropertyValueFactory<>("workplacesGMR"));
 
@@ -78,15 +76,15 @@ public class BoroughInfoController {
         TableColumn<CovidData, Integer> newCovidDeaths = new TableColumn<>("New Covid Deaths");
         newCovidDeaths.setCellValueFactory(new PropertyValueFactory<>("newDeaths"));
 
+        boroughTable.getColumns().addAll(dateColumn, retailRecreationGMR, groceryPharmacyGMR, parksGMR, transitGMR,
+                workplacesGMR, residentialGMR, newCasesColumn, totalCovidCases, newCovidDeaths);
 
-        boroughTable.getColumns().addAll(dateColumn, retailRecreationGMR, groceryPharmacyGMR,parksGMR,transitGMR,workplacesGMR, residentialGMR, newCasesColumn, totalCovidCases, newCovidDeaths);
-        
         // add all the column names to the filtercombo box
-        columnNames = boroughTable.getColumns().stream().map(e->e.getText()).collect(Collectors.toList());
+        columnNames = boroughTable.getColumns().stream().map(e -> e.getText()).collect(Collectors.toList());
         filterComboBox.getItems().addAll(columnNames);
 
         // create the options for how the user can sort. Ascending or Descending
-        orderStrings = new String[] {"Ascending","Descending"};
+        orderStrings = new String[] { "Ascending", "Descending" };
         orderComboBox.getItems().setAll(orderStrings);
 
         String initialOrder = orderStrings[0];
@@ -101,24 +99,30 @@ public class BoroughInfoController {
 
     /**
      * show the actual data in the table is created
+     * 
      * @param data
      */
-    public void showData(ArrayList<CovidData> data){
+    public void showData(ArrayList<CovidData> data) {
+        // TODO: try and make stage in mapviewer an attribute, and when date changed
+        // also re-arrange the data. (this should be done by inheriting from
+        // viewercontroller to use 'data' and 'processDataInRange')
+
         ObservableList<CovidData> obsData = FXCollections.observableArrayList(data);
         boroughTable.getItems().setAll(obsData);
-        
+
         // bind the height of the tableview to the height of the stage
-        boroughTable.prefHeightProperty().bind(mainPane.heightProperty());  
-        
-        sortTable(); 
+        boroughTable.prefHeightProperty().bind(mainPane.heightProperty());
+
+        sortTable();
     }
 
     /**
      * Action event for when an item from the combobox is selected
+     * 
      * @param event
      */
     @FXML
-    void filterSelected(ActionEvent event){
+    void filterSelected(ActionEvent event) {
         filterSelected = filterComboBox.getValue();
         sortTable();
     }
@@ -126,7 +130,7 @@ public class BoroughInfoController {
     /**
      * Sorting the table by a certain column
      */
-    private void sortTable(){
+    private void sortTable() {
         int colIndex = getColumnIndexOfStat(filterSelected);
 
         // column we're retrieving could be String or Integer, hence the '?'
@@ -140,11 +144,13 @@ public class BoroughInfoController {
     }
 
     /**
-     * Handling when the order button is click determining what text to display along with 
+     * Handling when the order button is click determining what text to display
+     * along with
+     * 
      * @param event
      */
     @FXML
-    void orderButtonClick(ActionEvent event){
+    void orderButtonClick(ActionEvent event) {
         String order = (String) orderComboBox.getValue();
         orderByAscending = order.equals("Ascending");
         sortTable();
@@ -152,16 +158,17 @@ public class BoroughInfoController {
 
     /**
      * get the index of the column that points to a specific stat selected
+     * 
      * @param stat
      * @return the index of the stat column. if not found, return -1
      */
-    private int getColumnIndexOfStat(String stat){
-        for (int i = 0; i<columnNames.size(); i++){
-            if (columnNames.get(i).equals(stat)){
+    private int getColumnIndexOfStat(String stat) {
+        for (int i = 0; i < columnNames.size(); i++) {
+            if (columnNames.get(i).equals(stat)) {
                 return i;
             }
         }
         return -1;
     }
 
-}      
+}

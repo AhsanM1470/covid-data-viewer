@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
  * @author Ishab Ahmed
  * @version 2023.03.20
  */
-public class MainController implements Initializable
+public class MainWindowController implements Initializable
 {
     @FXML
     private BorderPane mainLayout;
@@ -166,12 +166,6 @@ public class MainController implements Initializable
     private void transitionIntoNextPanel(ViewerController currentController, ViewerController nextController,
             ActionEvent event) {
                 
-        // when inTransition is true, don't allow certain actions such as switching
-        // panes until animation finished
-
-        nextController.updatePanelForDateRange(fromDatePicker.getValue(), toDatePicker.getValue());
-        nextController.resizeComponents(mainLayout);
-
         // Sets the date picker of the next panel to the dates chosen on the current
         // panel
         nextController.updatePanelForDateRange(fromDatePicker.getValue(), toDatePicker.getValue());

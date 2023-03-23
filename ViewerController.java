@@ -102,9 +102,11 @@ public abstract class ViewerController {
                 .collect(Collectors.toList()));
     }
 
-
-
-
+    /**
+     * Sets the data within a date range and processes the data.
+     * @param fromDate
+     * @param toDate
+     */
     protected void updatePanelForDateRange(LocalDate fromDate, LocalDate toDate) {
         setDateRange(fromDate, toDate);
         processDataInDateRange(fromDate, toDate);
