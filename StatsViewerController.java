@@ -4,6 +4,7 @@ import javafx.scene.Parent;
 
 import java.lang.reflect.Array;
 import java.net.URL;
+import java.util.Collections;
 import java.util.ResourceBundle;
 
 import java.time.LocalDate;
@@ -37,7 +38,8 @@ import javafx.fxml.Initializable;
 // TODO
 // does "average cases" refer to an average over all records in date range OR an average over all boroughs
 // fix average cases
-
+// waiting for jeffrey to respond, in meantime I will make a way to sum up deaths and cases
+    // within the date range and not use totals.
 
 public class StatsViewerController extends ViewerController implements Initializable {
 
@@ -116,11 +118,15 @@ public class StatsViewerController extends ViewerController implements Initializ
     private LocalDate fromDate;
     private LocalDate toDate;
 
+
+    private String finalDateString;
+
     /**
      * Initialises "dataRangeData" which is used to
      * contain data inside a give data range.
      */
     private ArrayList<CovidData> dataRangeData = new ArrayList<>();
+    private ArrayList<CovidData> reversedDataRangeData = new ArrayList<>();
 
     /**
      * This contains the records that have the latest date in dataRangeData.
@@ -279,20 +285,30 @@ public class StatsViewerController extends ViewerController implements Initializ
             // it takes into account the most recent "fromDate"
             // and "toDate"
             dataRangeData = getDataInDateRange(fromDate, toDate);
+//            Collections.sort(dataRangeData);
+
 
             // this generates a new ArrayList for the records for each borough on the last
             // date in the date range
             // could also compare the boroughs on final date to make sure they're unique
-            String recordsOnFinalDate = dataRangeData.get(dataRangeData.size() - 1).getDate();
+
+//            String finalDateString = dataRangeData.get(dataRangeData.size() - 1).getDate();
+
+            reversedDataRangeData = dataRangeData;
+            Collections.reverse(reversedDataRangeData);
+            finalDateString = getFinalDateString(reversedDataRangeData);
+
             // this assumes you can't have multiple records on the same day
-            finalDateRecords = new ArrayList<>(dataRangeData.stream()
-                    .filter(i -> {
-                        return i.getDate().equals(recordsOnFinalDate) && i.;
-                    })
-                    .collect(Collectors.toList()) );
+            // finalDateRecords will not have nulls for total deaths cases in most cases
+            ArrayList<CovidData> covidData = new ArrayList<>();
+            for (CovidData dataRangeDatum : dataRangeData) {
+                if (dataRangeDatum.getDate().equals(finalDateString)) {
+                    covidData.add(dataRangeDatum);
+                }
+            }
+            finalDateRecords = covidData;
 
-
-            if(!fromDate.isBefore(toDate)){
+            if(!isDateRangeValid(fromDate, toDate)){
                 rrGMRLabel.setText("The date field is not valid.");
                 gpGMRLabel.setText("The date field is not valid.");
                 sumTotalDeathLabel.setText("The date field is not valid.");
@@ -311,56 +327,55 @@ public class StatsViewerController extends ViewerController implements Initializ
                 averageCasesLabel.setText("" + averageOfTotalCases());
             }
             else if(i == 3){
-                highestDeathDateLabel.setText("" + highestTotalDeathDate());
+                highestDeathDateLabel.setText("" + getFinalRecordWithCondition(reversedDataRangeData, "deaths"));
             }
-
-
-
-
-//            if(i == 0){
-//                if (fromDate.isBefore(toDate)) {
-//                    rrGMRLabel.setText("The average retail recreational GMR: " + getAverageRRGMR());
-//                    gpGMRLabel.setText("The average grocery pharmacy GMR: " + getAverageGPGMR());
-//                }
-//
-//                else {
-//                    rrGMRLabel.setText("The date field is not valid.");
-//                    gpGMRLabel.setText("The date field is not valid.");
-//                }
-//            }
-//
-//            else if (i == 1) {
-//                if(fromDate.isBefore(toDate)) {
-//                    sumTotalDeathLabel.setText("" + totalNumberOfTotalDeathsCount());
-//                }
-//
-//                else {
-//                    sumTotalDeathLabel.setText("The date field is not valid.");
-//                }
-//            }
-//
-//            else if(i == 2){
-//                if (fromDate.isBefore(toDate)) {
-//                    averageCasesLabel.setText("" + averageOfTotalCases());
-//                }
-//
-//                else {
-//                    averageCasesLabel.setText("The date field is not valid.");
-//                }
-//            }
-//
-//            else if(i == 3){
-//                if (fromDate.isBefore(toDate)) {
-//                    highestDeathDateLabel.setText("" + highestTotalDeathDate());
-//                }
-//
-//                else {
-//                    highestDeathDateLabel.setText("The date field is not valid.");
-//                }
-//            }
 
         }
 
+    }
+
+    /**
+     * This returns the date of the final record which has non-null values
+     *  for total deaths and total cases.
+     * This takes in a reversed dataRangeData to check for the last dates first.
+     * @param cd is dataRangeData. Not used directly because dataRangeData may change.
+     * @return date as String of final record that has values for total deaths and total cases.
+     */
+    private String getFinalDateString(ArrayList<CovidData> cd){
+        for(CovidData x : cd){
+            if(x.getTotalDeaths() != null && x.getTotalCases() != null){
+               return x.getDate();
+            }
+        }
+
+        System.out.println("error has occurred with finding final date string");
+        return "";
+    }
+
+    /**
+     * cd is a REVERSED arraylist
+     * @param cd
+     * @param condition
+     * @return
+     */
+    private CovidData getFinalRecordWithCondition(ArrayList<CovidData> cd, String condition){
+        if(condition.equals("deaths")){
+            for(CovidData x : cd){
+                if(x.getTotalDeaths() != null){
+                    return x;
+                }
+            }
+        }
+
+        else if(condition.equals("cases")){
+            for(CovidData x : cd){
+                if(x.getTotalDeaths() != null){
+                    return x;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -388,6 +403,12 @@ public class StatsViewerController extends ViewerController implements Initializ
         for (CovidData c : finalDateRecords) {
             // some records actually have null for the total
             // deaths so a check is necessary
+            if(Objects.isNull(c.getTotalDeaths())){
+
+            }
+
+
+
             if (!Objects.isNull(c.getTotalDeaths())) {
                 totalNumberOfDeaths += c.getTotalDeaths();
                 // System.out.println(c);
@@ -435,6 +456,9 @@ public class StatsViewerController extends ViewerController implements Initializ
         float totalCases = 0;
         // this must be declared here
         float average;
+        float sum = 0;
+
+        System.out.println(finalDateRecords);
 
         // iterates and adds each case to number of cases
         for (CovidData c : finalDateRecords) {
@@ -453,12 +477,28 @@ public class StatsViewerController extends ViewerController implements Initializ
         if (finalDateRecords.size() > 0) {
             // System.out.println(totalCases + " " + dataRangeData.size());
             average = totalCases / finalDateRecords.size();
-//            average = totalCases / 33;
         }
 
         else {
             average = 0;
         }
+
+
+
+        for (CovidData c : dataRangeData){
+            if (!Objects.isNull(c.getTotalCases())) {
+                sum += c.getNewCases();
+            }
+        }
+        if(dataRangeData.size() > 0){
+//            average = sum / dataRangeData.size();
+            average = sum / 32;
+        }
+
+
+
+
+
 
         return average;
 
@@ -471,89 +511,92 @@ public class StatsViewerController extends ViewerController implements Initializ
      * This is called whenever index "i" changes to show the
      * fourth pane, or if "i" is already 3 and the date changed.
      */
-    private void refreshHighestDeathLabel() {
-
-        System.out.println("poiuy");
-        if (i == 3) {
-            if (fromDate != null && toDate != null) {
-                // this updates the value of "dataRangeData" so that
-                // it takes into account the most recent "fromDate"
-                // and "toDate"
-                dataRangeData = getDataInDateRange(fromDate, toDate);
-
-                if (fromDate.isBefore(toDate)) {
-                    highestDeathDateLabel.setText("" + highestTotalDeathDate());
-                }
-
-                else {
-                    highestDeathDateLabel.setText("The date field is not valid.");
-                }
-            }
-
-        }
-    }
+//    private void refreshHighestDeathLabel() {
+//
+//        System.out.println("poiuy");
+//        if (i == 3) {
+//            if (fromDate != null && toDate != null) {
+//                // this updates the value of "dataRangeData" so that
+//                // it takes into account the most recent "fromDate"
+//                // and "toDate"
+//                dataRangeData = getDataInDateRange(fromDate, toDate);
+//
+//                if (fromDate.isBefore(toDate)) {
+//                    highestDeathDateLabel.setText("" + highestTotalDeathDate());
+//                }
+//
+//                else {
+//                    highestDeathDateLabel.setText("The date field is not valid.");
+//                }
+//            }
+//
+//        }
+//    }
 
     /**
      * This returns the date with the highest total death
      * as a String.
      *
-     * @return date with highest total death.
+     * @return date with the highest total death.
      */
     private String highestTotalDeathDate() {
         int newDeaths = 0;
         String highestDeathDate = "";
 
+        return finalDateString;
+
+
         // iterates through all records in date range
-        for (CovidData c : dataRangeData) {
-            // some records actually have null for the total
-            // deaths so a check is necessary
-            if (!Objects.isNull(c.getNewDeaths())) {
-
-                if (c.getNewDeaths() > newDeaths) {
-                    newDeaths = c.getNewDeaths();
-                    highestDeathDate = c.getDate();
-                    // System.out.println(c);
-                }
-
-            }
-
-        }
-
-        // in the case that there is no highest death date
-        if(highestDeathDate.equals("")){
-            return "Not applicable.";
-        }
-
-        return highestDeathDate;
-
-    }
-
-    /**
-     *
-     */
-    private void refreshMobilityMeasureLabel() {
-        // System.out.println(i);
-
-        if (i == 0) {
-            System.out.println(fromDate + "   " + toDate);
-            if (fromDate != null && toDate != null) {
-                // this updates the value of "dataRangeData" so that
-                // it takes into account the most recent "fromDate"
-                // and "toDate"
-                dataRangeData = getDataInDateRange(fromDate, toDate);
-
-                if (fromDate.isBefore(toDate)) {
-                    rrGMRLabel.setText("The average retail recreational GMR: " + getAverageRRGMR());
-                    gpGMRLabel.setText("The average grocery pharmacy GMR: " + getAverageGPGMR());
-                }
-
-                else {
-                    rrGMRLabel.setText("The date field is not valid.");
-                    gpGMRLabel.setText("The date field is not valid.");
-                }
-            }
-
-        }
+//        for (CovidData c : dataRangeData) {
+//            // some records actually have null for the total
+//            // deaths so a check is necessary
+//            if (!Objects.isNull(c.getNewDeaths())) {
+//
+//                if (c.getNewDeaths() > newDeaths) {
+//                    newDeaths = c.getNewDeaths();
+//                    highestDeathDate = c.getDate();
+//                    // System.out.println(c);
+//                }
+//
+//            }
+//
+//        }
+//
+//        // in the case that there is no highest death date
+//        if(highestDeathDate.equals("")){
+//            return "Not applicable.";
+//        }
+//
+//        return highestDeathDate;
+//
+//    }
+//
+//    /**
+//     *
+//     */
+//    private void refreshMobilityMeasureLabel() {
+//        // System.out.println(i);
+//
+//        if (i == 0) {
+//            System.out.println(fromDate + "   " + toDate);
+//            if (fromDate != null && toDate != null) {
+//                // this updates the value of "dataRangeData" so that
+//                // it takes into account the most recent "fromDate"
+//                // and "toDate"
+//                dataRangeData = getDataInDateRange(fromDate, toDate);
+//
+//                if (fromDate.isBefore(toDate)) {
+//                    rrGMRLabel.setText("The average retail recreational GMR: " + getAverageRRGMR());
+//                    gpGMRLabel.setText("The average grocery pharmacy GMR: " + getAverageGPGMR());
+//                }
+//
+//                else {
+//                    rrGMRLabel.setText("The date field is not valid.");
+//                    gpGMRLabel.setText("The date field is not valid.");
+//                }
+//            }
+//
+//        }
     }
 
     /**

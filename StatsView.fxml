@@ -121,7 +121,7 @@
                      <top>
                         <Label text="Average of total cases over all records in date range" textFill="WHITE" underline="true" BorderPane.alignment="CENTER">
                            <font>
-                              <Font size="29.0" />
+                              <Font size="25.0" />
                            </font>
                            <padding>
                               <Insets top="97.0" />
