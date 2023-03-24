@@ -2,6 +2,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
+import java.util.Collections;
 
 /**
  * Represents the data set that is loaded from a CovidDataLoader and processed. 
@@ -25,6 +26,9 @@ public class Dataset {
     private Dataset() {
         CovidDataLoader dataLoader = new CovidDataLoader();
         data = dataLoader.load();
+        // sort and reverse the data (sorted by date from new -> old)
+        Collections.sort(data);
+        Collections.reverse(data);
     }
     
     /**
