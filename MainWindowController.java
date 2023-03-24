@@ -16,11 +16,9 @@ import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
-
 import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 
 /**
  * Write a description of class MainController here.
@@ -28,8 +26,7 @@ import java.util.ResourceBundle;
  * @author Ishab Ahmed
  * @version 2023.03.20
  */
-public class MainWindowController implements Initializable
-{
+public class MainWindowController implements Initializable {
     @FXML
     private BorderPane mainLayout;
 
@@ -48,7 +45,8 @@ public class MainWindowController implements Initializable
     @FXML
     protected StackPane stackPane;
     
-    private ArrayList<CovidData> data;
+    // Instance of Dataset singleton
+    protected Dataset dataset = Dataset.getInstance();
     
     private ArrayList<ViewerController> controllers;
     private int controllerIndex;
@@ -64,8 +62,6 @@ public class MainWindowController implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        CovidDataLoader dataLoader = new CovidDataLoader();
-        data = dataLoader.load();
 
         // Try to load the controllers for all the panels
         try {
@@ -85,27 +81,10 @@ public class MainWindowController implements Initializable
 
         applyDatePickLimit(fromDatePicker);
         applyDatePickLimit(toDatePicker);
-
-    }
-
-    private void applyDatePickLimit(DatePicker datePicker){
-
-        // Calculate the minimum and maxium dates within the date range
-        LocalDate minDate = LocalDate.parse(Collections.min(data).getDate());
-        LocalDate maxDate = LocalDate.parse(Collections.max(data).getDate());
-
-        datePicker.setDayCellFactory((p) -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate ld, boolean bln) {
-                super.updateItem(ld, bln);
-                setDisable(ld.isBefore(minDate) || ld.isAfter(maxDate));
-            }
-        });
-
     }
     
     /**
-     * Loads the controllers of all of the panels in the app.
+     * Loads the FXML files and controllers for all panels.
      * 
      * @throws Exception if the FXMLLoader fails to load any FXML file.
      */
@@ -116,14 +95,39 @@ public class MainWindowController implements Initializable
         for (int i = 0; i < fxmlFiles.length; i++) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFiles[i]));
             loader.load();
-            ViewerController controller = loader.getController();
             
-            controller.setData(data);
+            // get controller instance as set in FXML file
+            ViewerController controller = loader.getController();
             controllers.add(controller);
         }
     }
     
+    /**
+     * Applies a minimum and maximum date limit to the date picker, 
+     * based on the minimum and maximum dates of the datset.
+     * 
+     * @param datePicker The DatePicker to apply the date limit to
+     */
+    private void applyDatePickLimit(DatePicker datePicker){
+
+        // Calculate the minimum and maximum dates in the dataset
+        LocalDate minDate = LocalDate.parse(Collections.min(dataset.getData()).getDate());
+        LocalDate maxDate = LocalDate.parse(Collections.max(dataset.getData()).getDate());
+        
+        
+        datePicker.setDayCellFactory((cell) -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean bool) {
+                super.updateItem(date, bool);
+                // Disables date cell if date is not in the range of dataset
+                setDisable(date.isBefore(minDate) || date.isAfter(maxDate));
+            }
+        });
+
+    }
+    
     // ----------------------------- Panel Switching ---------------------------- //
+    
     /**
      * Changes whether the panel switching buttons are interactable or not.
      * 
@@ -135,10 +139,12 @@ public class MainWindowController implements Initializable
     }
 
     /**
+     * Checks if the stack pane can switch to a different panel or not.
      * 
-     * @return whether transitioning/switching
+     * @return true if the stack pane can switch to a different panel, false otherwise
      */
     private boolean canSwitchPanels(){
+        // If there is a panel already on the pane, then switching should be prevented
         return !(stackPane.getChildren().size() > 1);
     }
     
@@ -150,18 +156,16 @@ public class MainWindowController implements Initializable
     @FXML
     private void nextPanel(ActionEvent event) {
         // prevents continuous clicking if currently in process of switching to next panel
-        if (!canSwitchPanels()){
-            return;
+        if (canSwitchPanels()){
+            ViewerController currentController = controllers.get(controllerIndex);
+        
+            // increment the panel controller (% to prevent indexOutOfBound)
+            controllerIndex = (controllerIndex + 1) % controllers.size();
+            ViewerController nextController = controllers.get(controllerIndex);
+            
+            // transition from current view to the next view
+            transitionIntoNextPanel(currentController, nextController, event);
         }
-
-        ViewerController currentController = controllers.get(controllerIndex);
-        
-        // increment the panel controller (% to prevent indexOutOfBound)
-        controllerIndex = (controllerIndex + 1) % controllers.size();
-        ViewerController nextController = controllers.get(controllerIndex);
-        
-        // transition from current view to the next view
-        transitionIntoNextPanel(currentController, nextController, event);
     }
     
     /**
@@ -172,97 +176,90 @@ public class MainWindowController implements Initializable
     @FXML
     private void previousPanel(ActionEvent event) {
         // prevents continuous clicking if currently in process of switching to next panel
-        if (!canSwitchPanels()){
-            return;
+        if (canSwitchPanels()){
+            ViewerController currentController = controllers.get(controllerIndex);
+            
+            controllerIndex--;
+            // rolls index back to end of list if reaching -ve index
+            if (controllerIndex < 0) {
+                controllerIndex = controllers.size() - 1;
+            }
+            ViewerController nextController = controllers.get(controllerIndex);
+            
+            // transition from  current view to the previous view
+            transitionIntoNextPanel(currentController, nextController, event);
         }
-
-        ViewerController currentController = controllers.get(controllerIndex);
-        
-        controllerIndex--;
-        // rolls index back to end of list if reaching -ve index
-        if (controllerIndex < 0) {
-            controllerIndex = controllers.size() - 1;
-        }
-        ViewerController nextController = controllers.get(controllerIndex);
-        
-        // transition from  current view to the previous view
-        transitionIntoNextPanel(currentController, nextController, event);
-        
     }
 
     // ----------------------- Transition Between Panels ----------------------- //
     
     /**
-     * set the center of the screen (contents of stackPane) to new view
-     * show a transition between the the old view and  new view 
+     * Sets the center of the screen to next panel.
+     * Shows a transition between the the current panel and next panel. 
      * 
-     * @param previousController controller class of the view being switched out
-     * @param currentController controller class of the view being switched in
-     * @param event button that triggered the series of events.
+     * @param currentController The ViewerController of the current panel
+     * @param nextController The ViewerController of the next panel
+     * @param event Button click event that triggers the panel transition
      */
     private void transitionIntoNextPanel(ViewerController currentController, ViewerController nextController,
             ActionEvent event) {
 
-                        // add you held 
-                
-        // Sets the date picker of the next panel to the dates chosen on the current
-        // panel
+        // Updates the next panel with the necessary information given the dates
+        // currently chosen in the datepickers
         nextController.updatePanelForDateRange(fromDatePicker.getValue(), toDatePicker.getValue());
         nextController.resizeComponents(mainLayout);
-
+        
+        Parent currentPanel = currentController.getView();
         Parent nextPanel = nextController.getView();
-        Parent oldPanel = currentController.getView();
 
-
-        // determine which direction the panes will move in depending on the button
-        // pressed. 
-
-        // animation to move panels from right to left.
-        double oldPanelStartX = 0;
-        double newPanelStartX = mainLayout.getWidth();
-        double oldPanelEndX = -mainLayout.getWidth();
+        // Will determine which direction the panels will move in.
+        double currentPanelEndX;
+        double newPanelStartX;
+        
+        double currentPanelStartX = 0;
         double newPanelEndX = 0;
-
-
-
-        // if instead we're moving from left to right, inverse values
-        if (event.getSource() == leftButton) {
-            oldPanelEndX *= -1;
-            newPanelStartX *= -1;
+        
+        // If right button pressed, transition from right to left
+        if (event.getSource() == rightButton) {
+            currentPanelEndX = -mainLayout.getWidth();
+            newPanelStartX = mainLayout.getWidth();
+        } else {
+            // If left button pressed, transition from left to right (inversed values)
+            currentPanelEndX = mainLayout.getWidth();
+            newPanelStartX = -mainLayout.getWidth();
         }
 
-        oldPanel.translateXProperty().set(oldPanelStartX);
+        currentPanel.translateXProperty().set(currentPanelStartX);
         nextPanel.translateXProperty().set(newPanelStartX);
 
         stackPane.getChildren().add(nextPanel);
 
-        // transitionig between panes
+        // Transition length between panes
         Duration transitionDuration = Duration.seconds(0.5);
 
-        // timline thread that allows for the animations
+        // Timeline that allows for the animations
         Timeline timeline = new Timeline();
 
-        // key value -> (whatToAnimate + start value, its end value, interpolation type)
-        // key frame -> (how long above animation, animation to do)
-        KeyValue oldViewKV = new KeyValue(oldPanel.translateXProperty(), oldPanelEndX, new AnimationInterpolator());
-        KeyFrame oldViewKF = new KeyFrame(transitionDuration, oldViewKV);
+        // key value -> (whatToAnimate + start value, it's end value, interpolation type)
+        KeyValue currentViewKV = new KeyValue(currentPanel.translateXProperty(), currentPanelEndX, new AnimationInterpolator());
+        // key frame -> (animation length, what animation to do)
+        KeyFrame currentViewKF = new KeyFrame(transitionDuration, currentViewKV);
 
         KeyValue newViewKV = new KeyValue(nextPanel.translateXProperty(), newPanelEndX, new AnimationInterpolator());
         KeyFrame newViewKF = new KeyFrame(transitionDuration, newViewKV);
 
-        // adding the two animations to the timeline to execute
-        timeline.getKeyFrames().add(oldViewKF);
+        // Adding the two animations to the timeline to execute
+        timeline.getKeyFrames().add(currentViewKF);
         timeline.getKeyFrames().add(newViewKF);
         
 
         timeline.setOnFinished(e -> {
-            // remove the previous view that was on teh stack pane
+            // Remove the previous view that was on teh stack pane
             stackPane.getChildren().remove(currentController.getView());
         });
 
-        // left/right buttons
+        // Play the animation
         timeline.play();
-
     }
 
     // ----------------------------- Date Changing ----------------------------- //

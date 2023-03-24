@@ -98,11 +98,11 @@ public class GraphViewerController extends ViewerController implements Initializ
         ArrayList<String> dates = new ArrayList<>();
         ArrayList<Integer> totalDeathsArray = new ArrayList<>();
 
-        ArrayList<CovidData> dataInDateRange = getDataInDateRange(from, to);
-        ArrayList<CovidData> boroughData = getBoroughData(borough, from, to);
+        ArrayList<CovidData> dataInDateRange = dataset.getDataInDateRange(from, to);
+        ArrayList<CovidData> boroughData = dataset.getBoroughData(borough, from, to);
 
         for (CovidData d : boroughData) {
-            if(d.getBorough().equals(borough) && isDateRangeValid(from, to)){
+            if(d.getBorough().equals(borough) && dataset.isDateRangeValid(from, to)){
                 LocalDate date = LocalDate.parse(d.getDate());
                 Integer totalDeaths = d.getTotalDeaths();
                 if(totalDeaths != null){
@@ -168,12 +168,5 @@ public class GraphViewerController extends ViewerController implements Initializ
      */
     protected Parent getView(){
         return graphPane;
-    }
-    
-    /**
-     * 
-     */
-    public void setData(ArrayList<CovidData> data){
-        this.data = data;
     }
 }
