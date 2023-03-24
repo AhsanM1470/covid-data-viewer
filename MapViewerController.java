@@ -77,7 +77,7 @@ public class MapViewerController extends ViewerController {
 
     // the value which is used as a base to determine the intensity for other
     // boroughs on the heat map
-    private int heatMapBaseValue;
+    private Integer heatMapBaseValue;
 
     // stores the data within the date range selected
     private ArrayList<CovidData> dataInDateRange;
@@ -199,6 +199,7 @@ public class MapViewerController extends ViewerController {
      * 'boroughHeatMapData'
      */
     private void resetBoroughHeatMapData() {
+        heatMapBaseValue = null;
         boroughHeatMapData = new HashMap<>();
         for (CovidData covidRecord : data) {
             String recordBoroughName = covidRecord.getBorough();
@@ -267,9 +268,15 @@ public class MapViewerController extends ViewerController {
                 // calculate proportion of current borough data with the base value
                 // in HSB hue is measured in degrees where: 0 -> 120 == red -> green.
                 // converts the proportion of heat map values as a % of the hueUpperBound
-                double hueUpperBound = 135.0;
-
+                double hueUpperBound = 100.0;
+                double perc = 100.0 * boroughHeatMapMeasure / heatMapBaseValue;
                 double percentageOfHue = (hueUpperBound * boroughHeatMapMeasure / heatMapBaseValue);
+
+                // if (perc < 40){
+                //     double perc2 = perc/40;
+                //     percentageOfHue += (20*perc2);
+
+                // }
 
                 // subtracting from the upper bound gives us reversed scale.
                 // green -> low deaths
@@ -378,16 +385,22 @@ public class MapViewerController extends ViewerController {
 
         String polygonName = boroughIdToName.get(poly.getId());
 
+        
+
         // retrieve the heat map data and calculate the percentage
         Integer boroughHeatMapMeasure = boroughHeatMapData.get(polygonName);
-        double percentage = (double) (100.0 * boroughHeatMapMeasure / heatMapBaseValue);
-        int perc = (int) Math.round(percentage);
+
+        Integer percentage = null;
+        if (boroughHeatMapMeasure != null && heatMapBaseValue > 0) {
+            percentage = (int) Math.round((100.0 * boroughHeatMapMeasure / heatMapBaseValue)) ;
+
+        }
 
         // changing the text on the labels to adjust for the current borough being
         // hovered over
         deathsHoverLabel.setText("Total deaths within date range: " + boroughHeatMapData.get(polygonName));
         baseHoverTotal.setText("Highest deaths within date range: " + heatMapBaseValue);
-        percentLabel.setText("Percentage: " + perc + "%");
+        percentLabel.setText("Percentage: " + percentage + "%");
         hoverBoxBoroughLabel.setText(polygonName);
 
         // position the pane
