@@ -102,9 +102,6 @@ public abstract class ViewerController {
                 .collect(Collectors.toList()));
     }
 
-
-
-
     protected void updatePanelForDateRange(LocalDate fromDate, LocalDate toDate) {
         setDateRange(fromDate, toDate);
         processDataInDateRange(fromDate, toDate);
@@ -136,7 +133,7 @@ public abstract class ViewerController {
      * @return whether the date is within an inclusive date range
      */
     protected boolean isDateInRange(LocalDate date, LocalDate fromDate, LocalDate toDate) {
-        return (date.isAfter(fromDate) && date.isBefore(toDate)) || date.isEqual(fromDate) || date.isEqual(toDate);
+        return (!date.isBefore(fromDate) && !date.isAfter(toDate));
     }
 
     /**

@@ -15,7 +15,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphViewerController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GraphViewerController">
    <top>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="30.0" BorderPane.alignment="CENTER">
          <children>
@@ -56,7 +56,7 @@
       </VBox>
    </bottom>
    <center>
-      <AnchorPane fx:id="graphPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #191919D1;" BorderPane.alignment="CENTER">
+      <AnchorPane fx:id="graphPane" prefHeight="580.0" prefWidth="920.0" style="-fx-background-color: #191919D1;" BorderPane.alignment="CENTER">
          <children>
             <ChoiceBox fx:id="choiceBox" layoutX="14.0" layoutY="35.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
             <Label layoutX="15.0" layoutY="14.0" text="Select the borough" textFill="WHITE">
@@ -64,7 +64,7 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <LineChart fx:id="chart" layoutX="214.0" layoutY="49.0" prefHeight="493.0" prefWidth="679.0" style="-fx-background-color: #FFFFFF;">
+            <LineChart fx:id="chart" layoutX="206.0" layoutY="56.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="467.0" prefWidth="664.0" style="-fx-background-color: #FFFFFF;">
               <xAxis>
                 <CategoryAxis animated="false" label="Date" side="BOTTOM" fx:id="xAxis" />
               </xAxis>
