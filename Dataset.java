@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
 
@@ -25,6 +26,8 @@ public class Dataset {
     private Dataset() {
         CovidDataLoader dataLoader = new CovidDataLoader();
         data = dataLoader.load();
+        Collections.sort(data);
+        Collections.reverse(data);
     }
     
     /**
