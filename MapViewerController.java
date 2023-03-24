@@ -149,13 +149,13 @@ public class MapViewerController extends ViewerController {
     protected void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {
         title.setText("Click on a borough to view more information");
 
-        if (!isDateRangeValid(fromDate, toDate)) {
+        if (!dataset.isDateRangeValid(fromDate, toDate)) {
             title.setText("The 'from date' is after the 'to date' ! ");
         }
         // reset boroughs heat map measure information when date is changed
         resetBoroughHeatMapData();
 
-        if (isDateRangeValid(fromDate, toDate)) {
+        if (dataset.isDateRangeValid(fromDate, toDate)) {
             // reset base value each time date is changed
             heatMapBaseValue = 0;
 
@@ -191,7 +191,7 @@ public class MapViewerController extends ViewerController {
      * @param toDate
      */
     private void loadDataInDateRange(LocalDate fromDate, LocalDate toDate) {
-        dataInDateRange = getDataInDateRange(fromDate, toDate);
+        dataInDateRange = dataset.getDataInDateRange(fromDate, toDate);
     }
 
     /**
@@ -201,7 +201,7 @@ public class MapViewerController extends ViewerController {
     private void resetBoroughHeatMapData() {
         heatMapBaseValue = null;
         boroughHeatMapData = new HashMap<>();
-        for (CovidData covidRecord : data) {
+        for (CovidData covidRecord : dataset.getData()) {
             String recordBoroughName = covidRecord.getBorough();
             boroughHeatMapData.put(recordBoroughName, null);
         }
@@ -328,7 +328,7 @@ public class MapViewerController extends ViewerController {
         stage.initOwner(mapAnchorPane.getScene().getWindow());
         stage.setScene(scene);
         stage.setTitle(boroughName);
-        controller.showData(getBoroughData(boroughName, fromDate, toDate));
+        controller.showData(dataset.getBoroughData(boroughName, fromDate, toDate));
         stage.show();
     }
 

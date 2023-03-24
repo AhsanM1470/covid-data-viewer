@@ -47,7 +47,6 @@ public class DataViewerController extends ViewerController implements Initializa
      * CovidData objects loaded from the data source.
      */
     @Override
-    @SuppressWarnings("unchecked")
     public void initialize(URL location, ResourceBundle resources) {      
         // Create TableColumns for the TableView
         TableColumn<CovidData, String> dateCol = new TableColumn<CovidData, String>("Date");
@@ -86,10 +85,10 @@ public class DataViewerController extends ViewerController implements Initializa
         // Clear any existing items from the table
         dataTable.getItems().clear();
 
-        ArrayList<CovidData> rangedData = getDataInDateRange(fromDate, toDate);
+        ArrayList<CovidData> rangedData = dataset.getDataInDateRange(fromDate, toDate);
         boolean dataExistsInDateRange = rangedData.size() > 0;
 
-        if (isDateRangeValid(fromDate, toDate) == true) {
+        if (dataset.isDateRangeValid(fromDate, toDate) == true) {
             if (dataExistsInDateRange) {
                 populateTable(rangedData);
                 dataTableInfoLabel.setText("Showing data from " + fromDate + " to " + toDate + ".");
@@ -126,16 +125,6 @@ public class DataViewerController extends ViewerController implements Initializa
             dataTable.getItems().add(covidData);
         }
         
-    }
-
-
-    /**
-     * Returns the list of CovidData objects loaded from the data source.
-     * 
-     * @return ArrayList of CovidData objects
-     */
-    public ArrayList<CovidData> getData() {
-        return data;
     }
     
     public Parent getView() {

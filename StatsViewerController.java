@@ -151,8 +151,8 @@ public class StatsViewerController extends ViewerController implements Initializ
         // long daysBetween = ChronoUnit.DAYS.between(fromDate, toDate);
         // System.out.println(daysBetween);
 
-        if (isDateRangeValid(fromDate, toDate)) {
-            getDataInDateRange(fromDate, toDate);
+        if (dataset.isDateRangeValid(fromDate, toDate)) {
+            dataset.getDataInDateRange(fromDate, toDate);
         }
 
         refreshLabels();
@@ -246,9 +246,9 @@ public class StatsViewerController extends ViewerController implements Initializ
             // this updates the value of "dateRangeData" so that
             // it takes into account the most recent "fromDate"
             // and "toDate"
-            dateRangeData = getDataInDateRange(fromDate, toDate);
+            dateRangeData = dataset.getDataInDateRange(fromDate, toDate);
 
-            if(!isDateRangeValid(fromDate, toDate)){
+            if(!dataset.isDateRangeValid(fromDate, toDate)){
                 rrGMRLabel.setText("The date field is not valid.");
                 gpGMRLabel.setText("The date field is not valid.");
                 sumTotalDeathLabel.setText("The date field is not valid.");
