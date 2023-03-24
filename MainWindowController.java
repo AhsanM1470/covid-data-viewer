@@ -50,7 +50,7 @@ public class MainWindowController implements Initializable
     
     private ArrayList<CovidData> data;
     
-    private ViewerController[] controllers;
+    private ArrayList<ViewerController> controllers;
     private int controllerIndex;
 
     /**
@@ -69,7 +69,7 @@ public class MainWindowController implements Initializable
 
         // Try to load the controllers for all the panels
         try {
-            controllers = new ViewerController[4];
+            controllers = new ArrayList<ViewerController>();
             loadControllers();
         } catch (Exception e) {
             // Print the error message and stack trace to the console
@@ -81,7 +81,7 @@ public class MainWindowController implements Initializable
         controllerIndex = 0;
         
         // Load the first panel into the center of the screen
-        stackPane.getChildren().add(controllers[controllerIndex].getView());
+        stackPane.getChildren().add(controllers.get(controllerIndex).getView());
 
         applyDatePickLimit(fromDatePicker);
         applyDatePickLimit(toDatePicker);
@@ -119,7 +119,7 @@ public class MainWindowController implements Initializable
             ViewerController controller = loader.getController();
             
             controller.setData(data);
-            controllers[i] = controller;
+            controllers.add(controller);
         }
     }
     
@@ -154,11 +154,11 @@ public class MainWindowController implements Initializable
             return;
         }
 
-        ViewerController currentController = controllers[controllerIndex];
+        ViewerController currentController = controllers.get(controllerIndex);
         
         // increment the panel controller (% to prevent indexOutOfBound)
-        controllerIndex = (controllerIndex + 1) % controllers.length;
-        ViewerController nextController = controllers[controllerIndex];
+        controllerIndex = (controllerIndex + 1) % controllers.size();
+        ViewerController nextController = controllers.get(controllerIndex);
         
         // transition from current view to the next view
         transitionIntoNextPanel(currentController, nextController, event);
@@ -176,14 +176,14 @@ public class MainWindowController implements Initializable
             return;
         }
 
-        ViewerController currentController = controllers[controllerIndex];
+        ViewerController currentController = controllers.get(controllerIndex);
         
         controllerIndex--;
         // rolls index back to end of list if reaching -ve index
         if (controllerIndex < 0) {
-            controllerIndex = controllers.length - 1;
+            controllerIndex = controllers.size() - 1;
         }
-        ViewerController nextController = controllers[controllerIndex];
+        ViewerController nextController = controllers.get(controllerIndex);
         
         // transition from  current view to the previous view
         transitionIntoNextPanel(currentController, nextController, event);
@@ -237,7 +237,7 @@ public class MainWindowController implements Initializable
         stackPane.getChildren().add(nextPanel);
 
         // transitionig between panes
-        Duration transitionDuration = Duration.seconds(1);
+        Duration transitionDuration = Duration.seconds(0.5);
 
         // timline thread that allows for the animations
         Timeline timeline = new Timeline();
@@ -281,7 +281,7 @@ public class MainWindowController implements Initializable
         
         if (!(fromDate == null || toDate == null)) {
             // Update the current panel using the new date range
-            controllers[controllerIndex].updatePanelForDateRange(fromDate, toDate);
+            controllers.get(controllerIndex).updatePanelForDateRange(fromDate, toDate);
             
             // If 'from' date is before 'to' date, allow panel switching
             if (fromDate.isBefore(toDate) || fromDate.isEqual(toDate)) {
