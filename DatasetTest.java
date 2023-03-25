@@ -122,5 +122,39 @@ public class DatasetTest
         // Invalid input: 'to' before 'from'
         assertFalse(dataset.isDateRangeValid(toDate, fromDate));
     }
+    
+    @Test
+    public void testGetAverage() {
+        ArrayList<Number> dataField = new ArrayList<>();
+        
+        // Test with all null values
+        dataField.add(null);
+        dataField.add(null);
+        dataField.add(null);
+        
+        assertEquals(0.0, dataset.getAverage(dataField));
+        
+        dataField.clear();
+        
+        // Test with mixed values
+        dataField.add(1);
+        dataField.add(2.0);
+        dataField.add(null);
+        dataField.add(3);
+        dataField.add(null);
+        dataField.add(4.0);
+        
+        assertEquals(2.5, dataset.getAverage(dataField));
+        
+        dataField.clear();
+        
+        // Test with non-null values
+        dataField.add(1);
+        dataField.add(2);
+        dataField.add(3);
+        dataField.add(4);
+        
+        assertEquals(2.5, dataset.getAverage(dataField));
+    }
 
 }

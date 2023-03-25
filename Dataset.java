@@ -170,18 +170,19 @@ public class Dataset {
     public double getAverage(List<Number> field) {
         double sum = 0;
         double average = 0;
+        int count = 0;  // count of non-null values
         
         for (Number value : field) {
             // To stop the many null values in dataset
             if (value != null) {
                 sum += value.doubleValue();
+                count++;
             }
         }
         
-        int fieldSize = field.size();
         // Check to ensure no division by zero error
-        if (fieldSize > 0) {
-            average = sum / fieldSize;
+        if (count > 0) {
+            average = sum / count;
             // Rounds to 2 decimal places
             average = Math.round(average * 100.0) / 100.0;
         }
