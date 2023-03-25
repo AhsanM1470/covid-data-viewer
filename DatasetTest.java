@@ -63,8 +63,10 @@ public class DatasetTest {
      */
     @Test
     public void testGetData() {
+        // Ensure the data hsa been loaded
         assertNotNull(data);
         
+        // Ensure that all elements in the array are CovidData
         for (CovidData record : data) {
             assertTrue(record instanceof CovidData);
         }
@@ -76,7 +78,9 @@ public class DatasetTest {
     @Test
     public void testGetDataInDateRange() {
         ArrayList<CovidData> dataInRange = dataset.getDataInDateRange(fromDate, toDate);
+        
         for (CovidData covidData : dataInRange) {
+            // Data returned must be in range specified
             assertTrue(dataset.isDateInRange(LocalDate.parse(covidData.getDate()), fromDate, toDate));
         }
     }
@@ -87,8 +91,12 @@ public class DatasetTest {
     @Test
     public void testGetBoroughData() {
         ArrayList<CovidData> boroughData = dataset.getBoroughData("Brent", fromDate, toDate);
+        
         for (CovidData covidData : boroughData) {
+            // Data returned must be in range specified
             assertTrue(dataset.isDateInRange(LocalDate.parse(covidData.getDate()), fromDate, toDate));
+            
+            // Data returned must be of borough specified
             assertEquals("Brent", covidData.getBorough());
         }
     }
@@ -98,7 +106,6 @@ public class DatasetTest {
      */
     @Test
     public void testGetMostRecentDataWithFilter() {
-    
         // Get the most recent data with the getTotalCases filter applied
         ArrayList<CovidData> mostRecentDataWithTotalCases = dataset.getMostRecentDataWithFilter(dataset.getDataInDateRange(fromDate, toDate), CovidData::getTotalCases);
     
@@ -126,11 +133,13 @@ public class DatasetTest {
      */
     @Test
     public void testGetBoroughs() {
+        // List of all London boroughs (+ City Of London)
         String[] expectedBoroughs = {"Barking And Dagenham", "Barnet", "Bexley", "Brent", "Bromley", "Camden",
                 "City Of London", "Croydon", "Ealing", "Enfield", "Greenwich", "Hackney", "Hammersmith And Fulham", "Haringey",
                 "Harrow", "Havering", "Hillingdon", "Hounslow", "Islington", "Kensington And Chelsea", "Kingston Upon Thames",
                 "Lambeth", "Lewisham", "Merton", "Newham", "Redbridge", "Richmond Upon Thames", "Southwark",
                 "Sutton", "Tower Hamlets", "Waltham Forest", "Wandsworth", "Westminster"};
+    
         String[] boroughs = dataset.getBoroughs();
         assertEquals(expectedBoroughs.length, boroughs.length);
         for (int i = 0; i < expectedBoroughs.length; i++) {
@@ -145,18 +154,20 @@ public class DatasetTest {
     public void testIsDateInRange() {
         // Valid data
         LocalDate dateInRange = LocalDate.parse("2022-01-15");
+        
+        assertTrue(dataset.isDateInRange(dateInRange, fromDate, toDate));
 
         // Invalid data
         LocalDate dateBeforeRange = LocalDate.parse("2021-12-31");
         LocalDate dateAfterRange = LocalDate.parse("2022-06-30");
+        
+        assertFalse(dataset.isDateInRange(dateBeforeRange, fromDate, toDate));
+        assertFalse(dataset.isDateInRange(dateAfterRange, fromDate, toDate));
 
-        // Edge cases
+        // Valid edge cases
         LocalDate dateOnFrom = LocalDate.parse("2022-01-01");
         LocalDate dateOnTo = LocalDate.parse("2022-01-31");
 
-        assertTrue(dataset.isDateInRange(dateInRange, fromDate, toDate));
-        assertFalse(dataset.isDateInRange(dateBeforeRange, fromDate, toDate));
-        assertFalse(dataset.isDateInRange(dateAfterRange, fromDate, toDate));
         assertTrue(dataset.isDateInRange(dateOnFrom, fromDate, toDate));
         assertTrue(dataset.isDateInRange(dateOnTo, fromDate, toDate));
     }
