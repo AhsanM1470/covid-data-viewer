@@ -1,17 +1,21 @@
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+
 import java.time.LocalDate;
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
-import java.util.ArrayList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.fxml.Initializable;
-import java.net.URL;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.ResourceBundle;
+
+import java.net.URL;
 
 /**
  * Responsible for managing the GUI components of the application, including
@@ -21,7 +25,7 @@ import java.util.ResourceBundle;
  * @author Ishab Ahmed
  * @version 2023.03.13
  */
-public class DataViewerController extends ViewerController implements Initializable {
+public class WelcomeViewerController extends ViewerController implements Initializable {
 
     @FXML
     private VBox welcomePane;
@@ -37,6 +41,9 @@ public class DataViewerController extends ViewerController implements Initializa
 
     @FXML
     private Label dataTableInfoLabel;
+    
+    @FXML
+    private Label validDataRangeLabel;
 
     /**
      * Initializes the FXML controller class.
@@ -72,6 +79,9 @@ public class DataViewerController extends ViewerController implements Initializa
 
         // Make all columns equal width
         dataTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        
+        validDataRangeLabel.setText("The dataset shows data from " + Collections.min(dataset.getData()).getDate() + " to " + Collections.max(dataset.getData()).getDate() 
+            + " so you can only select dates from that period.");
     }
 
     /**

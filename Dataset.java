@@ -3,8 +3,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.function.Predicate;
 import java.util.function.Function;
 
 /**

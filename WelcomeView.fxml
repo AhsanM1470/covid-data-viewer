@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="viewPane" prefHeight="565.0" prefWidth="911.0" style="-fx-background-color: #191919D1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DataViewerController">
+<BorderPane fx:id="viewPane" prefHeight="565.0" prefWidth="911.0" style="-fx-background-color: #191919D1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WelcomeViewerController">
    <center>
       <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
@@ -28,7 +28,12 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <Label text="Pick a date range using the drop downs at the top to look at data for that period!" textFill="#eeeeee">
+                  <Label text="Pick a date range using the drop downs at the top to look at data for that period." textFill="#eeeeee">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="validDataRangeLabel" text="The dataset shows data between yyyy-MM-dd to yyyy-MM-dd" textFill="#eeeeee">
                      <font>
                         <Font size="18.0" />
                      </font>
