@@ -16,6 +16,8 @@ import java.time.LocalDate;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Label;
+
 //import javafx.scene.Node;
 //import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Tooltip;
@@ -33,6 +35,9 @@ public class GraphViewerController extends ViewerController implements Initializ
     
     @FXML
     private ChoiceBox<String> choiceBox;
+
+    @FXML
+    private Label infoLabel;
     
     @FXML
     private LineChart<String, Integer> chart;
@@ -103,11 +108,17 @@ public class GraphViewerController extends ViewerController implements Initializ
         series.setName("deaths in borough");
         //Clears the previous chart before creating a new one
         chart.getData().clear();
-        
+
+        // check if date range is valid and update label text appropriately
+        // only continue with plotting if valid date range is selected
+        infoLabel.setText("Showing data between "+fromDate+" and "+toDate);
+        if(!dataset.isDateRangeValid(fromDate, toDate)){
+            infoLabel.setText("The selected 'from' date is after the 'to' date");
+            return;
+        }
+
         ArrayList<String> dates = new ArrayList<>();
         ArrayList<Integer> totalDeaths = new ArrayList<>();
-        ArrayList<CovidData> boroughData = new ArrayList<>();
-        
         //Add data from the excel database to the arraylists
         for(CovidData data : dataset.getBoroughData(borough, from, to)){
             LocalDate date = LocalDate.parse(data.getDate());

@@ -398,9 +398,9 @@ public class MapViewerController extends ViewerController {
 
         // changing the text on the labels to adjust for the current borough being
         // hovered over
-        deathsHoverLabel.setText("Total deaths within date range: " + boroughHeatMapData.get(polygonName));
-        baseHoverTotal.setText("Highest deaths within date range: " + heatMapBaseValue);
-        percentLabel.setText("Percentage: " + percentage + "%");
+        deathsHoverLabel.setText("Borough Deaths: " + boroughHeatMapData.get(polygonName)+"\n"+percentage+"% of highest deaths in date range");
+        // baseHoverTotal.setText("Highest deaths within date range: " + heatMapBaseValue);
+        // percentLabel.setText("Percentage of highest deaths within date range: " + percentage + "%");
         hoverBoxBoroughLabel.setText(polygonName);
 
         // position the pane
