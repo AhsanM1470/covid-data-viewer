@@ -128,6 +128,13 @@ public class Dataset {
         return new ArrayList<>(result);
     }
     
+    /**
+     * @return Array of strings representing the names of all boroughs in the dataset.
+     */
+    public String[] getBoroughs() {
+        return boroughs;
+    }
+    
     // -------------------------------- Date validation -------------------------------- //
         
     /**

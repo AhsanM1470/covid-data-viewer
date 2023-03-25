@@ -1,32 +1,31 @@
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.net.URL;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.Parent;
-import javafx.scene.control.DatePicker;
-import java.time.LocalDate;
+import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.control.Label;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.CategoryAxis;
 
-//import javafx.scene.Node;
-//import javafx.scene.chart.XYChart.Data;
-import javafx.scene.control.Tooltip;
+import java.time.LocalDate;
 
 /**
- * Write a description of class GraphViewerController here.
- *
- * @author (your name)
- * @version (a version number or a date)
+ * Responsible for displaying line charts of Covid Data for each boroughs in London.
+ *  
+ * @author Muhammad Ahsan Mahfuz
+ * @version 2023.03.16
  */
 public class GraphViewerController extends ViewerController implements Initializable
 {
@@ -54,13 +53,6 @@ public class GraphViewerController extends ViewerController implements Initializ
     private LocalDate fromDate, toDate;
 
     private XYChart.Series<String, Integer> series;
-    
-    //tk remove All or keep it
-    private String[] boroughs = {"All", "Barking And Dagenham", "Barnet", "Bexley", "Brent", "Bromley", "Camden",
-        "Croydon", "Ealing", "Enfield", "Greenwich", "Hackney", "Hammersmith And Fulham", "Haringey",
-        "Harrow", "Havering", "Hillingdon", "Hounslow", "Kensington And Chelsea", "Kingston Upon Thames",
-        "Lambeth", "Lewisham", "Merton", "Newham", "Redbridge", "Richmond Upon Thames", "Southwark",
-        "Sutton", "Tower Hamlets", "Waltham Forest", "Wandsworth", "Westminster"};
         
     private String borough;
     
@@ -70,15 +62,15 @@ public class GraphViewerController extends ViewerController implements Initializ
      */
     @Override
     public void initialize(URL url, ResourceBundle rb){ 
-        choiceBox.getItems().addAll(boroughs);
+        choiceBox.getItems().addAll(dataset.getBoroughs());
         choiceBox.setOnAction(this::selectBorough);
     }
     
     /**
      * Called when either date picker is changed.
      * 
-     * @param fromDate      The starting date of the range.
-     * @param toDate        The ending date of the range.
+     * @param fromDate The starting date of the range.
+     * @param toDate The ending date of the range.
      */
     @FXML
     public void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {
@@ -100,8 +92,9 @@ public class GraphViewerController extends ViewerController implements Initializ
     
     /**
      * Creates a line chart for the dates vs total deaths of a borough.
-     * @param from      The start date of the date range.
-     * @param to        The end date of the date range.
+     * 
+     * @param from The start date of the date range.
+     * @param to The end date of the date range.
      */
     public void constructChart(LocalDate from, LocalDate to){
         series = new XYChart.Series<String, Integer>();
@@ -140,7 +133,8 @@ public class GraphViewerController extends ViewerController implements Initializ
     
     /**
      * Sets the upper and lower bound of the y-axis on the line chart.
-     * @param deaths    Arraylist of all the deaths in the specified borough and date range.
+     * 
+     * @param deaths Arraylist of all the deaths in the specified borough and date range.
      */
     private void setBounds(ArrayList<Integer> deaths){
         //The arraylist stores total deaths from most recent to oldest
@@ -175,8 +169,7 @@ public class GraphViewerController extends ViewerController implements Initializ
     }
     
     /**
-     * Returns the anchor pane of GraphView.fxml
-     * @return graphPane
+     * @return The view that this controller is associated with.
      */
     protected Parent getView(){
         return graphPane;

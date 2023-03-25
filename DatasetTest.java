@@ -83,6 +83,23 @@ public class DatasetTest {
             assertEquals("Brent", covidData.getBorough());
         }
     }
+    
+    /**
+     * Tests whether getBoroughs() is returning the expected borough names or not.
+     */
+    @Test
+    public void testGetBoroughs() {
+        String[] expectedBoroughs = {"Barking And Dagenham", "Barnet", "Bexley", "Brent", "Bromley", "Camden",
+                "City Of London", "Croydon", "Ealing", "Enfield", "Greenwich", "Hackney", "Hammersmith And Fulham", "Haringey",
+                "Harrow", "Havering", "Hillingdon", "Hounslow", "Islington", "Kensington And Chelsea", "Kingston Upon Thames",
+                "Lambeth", "Lewisham", "Merton", "Newham", "Redbridge", "Richmond Upon Thames", "Southwark",
+                "Sutton", "Tower Hamlets", "Waltham Forest", "Wandsworth", "Westminster"};
+        String[] boroughs = dataset.getBoroughs();
+        assertEquals(expectedBoroughs.length, boroughs.length);
+        for (int i = 0; i < expectedBoroughs.length; i++) {
+            assertEquals(expectedBoroughs[i], boroughs[i]);
+        }
+    }
 
     /**
      * Tests whether isDateInRange() returns true when the input date is within the date range (inclusive), and false when it's outside the range.
