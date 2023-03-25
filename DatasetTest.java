@@ -85,6 +85,34 @@ public class DatasetTest {
     }
     
     /**
+     * Tests that getMostRecentDataWithFilter() returns only the most recent records that match the given filter.
+     */
+    @Test
+    public void testGetMostRecentDataWithFilter() {
+    
+        // Get the most recent data with the getTotalCases filter applied
+        ArrayList<CovidData> mostRecentDataWithTotalCases = dataset.getMostRecentDataWithFilter(dataset.getDataInDateRange(fromDate, toDate), CovidData::getTotalCases);
+    
+        // Check that the data returned matches the filter and is the most recent available
+        for (CovidData record : mostRecentDataWithTotalCases) {
+            assertNotEquals(null, record.getTotalCases());
+            assertNotEquals(0, record.getTotalCases());
+            assertEquals(toDate, LocalDate.parse(record.getDate()));
+        }
+    
+        // Get the most recent data with the getTotalDeaths filter applied
+        ArrayList<CovidData> mostRecentDataWithTotalDeaths = dataset.getMostRecentDataWithFilter(dataset.getDataInDateRange(fromDate, toDate), CovidData::getTotalCases);
+        
+        // Check that the data returned matches the filter and is the most recent available
+        for (CovidData record : mostRecentDataWithTotalDeaths) {
+            assertNotEquals(null, record.getTotalCases());
+            assertNotEquals(0, record.getTotalCases());
+            assertEquals(toDate, LocalDate.parse(record.getDate()));
+        }
+    }
+
+    
+    /**
      * Tests whether getBoroughs() is returning the expected borough names or not.
      */
     @Test
