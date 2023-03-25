@@ -19,6 +19,12 @@ public class Dataset {
     // data to be served
     private ArrayList<CovidData> data;
     
+    private String[] boroughs = {"Barking And Dagenham", "Barnet", "Bexley", "Brent", "Bromley", "Camden",
+        "City Of London", "Croydon", "Ealing", "Enfield", "Greenwich", "Hackney", "Hammersmith And Fulham", "Haringey",
+        "Harrow", "Havering", "Hillingdon", "Hounslow", "Islington", "Kensington And Chelsea", "Kingston Upon Thames",
+        "Lambeth", "Lewisham", "Merton", "Newham", "Redbridge", "Richmond Upon Thames", "Southwark",
+        "Sutton", "Tower Hamlets", "Waltham Forest", "Wandsworth", "Westminster"};
+    
     /**
      * Initialises its data field by loading the CovidData.
      * Private constructor used to prevent instantiation outside of this class.
@@ -86,6 +92,48 @@ public class Dataset {
         return new ArrayList<>(filteredData);
     }
     
+    public ArrayList<CovidData> getMostRecentDataWithTotalDeaths(ArrayList<CovidData> covidData) {
+        List<CovidData> result = new ArrayList<>();
+    
+        for (String boroughName : boroughs) {
+            CovidData mostRecentData = null;
+            for (CovidData record : covidData) {
+                if (record.getBorough().equals(boroughName) &&
+                        record.getTotalDeaths() != null &&
+                        record.getTotalDeaths() != 0) {
+                    mostRecentData = record;
+                    break;
+                }
+            }
+            if (mostRecentData != null) {
+                result.add(mostRecentData);
+            }
+        }
+    
+        return new ArrayList<>(result);
+    }
+    
+    public ArrayList<CovidData> getMostRecentDataWithTotalCases(ArrayList<CovidData> covidData) {
+        List<CovidData> result = new ArrayList<>();
+    
+        for (String boroughName : boroughs) {
+            CovidData mostRecentData = null;
+            for (CovidData record : covidData) {
+                if (record.getBorough().equals(boroughName) &&
+                        record.getTotalCases() != null &&
+                        record.getTotalCases() != 0) {
+                    mostRecentData = record;
+                    break;
+                }
+            }
+            if (mostRecentData != null) {
+                result.add(mostRecentData);
+            }
+        }
+    
+        return new ArrayList<>(result);
+    }
+    
     /**
      * Checks if a given date falls within a specified date range.
      *
@@ -112,5 +160,34 @@ public class Dataset {
             return false;
         }
         return fromDate.isBefore(toDate) || fromDate.isEqual(toDate);
+    }
+    
+    /**
+     * Calculates the average of a list of numbers by adding up all the non-null values 
+     * and dividing by the number of non-null values.
+     * 
+     * @param field List of numbers to calculate the average of
+     * @return the average of the non-null values in the list (to 2 d.p.)
+     */
+    public double getAverage(List<Number> field) {
+        double sum = 0;
+        double average = 0;
+        
+        for (Number value : field) {
+            // To stop the many null values in dataset
+            if (value != null) {
+                sum += value.doubleValue();
+            }
+        }
+        
+        int fieldSize = field.size();
+        // Check to ensure no division by zero error
+        if (fieldSize > 0) {
+            average = sum / fieldSize;
+            // Rounds to 2 decimal places
+            average = Math.round(average * 100.0) / 100.0;
+        }
+        
+        return average;
     }
 }
