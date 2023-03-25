@@ -16,7 +16,6 @@ import java.util.Collections;
  * @version 2023.03.16
  */
 public abstract class ViewerController {
-
     // Instance of Dataset singleton
     protected Dataset dataset = Dataset.getInstance();
 
