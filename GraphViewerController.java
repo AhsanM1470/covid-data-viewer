@@ -108,9 +108,8 @@ public class GraphViewerController extends ViewerController implements Initializ
         ArrayList<Integer> totalDeaths = new ArrayList<>();
         ArrayList<CovidData> boroughData = new ArrayList<>();
         
-        boroughData = getBoroughData(borough, from, to);
-        //Add data from the excel database to dates and totalDeaths
-        for(CovidData data : boroughData){
+        //Add data from the excel database to the arraylists
+        for(CovidData data : dataset.getBoroughData(borough, from, to)){
             LocalDate date = LocalDate.parse(data.getDate());
             Integer deaths = data.getTotalDeaths();
             if(deaths != null || date != null){
@@ -119,7 +118,7 @@ public class GraphViewerController extends ViewerController implements Initializ
             }
         }
         
-        //Creates a new point on the line chart using elements from dates and totalDeaths
+        //Creates a new point on the line chart using elements from the arraylists
         for(int i = dates.size() - 1; i >= 0; i--){
             series.getData().add(new XYChart.Data<String, Integer>(dates.get(i),totalDeaths.get(i)));
         }

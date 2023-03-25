@@ -1,21 +1,24 @@
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.DateCell;
 import java.time.LocalDate;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.event.ActionEvent;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.animation.KeyValue;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 import java.util.ArrayList;
+import java.util.Collections;
 import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 
 /**
  * Write a description of class MainController here.
@@ -23,8 +26,7 @@ import java.util.ResourceBundle;
  * @author Ishab Ahmed
  * @version 2023.03.20
  */
-public class MainController implements Initializable
-{
+public class MainWindowController implements Initializable {
     @FXML
     private BorderPane mainLayout;
 
@@ -43,9 +45,10 @@ public class MainController implements Initializable
     @FXML
     protected StackPane stackPane;
     
-    private ArrayList<CovidData> data;
+    // Instance of Dataset singleton
+    protected Dataset dataset = Dataset.getInstance();
     
-    private ViewerController[] controllers;
+    private ArrayList<ViewerController> controllers;
     private int controllerIndex;
 
     /**
@@ -59,12 +62,10 @@ public class MainController implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        CovidDataLoader dataLoader = new CovidDataLoader();
-        data = dataLoader.load();
 
         // Try to load the controllers for all the panels
         try {
-            controllers = new ViewerController[4];
+            controllers = new ArrayList<ViewerController>();
             loadControllers();
         } catch (Exception e) {
             // Print the error message and stack trace to the console
@@ -76,29 +77,57 @@ public class MainController implements Initializable
         controllerIndex = 0;
         
         // Load the first panel into the center of the screen
-        stackPane.getChildren().add(controllers[controllerIndex].getView());
+        stackPane.getChildren().add(controllers.get(controllerIndex).getView());
+
+        applyDatePickLimit(fromDatePicker);
+        applyDatePickLimit(toDatePicker);
     }
     
     /**
-     * Loads the controllers of all of the panels in the app.
+     * Loads the FXML files and controllers for all panels.
      * 
      * @throws Exception if the FXMLLoader fails to load any FXML file.
      */
-    public void loadControllers() throws Exception {
+    private void loadControllers() throws Exception {
         // FXML files of all panels
         String[] fxmlFiles = {"WelcomeView.fxml", "MapView.fxml", "StatsView.fxml", "GraphView.fxml"};
         
         for (int i = 0; i < fxmlFiles.length; i++) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFiles[i]));
             loader.load();
-            ViewerController controller = loader.getController();
             
-            controller.setData(data);
-            controllers[i] = controller;
+            // get controller instance as set in FXML file
+            ViewerController controller = loader.getController();
+            controllers.add(controller);
         }
     }
     
+    /**
+     * Applies a minimum and maximum date limit to the date picker, 
+     * based on the minimum and maximum dates of the datset.
+     * 
+     * @param datePicker The DatePicker to apply the date limit to
+     */
+    private void applyDatePickLimit(DatePicker datePicker){
+
+        // Calculate the minimum and maximum dates in the dataset
+        LocalDate minDate = LocalDate.parse(Collections.min(dataset.getData()).getDate());
+        LocalDate maxDate = LocalDate.parse(Collections.max(dataset.getData()).getDate());
+        
+        
+        datePicker.setDayCellFactory((cell) -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean bool) {
+                super.updateItem(date, bool);
+                // Disables date cell if date is not in the range of dataset
+                setDisable(date.isBefore(minDate) || date.isAfter(maxDate));
+            }
+        });
+
+    }
+    
     // ----------------------------- Panel Switching ---------------------------- //
+    
     /**
      * Changes whether the panel switching buttons are interactable or not.
      * 
@@ -107,6 +136,16 @@ public class MainController implements Initializable
     private void allowPanelSwitching(boolean state) {
         leftButton.setDisable(!state);
         rightButton.setDisable(!state);
+    }
+
+    /**
+     * Checks if the stack pane can switch to a different panel or not.
+     * 
+     * @return true if the stack pane can switch to a different panel, false otherwise
+     */
+    private boolean canSwitchPanels(){
+        // If there is a panel already on the pane, then switching should be prevented
+        return !(stackPane.getChildren().size() > 1);
     }
     
     /**
@@ -117,12 +156,12 @@ public class MainController implements Initializable
     @FXML
     private void nextPanel(ActionEvent event) {
         // prevents continuous clicking if currently in process of switching to next panel
-        if (ViewerController.inTransition == false) {
-            ViewerController currentController = controllers[controllerIndex];
-            
+        if (canSwitchPanels()){
+            ViewerController currentController = controllers.get(controllerIndex);
+        
             // increment the panel controller (% to prevent indexOutOfBound)
-            controllerIndex = (controllerIndex + 1) % controllers.length;
-            ViewerController nextController = controllers[controllerIndex];
+            controllerIndex = (controllerIndex + 1) % controllers.size();
+            ViewerController nextController = controllers.get(controllerIndex);
             
             // transition from current view to the next view
             transitionIntoNextPanel(currentController, nextController, event);
@@ -137,101 +176,90 @@ public class MainController implements Initializable
     @FXML
     private void previousPanel(ActionEvent event) {
         // prevents continuous clicking if currently in process of switching to next panel
-        if (ViewerController.inTransition == false) {
-            ViewerController currentController = controllers[controllerIndex];
+        if (canSwitchPanels()){
+            ViewerController currentController = controllers.get(controllerIndex);
             
             controllerIndex--;
             // rolls index back to end of list if reaching -ve index
             if (controllerIndex < 0) {
-                controllerIndex = controllers.length - 1;
+                controllerIndex = controllers.size() - 1;
             }
-            ViewerController nextController = controllers[controllerIndex];
+            ViewerController nextController = controllers.get(controllerIndex);
             
             // transition from  current view to the previous view
             transitionIntoNextPanel(currentController, nextController, event);
         }
-        
     }
 
     // ----------------------- Transition Between Panels ----------------------- //
     
     /**
-     * set the center of the screen (contents of stackPane) to new view
-     * show a transition between the the old view and  new view 
+     * Sets the center of the screen to next panel.
+     * Shows a transition between the the current panel and next panel. 
      * 
-     * @param previousController controller class of the view being switched out
-     * @param currentController controller class of the view being switched in
-     * @param event button that triggered the series of events.
+     * @param currentController The ViewerController of the current panel
+     * @param nextController The ViewerController of the next panel
+     * @param event Button click event that triggers the panel transition
      */
     private void transitionIntoNextPanel(ViewerController currentController, ViewerController nextController,
             ActionEvent event) {
-                
-        // when inTransition is true, don't allow certain actions such as switching
-        // panes until animation finished
 
+        // Updates the next panel with the necessary information given the dates
+        // currently chosen in the datepickers
         nextController.updatePanelForDateRange(fromDatePicker.getValue(), toDatePicker.getValue());
         nextController.resizeComponents(mainLayout);
-
-        // Sets the date picker of the next panel to the dates chosen on the current
-        // panel
-        nextController.updatePanelForDateRange(fromDatePicker.getValue(), toDatePicker.getValue());
-        nextController.resizeComponents(mainLayout);
-
+        
+        Parent currentPanel = currentController.getView();
         Parent nextPanel = nextController.getView();
-        Parent oldPanel = currentController.getView();
 
-        // determine which direction the panes will move in depending on the button
-        // pressed. 
-
-        // animation to move panels from right to left.
-        double oldPanelStartX = 0;
-        double oldPanelEndX = -mainLayout.getWidth();
-        double newPanelStartX = mainLayout.getWidth();
+        // Will determine which direction the panels will move in.
+        double currentPanelEndX;
+        double newPanelStartX;
+        
+        double currentPanelStartX = 0;
         double newPanelEndX = 0;
-
-
-        // if instead we're moving from left to right, inverse values
-        if (event.getSource() == leftButton) {
-            oldPanelEndX *= -1;
-            newPanelStartX *= -1;
+        
+        // If right button pressed, transition from right to left
+        if (event.getSource() == rightButton) {
+            currentPanelEndX = -mainLayout.getWidth();
+            newPanelStartX = mainLayout.getWidth();
+        } else {
+            // If left button pressed, transition from left to right (inversed values)
+            currentPanelEndX = mainLayout.getWidth();
+            newPanelStartX = -mainLayout.getWidth();
         }
 
-        oldPanel.translateXProperty().set(oldPanelStartX);
+        currentPanel.translateXProperty().set(currentPanelStartX);
         nextPanel.translateXProperty().set(newPanelStartX);
 
-        // add you held 
         stackPane.getChildren().add(nextPanel);
 
-        // transitionig between panes
-        Duration transitionDuration = Duration.seconds(1);
+        // Transition length between panes
+        Duration transitionDuration = Duration.seconds(0.5);
 
-        // timline thread that allows for the animations
+        // Timeline that allows for the animations
         Timeline timeline = new Timeline();
 
-        // key value -> (whatToAnimate + start value, its end value, interpolation type)
-        // key frame -> (how long above animation, animation to do)
-        KeyValue oldViewKV = new KeyValue(oldPanel.translateXProperty(), oldPanelEndX, new AnimationInterpolator());
-        KeyFrame oldViewKF = new KeyFrame(transitionDuration, oldViewKV);
+        // key value -> (whatToAnimate + start value, it's end value, interpolation type)
+        KeyValue currentViewKV = new KeyValue(currentPanel.translateXProperty(), currentPanelEndX, new AnimationInterpolator());
+        // key frame -> (animation length, what animation to do)
+        KeyFrame currentViewKF = new KeyFrame(transitionDuration, currentViewKV);
 
         KeyValue newViewKV = new KeyValue(nextPanel.translateXProperty(), newPanelEndX, new AnimationInterpolator());
         KeyFrame newViewKF = new KeyFrame(transitionDuration, newViewKV);
 
-        // adding the two animations to the timeline to execute
-        timeline.getKeyFrames().add(oldViewKF);
+        // Adding the two animations to the timeline to execute
+        timeline.getKeyFrames().add(currentViewKF);
         timeline.getKeyFrames().add(newViewKF);
         
 
         timeline.setOnFinished(e -> {
-            // remove the previous view that was on teh stack pane
+            // Remove the previous view that was on teh stack pane
             stackPane.getChildren().remove(currentController.getView());
-            ViewerController.inTransition = false;
         });
 
-        // set 'Controller.inTransition' to true, disallowing some actions such as spamming
-        // left/right buttons
+        // Play the animation
         timeline.play();
-        ViewerController.inTransition = true;
-
     }
 
     // ----------------------------- Date Changing ----------------------------- //
@@ -244,13 +272,13 @@ public class MainController implements Initializable
      * @param event The event triggered by changing the date picker.
      */
     @FXML
-    void dateChanged(ActionEvent event) {        
+    private void dateChanged(ActionEvent event) {        
         LocalDate fromDate = fromDatePicker.getValue();
         LocalDate toDate = toDatePicker.getValue();
         
         if (!(fromDate == null || toDate == null)) {
             // Update the current panel using the new date range
-            controllers[controllerIndex].updatePanelForDateRange(fromDate, toDate);
+            controllers.get(controllerIndex).updatePanelForDateRange(fromDate, toDate);
             
             // If 'from' date is before 'to' date, allow panel switching
             if (fromDate.isBefore(toDate) || fromDate.isEqual(toDate)) {

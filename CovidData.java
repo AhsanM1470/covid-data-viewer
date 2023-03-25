@@ -1,4 +1,4 @@
- 
+import java.time.LocalDate;
 
 /**
  * Represents one record in the COVID dataset.
@@ -6,7 +6,7 @@
  * has a corresponding field.
  */ 
 
-public class CovidData {
+public class CovidData implements Comparable<CovidData>{
     /*
     The date the COVID information (cases & deaths) was collected
     */
@@ -130,5 +130,15 @@ public class CovidData {
         ", newDeaths=" + newDeaths + 
         ", totalDeaths=" + totalDeaths + 
         "}";
+    }
+
+    /**
+     * Comparing two LocalDates; used when sorting data
+     */
+    @Override
+    public int compareTo(CovidData cd) {
+        LocalDate d = LocalDate.parse(this.date);
+        LocalDate d2 = LocalDate.parse(cd.getDate());
+    	return d.compareTo(d2);
     }
 }

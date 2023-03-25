@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.shape.Polyline?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="viewPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="920.0" style="-fx-background-color: #191919D1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MapViewerController">
@@ -13,6 +16,7 @@
          <children>
             <AnchorPane fx:id="polygonPane" layoutX="148.0" layoutY="56.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="524.0" prefWidth="650.0">
                <children>
+                  <Polygon fx:id="richmondPolygon" fill="#ababab" layoutX="156.0" layoutY="343.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="37.600013732910156, -54.43157958984375, 47.9869270324707, -64.21649932861328, 51.81282043457031, -62.26604461669922, 54.33024215698242, -50.552310943603516, 37.600006103515625, -39.358062744140625, 42.27227783203125, -18.132965087890625, 21.8592529296875, -1.45404052734375, -0.8886072039604187, -1.4540395736694336, -7.241119861602783, 3.0534863471984863, -9.02187442779541, 27.747642517089844, -22.330272674560547, 16.093616485595703, -50.600006103515625, 10.600006103515625, -39.0, -14.899993896484375, -48.530433654785156, -21.549989700317383, -44.948204040527344, -27.70786476135254, -13.317634582519531, -29.57451057434082, -7.24110746383667, -39.35807418823242, -2.8999953269958496, -46.61799240112305, 17.638891220092773, -59.31365203857422" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
                   <Polygon fx:id="thamesPolygon" fill="#59bce3" layoutX="167.0" layoutY="389.0" points="-31.36505126953125, -23.46124267578125, -16.113296508789062, -23.46124267578125, 7.400006294250488, -9.263625144958496, 10.268128395080566, -8.868695259094238, 14.618236541748047, -43.32484436035156, 14.618236541748047, -52.824886322021484, 10.26812744140625, -98.85800170898438, 28.600006103515625, -110.29998779296875, 49.20001220703125, -105.0, 59.92012023925781, -115.50000762939453, 65.96180725097656, -111.70001220703125, 68.79998779296875, -98.85800170898438, 98.71953582763672, -90.9757080078125, 104.60000610351562, -105.0, 108.20001220703125, -106.20001220703125, 123.0, -109.60000610351562, 134.20001220703125, -111.70001220703125, 146.0, -136.5, 187.20001220703125, -138.29998779296875, 203.16941833496094, -115.50000762939453, 223.29708862304688, -118.89999389648438, 221.22879028320312, -132.97467041015625, 239.62954711914062, -128.11907958984375, 270.780517578125, -124.95968627929688, 285.53704833984375, -144.5, 305.40081787109375, -148.42431640625, 320.8504638671875, -144.5, 336.6759033203125, -121.89999389648438, 362.78521728515625, -123.29998779296875, 365.8751220703125, -128.11907958984375, 339.3900146484375, -128.11907958984375, 320.8504943847656, -152.5, 305.40081787109375, -155.6999969482422, 283.5, -152.5, 266.99749755859375, -132.97467041015625, 239.62954711914062, -136.5, 223.29708862304688, -140.10000610351562, 215.05055236816406, -138.29998779296875, 215.05055236816406, -123.29998016357422, 206.20001220703125, -121.89999389648438, 192.39999389648438, -140.10000610351562, 188.79998779296875, -144.5, 142.39999389648438, -144.5, 130.0, -117.5, 100.0, -111.70001220703125, 94.20001220703125, -97.29998779296875, 76.04900360107422, -102.54248046875, 68.79999542236328, -115.50000762939453, 58.600006103515625, -123.29998779296875, 47.20001220703125, -110.29998779296875, 27.0, -115.5, 1.3711395263671875, -100.63924407958984, 7.400006294250488, -52.824886322021484, 7.400006294250488, -45.76115798950195, 4.477271556854248, -16.292003631591797, -12.0, -29.20001220703125, -35.100006103515625, -34.29998779296875" scaleX="1.15" scaleY="1.15" stroke="#ffffff00" strokeType="INSIDE" style="-fx-stroke: #161616D1;" />
                   <Polygon fx:id="enfieldPolygon" fill="#ababab" layoutX="277.0" layoutY="106.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="74.04810333251953, -3.7001149654388428, 13.781499862670898, -5.7509636878967285, 17.59588623046875, -29.838584899902344, -12.68701171875, -64.74803924560547, -0.069122314453125, -83.67485809326172, 28.951995849609375, -90.40438842773438, 100.54265594482422, -80.04515838623047" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
                   <Polygon fx:id="barnetPolygon" fill="#ababab" layoutX="182.0" layoutY="146.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="51.856903076171875, 27.1138973236084, 36.497379302978516, 7.10001277923584, 19.02678108215332, 7.10001277923584, 24.14030647277832, -9.21894359588623, -8.827484130859375, -65.78820037841797, 67.70001220703125, -96.69999694824219, 97.29998779296875, -62.099998474121094, 88.15673828125, -0.6561092138290405, 90.30783081054688, 2.5705275535583496, 86.27452087402344, 5.369997978210449" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
@@ -35,7 +39,6 @@
                   <Polygon fx:id="kensChelsPolygon" fill="#ababab" layoutX="229.0" layoutY="263.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="29.999977111816406, -28.10614585876465, 44.80638885498047, -15.931329727172852, 44.80638885498047, -1.3785851001739502, 29.999980926513672, 1.69533109664917, 26.851163864135742, 1.79595947265625, 3.2693655490875244, -31.05340003967285, 0.891510009765625, -53.60076904296875, 6.4511637687683105, -52.09548568725586" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
                   <Polygon fx:id="hammfullPolygon" fill="#ababab" layoutX="211.0" layoutY="264.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="40.56275939941406, 3.273407220840454, 35.62462615966797, 16.743547439575195, 21.711584091186523, 12.283660888671875, 11.638649940490723, -1.5455572605133057, 2.2333285808563232, -9.629365921020508, -1.2672765254974365, -15.399991035461426, -1.2672765254974365, -18.145246505737305, -1.26727294921875, -31.78924560546875, -1.2672765254974365, -52.98458480834961, 8.782666206359863, -54.675899505615234, 14.000004768371582, -52.98458480834961, 16.94374656677246, -29.544612884521484" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
                   <Polygon fx:id="hounslowPolygon" fill="#ababab" layoutX="98.0" layoutY="303.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="41.365596771240234, -16.908700942993164, 42.93083190917969, -4.908685207366943, 39.437034606933594, 4.656531810760498, 6.938640117645264, 6.743483066558838, 3.1111650466918945, 15.613032341003418, 11.871806144714355, 22.65651512145996, 1.600006103515625, 45.399993896484375, -42.5687141418457, 14.569411277770996, -8.997758865356445, -44.82175064086914, 50.13267517089844, -40.64781951904297, 94.07571411132812, -50.0, 97.93641662597656, -38.647830963134766, 88.49604034423828, -28.50495719909668, 69.01779174804688, -32.908695220947266" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
-                  <Polygon fx:id="richmondPolygon" fill="#ababab" layoutX="156.0" layoutY="343.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="37.600013732910156, -54.43157958984375, 47.9869270324707, -64.21649932861328, 51.81282043457031, -62.26604461669922, 54.33024215698242, -50.552310943603516, 37.600006103515625, -39.358062744140625, 42.27227783203125, -18.132965087890625, 21.8592529296875, -1.45404052734375, -0.8886072039604187, -1.4540395736694336, -7.241119861602783, 3.0534863471984863, -9.02187442779541, 27.747642517089844, -22.330272674560547, 16.093616485595703, -50.600006103515625, 10.600006103515625, -39.0, -14.899993896484375, -48.530433654785156, -21.549989700317383, -44.948204040527344, -27.70786476135254, -13.317634582519531, -29.57451057434082, -7.24110746383667, -39.35807418823242, -2.8999953269958496, -46.61799240112305, 17.638891220092773, -59.31365203857422" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
                   <Polygon fx:id="kingstonPolygon" fill="#ababab" layoutX="203.0" layoutY="407.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-42.97248458862305, -13.530633926391602, -30.316802978515625, -5.156341552734375, -45.925811767578125, 48.474639892578125, -33.518646240234375, 46.0732421875, -0.699676513671875, -7.5577392578125, 4.600006103515625, -3.79998779296875, 11.0, -17.0, -0.6996665596961975, -70.49066162109375, -20.79949951171875, -54.04295349121094, -37.055763244628906, -54.042930603027344" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
                   <Polygon fx:id="wandsworthPolygon" fill="#ababab" layoutX="265.0" layoutY="336.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-57.87113952636719, -32.79998016357422, -52.819976806640625, -10.959320068359375, -9.799988746643066, -13.376411437988281, -3.799835205078125, 0.6673272252082825, 21.023012161254883, 16.27937126159668, 14.100006103515625, -40.20001220703125, 14.099997520446777, -53.59888458251953, -2.6639978885650635, -49.04258346557617, -9.799989700317383, -34.259971618652344, -41.790531158447266, -41.91213607788086" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
                   <Polygon fx:id="lambethPolygon" fill="#ababab" layoutX="325.0" layoutY="324.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-25.803035736083984, -44.50497055053711, -35.39999008178711, -43.14823532104492, -35.399993896484375, -28.706085205078125, -27.70001220703125, 32.20001220703125, 1.08685302734375, 11.46844482421875, -7.767822265625, -17.666229248046875, -2.250762939453125, -26.743682861328125, -15.020432472229004, -67.70698547363281" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
@@ -47,9 +50,9 @@
                   <Polygon fx:id="bromleyPolygon" fill="#ababab" layoutX="461.0" layoutY="438.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-60.786346435546875, 15.1541748046875, -41.93450927734375, 54.5716552734375, -1.0888671875, 62.283782958984375, 4.90948486328125, 31.149658203125, 34.90106201171875, 3.728790283203125, 40.4000244140625, -68.0, -5.4413347244262695, -88.63123321533203, -32.1031494140625, -88.6312255859375, -60.786346435546875, -76.29998779296875, -115.0, -84.10000610351562, -71.0, 15.1541748046875" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
                   <Polygon fx:id="croydonPolygon" fill="#ababab" layoutX="358.0" layoutY="456.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-48.32838821411133, -15.505212783813477, -69.86204528808594, 12.755337715148926, -44.059814453125, 46.3702392578125, 3.934295654296875, 0.978240966796875, 16.663665771484375, -1.8212890625, -27.91314697265625, -102.40216064453125, -57.79998779296875, -81.39999389648438" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
                   <Polygon fx:id="suttonPolygon" fill="#ababab" layoutX="283.0" layoutY="449.0" onMouseEntered="#polygonHovered" onMouseExited="#polygonLeft" onMousePressed="#polygonClicked" points="-36.43841552734375, -5.188690185546875, -5.791595458984375, 19.3865966796875, 14.4468994140625, -7.790771484375, 7.600006103515625, -50.399993896484375, -57.399993896484375, -50.399993896484375, -62.748443603515625, -38.72674560546875, -45.97943115234375, -1.71923828125" scaleX="1.15" scaleY="1.15" stroke="BLACK" strokeType="INSIDE" />
-                  <Label fx:id="hillingdonLabel" alignment="CENTER" cacheShape="false" centerShape="false" disable="true" focusTraversable="false" layoutX="29.0" layoutY="213.0" scaleShape="false" style="-fx-opacity: 1; -fx-text-fill: #000000;" text="Hillingdon">
+                  <Label alignment="CENTER" cacheShape="false" centerShape="false" disable="true" focusTraversable="false" layoutX="29.0" layoutY="213.0" scaleShape="false" style="-fx-opacity: 1; -fx-text-fill: #000000;" text="Hillingdon">
                      <font>
-                        <Font name="Comic Sans MS" size="13.0" />
+                        <Font name="System Font" size="13.0" />
                      </font>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
@@ -73,7 +76,7 @@
                   <Label alignment="CENTER" disable="true" layoutX="393.0" layoutY="196.0" style="-fx-opacity: 1; -fx-text-fill: #000000;" text="Newham" />
                   <Label alignment="CENTER" disable="true" layoutX="324.0" layoutY="168.0" rotate="38.7" snapToPixel="false" style="-fx-opacity: 1; -fx-text-fill: #000000;" text="Hackney">
                      <font>
-                        <Font name="System Bold" size="11.3" />
+                        <Font size="11.3" />
                      </font>
                   </Label>
                   <Label alignment="CENTER" disable="true" layoutX="291.0" layoutY="119.0" style="-fx-opacity: 1; -fx-text-fill: #000000;" text="Haringey" />
@@ -85,7 +88,7 @@
                   <Label alignment="CENTER" disable="true" layoutX="168.0" layoutY="167.0" prefHeight="21.0" prefWidth="40.0" style="-fx-opacity: 1; -fx-text-fill: #000000;" text="Brent" />
                   <Label disable="true" layoutX="121.0" layoutY="210.0" style="-fx-opacity: 1; -fx-text-fill: #000000;" text="Ealing" />
                   <Label disable="true" layoutX="70.0" layoutY="285.0" style="-fx-opacity: 1; -fx-text-fill: #000000;" text="Hounslow" />
-                  <Label disable="true" layoutX="210.0" layoutY="301.0" style="-fx-opacity: 1; -fx-text-fill: #000000;" text="Wandswroth" />
+                  <Label disable="true" layoutX="210.0" layoutY="301.0" style="-fx-opacity: 1; -fx-text-fill: #000000;" text="Wandsworth" />
                   <Label disable="true" layoutX="170.0" layoutY="350.0" prefHeight="62.0" prefWidth="52.0" rotate="21.2" style="-fx-opacity: 1; -fx-text-fill: #000000;" text="Kingston Upon Thames" wrapText="true">
                      <font>
                         <Font size="10.0" />
@@ -138,33 +141,74 @@
                         <Font size="7.0" />
                      </font>
                   </Label>
-                  <Label disable="true" layoutX="125.0" layoutY="310.0" rotate="-29.2" style="-fx-opacity: 1; -fx-text-fill: #000000;" text="Richmond">
+                  <Label disable="true" layoutX="107.0" layoutY="330.0" rotate="-29.7" style="-fx-opacity: 1; -fx-text-fill: #000000;" text="Richmond">
                      <font>
                         <Font size="10.0" />
                      </font>
                   </Label>
-                  <Label disable="true" layoutX="141.0" layoutY="318.0" rotate="-32.3" style="-fx-opacity: 1; -fx-text-fill: #000000;" text="Upon">
+                  <Label disable="true" layoutX="125.0" layoutY="339.0" rotate="-29.7" style="-fx-opacity: 1; -fx-text-fill: #000000;" text="Upon">
                      <font>
                         <Font size="10.0" />
                      </font>
                   </Label>
-                  <Label disable="true" layoutX="139.0" layoutY="328.0" prefHeight="14.0" prefWidth="35.0" rotate="-27.3" style="-fx-opacity: 1; -fx-text-fill: #000000;" text="Thames">
+                  <Label disable="true" layoutX="158.0" layoutY="312.0" prefHeight="16.0" prefWidth="46.0" rotate="-29.7" style="-fx-opacity: 1; -fx-text-fill: #000000;" text="Thames">
                      <font>
                         <Font size="10.0" />
                      </font>
                   </Label>
+                  <Polyline fill="CHARTREUSE" layoutX="146.0" layoutY="291.0" points="6.059326171875, 54.161468505859375, 0.6048583984375, 12.473876953125" strokeType="INSIDE" strokeWidth="5.0" />
                </children>
             </AnchorPane>
             <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" layoutX="133.0" layoutY="5.0" prefHeight="16.0" prefWidth="652.0" text="Click on a borough to view more information" textFill="WHITE">
                <font>
-                  <Font name="Comic Sans MS" size="14.0" />
+                  <Font name="System Font" size="14.0" />
                </font>
             </Label>
             <Label fx:id="selectedBoroughLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="134.0" layoutY="23.0" prefHeight="33.0" prefWidth="650.0" textFill="WHITE" underline="true">
                <font>
-                  <Font name="Wawati TC Regular" size="15.0" />
+                  <Font name="System Font" size="15.0" />
                </font>
             </Label>
+            <AnchorPane fx:id="infoPane" layoutX="14.0" layoutY="95.0" prefHeight="0.0" prefWidth="142.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-width: 1.5;" visible="false">
+               <children>
+                  <VBox fillWidth="false" prefWidth="140.0">
+                     <children>
+                        <Label fx:id="hoverBoxBoroughLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="26.0" prefWidth="142.0" text="Label" underline="true" wrapText="true">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <font>
+                              <Font name="System Bold" size="11.2" />
+                           </font>
+                        </Label>
+                        <Label fx:id="deathsHoverLabel" prefHeight="40.0" prefWidth="140.0" style="-fx-border-style: hidden hidden solid hidden; -fx-border-color: #000000;" wrapText="true">
+                           <VBox.margin>
+                              <Insets left="10.0" right="5.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="10.8" />
+                           </font>
+                        </Label>
+                        <Label fx:id="baseHoverTotal" prefHeight="40.0" prefWidth="140.0" style="-fx-border-style: hidden hidden solid hidden; -fx-border-color: #000000;" wrapText="true">
+                           <VBox.margin>
+                              <Insets left="10.0" right="5.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="10.8" />
+                           </font>
+                        </Label>
+                        <Label fx:id="percentLabel" prefHeight="40.0" prefWidth="140.0" wrapText="true">
+                           <VBox.margin>
+                              <Insets left="10.0" right="5.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="10.8" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </center>
