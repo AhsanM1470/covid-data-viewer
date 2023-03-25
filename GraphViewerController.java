@@ -33,6 +33,9 @@ public class GraphViewerController extends ViewerController implements Initializ
     
     @FXML
     private ChoiceBox<String> choiceBox;
+
+    @FXML
+    private Label infoLabel;
     
     @FXML
     private LineChart<String,Number> chart;
@@ -71,6 +74,7 @@ public class GraphViewerController extends ViewerController implements Initializ
     public void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {
         from = fromDate;
         to = toDate;
+
         if(borough != null){
             constructChart(from, to);
         }
@@ -89,12 +93,22 @@ public class GraphViewerController extends ViewerController implements Initializ
      * Creates a line chart for the total deaths vs date of a borough
      */
     public void constructChart(LocalDate from, LocalDate to){
+
+        // clear the chart
         series = new XYChart.Series();
-        //Clears the previous chart before creating a new one
-        series.setName("deaths in borough");
-        //chart.setCreateSymbols(false);
+        chart.setCreateSymbols(false);
         chart.getData().clear();
-        
+
+        // check if date range is valid and update label text appropriately
+        infoLabel.setText("Showing data between "+fromDate+" and "+toDate);
+        if(!dataset.isDateRangeValid(fromDate, toDate)){
+            infoLabel.setText("The selected 'from' date is after the 'to' date");
+            return;
+        }
+
+        // only continue with plotting if valid date range is selected
+        series.setName("deaths in borough");
+
         ArrayList<String> dates = new ArrayList<>();
         ArrayList<Integer> totalDeathsArray = new ArrayList<>();
 

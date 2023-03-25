@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
+import java.util.Collections;
 
 /**
  * Represents the data set that is loaded from a CovidDataLoader and processed. 

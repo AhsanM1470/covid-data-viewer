@@ -27,6 +27,11 @@
                 <NumberAxis fx:id="yAxis" label="Number of Deaths" prefWidth="41.0" side="LEFT" />
               </yAxis>
             </LineChart>
+            <Label fx:id="infoLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="214.0" layoutY="15.0" prefHeight="29.0" prefWidth="684.0" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </center>
