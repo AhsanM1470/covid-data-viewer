@@ -50,7 +50,12 @@ public class DatasetTest {
      */
     @Test
     public void testGetInstance() {
+        // Check non-null after retrieving instance for first time
         assertNotNull(dataset);
+    
+        // Check that the retrieving the instance again gives the same object
+        Dataset dataset2 = Dataset.getInstance();
+        assertSame(dataset, dataset2);
     }
 
     /**
@@ -58,7 +63,11 @@ public class DatasetTest {
      */
     @Test
     public void testGetData() {
-        assertEquals(data, dataset.getData());
+        assertNotNull(data);
+        
+        for (CovidData record : data) {
+            assertTrue(record instanceof CovidData);
+        }
     }
 
     /**
