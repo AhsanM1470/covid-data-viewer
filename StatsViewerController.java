@@ -189,8 +189,8 @@ public class StatsViewerController extends ViewerController implements Initializ
             }
 
             else if(panelIndex == 0){
-                rrGMRLabel.setText("The average retail recreational GMR: " + getAverageRRGMR());
-                gpGMRLabel.setText("The average grocery pharmacy GMR: " + getAverageGPGMR());
+                rrGMRLabel.setText("The average retail and recreation GMR: " + getAverageRRGMR());
+                gpGMRLabel.setText("The average grocery and pharmacy GMR: " + getAverageGPGMR());
             }
             else if(panelIndex == 1){
                 sumTotalDeathLabel.setText("" + totalNumberOfDeaths());
@@ -199,7 +199,7 @@ public class StatsViewerController extends ViewerController implements Initializ
                 averageCasesLabel.setText("" + averageOfTotalCases());
             }
             else if(panelIndex == 3){
-                highestDeathDateLabel.setText("" + dataset.getMostRecentDataWithTotalDeaths(dataInDateRange).get(0).getDate());
+                highestDeathDateLabel.setText("" + dataset.getMostRecentDataWithFilter(dataInDateRange, CovidData::getTotalDeaths).get(0).getDate());
             }
 
         }
@@ -214,7 +214,7 @@ public class StatsViewerController extends ViewerController implements Initializ
     public int totalNumberOfDeaths() {
         int totalNumberOfDeaths = 0;
 
-        ArrayList<CovidData> mostRecentDataWithTotalDeaths = dataset.getMostRecentDataWithTotalDeaths(dataInDateRange);
+        ArrayList<CovidData> mostRecentDataWithTotalDeaths = dataset.getMostRecentDataWithFilter(dataInDateRange, CovidData::getTotalDeaths);
         for (CovidData record : mostRecentDataWithTotalDeaths) {
             totalNumberOfDeaths += record.getTotalDeaths();
 
@@ -229,7 +229,7 @@ public class StatsViewerController extends ViewerController implements Initializ
      * @return the average of total cases in all boroughs within the date range (to 2 d.p.)
      */
     private double averageOfTotalCases() {
-        ArrayList<CovidData> mostRecentDataWithTotalCases = dataset.getMostRecentDataWithTotalCases(dataInDateRange);
+        ArrayList<CovidData> mostRecentDataWithTotalCases = dataset.getMostRecentDataWithFilter(dataInDateRange, CovidData::getTotalCases);
         List<Number> totalCasesList = mostRecentDataWithTotalCases.stream()
             .map(CovidData::getTotalCases)
             .collect(Collectors.toList());
