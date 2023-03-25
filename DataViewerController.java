@@ -96,7 +96,7 @@ public class DataViewerController extends ViewerController implements Initializa
                 dataTableInfoLabel.setText("There's no available data for the selected date range.");
             }
         } else {
-            dataTableInfoLabel.setText("The 'from' date is before the 'to' date.");
+            dataTableInfoLabel.setText("The 'to' date is before the 'from' date.");
         }
 
         setWelcomeState(false);
