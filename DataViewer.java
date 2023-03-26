@@ -13,7 +13,6 @@ import java.net.URL;
  */
 public class DataViewer extends Application
 {
-
     @Override
     public void start(Stage stage) throws Exception {
         URL url = getClass().getResource("MainWindow.fxml");
@@ -29,5 +28,4 @@ public class DataViewer extends Application
         stage.setScene(scene);
         stage.show();
     }
-
 }

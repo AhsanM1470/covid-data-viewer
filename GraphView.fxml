@@ -19,7 +19,7 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <LineChart fx:id="chart" layoutX="198.0" layoutY="56.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="467.0" prefWidth="694.0" style="-fx-background-color: #FFFFFF;">
+            <LineChart fx:id="chart" layoutX="198.0" layoutY="56.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="467.0" prefWidth="694.0" style="-fx-background-color: FFFFFF;">
               <xAxis>
                 <CategoryAxis animated="false" label="Date" side="BOTTOM" fx:id="xAxis" />
               </xAxis>

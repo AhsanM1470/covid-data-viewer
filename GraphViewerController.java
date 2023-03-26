@@ -209,8 +209,10 @@ public class GraphViewerController extends ViewerController implements Initializ
     }
     
     /**
-     * Calculating the upper and lower bounds of the y-axis
-     * An upperValue less than or equal to 10 will set the lower and upper bounds to 0 and 10 respectively.
+     * Calculating the upper and lower bounds of the y-axis.
+     * 
+     * An upperValue is less than or equal to 90, it will set the lower bound to 0 and the upper bound
+     * to the nearest 10.
      * An upperValue in the thousands, hundreds, or tens will set bounds to the nearest hundred.
      * An upperValue in the ten thousands will set bounds to the nearest thousand. 
      * An upperValue in the hundred thousands will set bounds to the nearest ten thousand.
@@ -240,9 +242,9 @@ public class GraphViewerController extends ViewerController implements Initializ
         // by default their values will be used to round to the nearest 100
         int adder = 99;
         int multiplier = 100;
-        if(upperValue <= 10){
+        if(upperValue <= 90){
             lowerBound = 0;
-            upperBound = 10;
+            upperBound = ((upperValue + 9)/10)*10;
             return;
         // to round to nearest thousand
         }else if(upperValue > 9999){
@@ -261,10 +263,15 @@ public class GraphViewerController extends ViewerController implements Initializ
     
     /**
      * Adds a Tooltip to every node on the line chart which displays the exact date
-     * and total deaths when hovered over with the mouse
+     * and stat value when hovered over with the mouse
      */
     private void addTooltips(){
         for(XYChart.Data<String, Integer> data : series.getData()){
+            // make the nodes smaller
+            data.getNode().setStyle("-fx-background-insets: 0, 1;" +
+                                    "-fx-background-radius: 1px;" +
+                                    "-fx-padding: 2px;");
+            // add the feature to hover over them
             data.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event){
