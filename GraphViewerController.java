@@ -19,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import java.util.Collections;
 
 /**
  * Responsible for managing the graph viewer of the program.
@@ -54,11 +55,6 @@ public class GraphViewerController extends ViewerController implements Initializ
     private double upperBound, lowerBound;
     
     private String borough, stat;
-    private String[] boroughs = {"Barking And Dagenham", "Barnet", "Bexley", "Brent", "Bromley", "Camden",
-        "Croydon", "Ealing", "Enfield", "Greenwich", "Hackney", "Hammersmith And Fulham", "Haringey",
-        "Harrow", "Havering", "Hillingdon", "Hounslow", "Kensington And Chelsea", "Kingston Upon Thames",
-        "Lambeth", "Lewisham", "Merton", "Newham", "Redbridge", "Richmond Upon Thames", "Southwark",
-        "Sutton", "Tower Hamlets", "Waltham Forest", "Wandsworth", "Westminster"};
     private String[] stats = {"New Cases", "Total Cases", "New Deaths", "Total Deaths"};
     
     private ArrayList<String> dates = new ArrayList<>();
@@ -70,7 +66,7 @@ public class GraphViewerController extends ViewerController implements Initializ
      */
     @Override
     public void initialize(URL url, ResourceBundle rb){ 
-        boroughChoiceBox.getItems().addAll(boroughs);
+        boroughChoiceBox.getItems().addAll(dataset.getBoroughs());
         statChoiceBox.getItems().addAll(stats);
         boroughChoiceBox.setOnAction(this::selectBorough);
         statChoiceBox.setOnAction(this::selectStat);
@@ -202,56 +198,28 @@ public class GraphViewerController extends ViewerController implements Initializ
     }
     
     /**
-     * Calculating the upper and lower bounds of the y-axis.
+     * Calculates the lower and upper bounds of the y-axis.
      * 
-     * An upperValue is less than or equal to 90, it will set the lower bound to 0 and the upper bound
-     * to the nearest 10.
-     * An upperValue in the thousands, hundreds, or tens will set bounds to the nearest hundred.
-     * An upperValue in the ten thousands will set bounds to the nearest thousand. 
-     * An upperValue in the hundred thousands will set bounds to the nearest ten thousand.
-     * 
-     * @param yValues   Arraylist of all the y-axis valus in the specified borough and date range.
+     * @param yValues ArrayList of all the y-axis values in the specified borough and date range
      */
-    private void calculateBounds(ArrayList<Integer> yValues){
-        int lowerValue = 9999999;
-        int upperValue = 0;
-        // for the total deaths and cases, the last value in the arraylist will be the smallest
-        // and the first value in the arraylist will be the largest
-        if(stat.contains("Total")){
-            lowerValue = Integer.valueOf(yValues.get(yValues.size() - 1));
-            upperValue = Integer.valueOf(yValues.get(0));
-        }else{
-            // for the new deaths and cases, search through each value to find the smallest and largest
-            for(int value : yValues){
-                if(value < lowerValue){
-                    lowerValue = value;
-                } else if(value > upperValue){
-                    upperValue = value;
-                }
-            }
-        }
+    private void calculateBounds(ArrayList<Integer> yValues) {
+        int lowerValue = Collections.min(yValues);
+        int upperValue = Collections.max(yValues);
         
-        // adder and multiplier are used when calculating the lower and upper bounds of the y-axis
-        // by default their values will be used to round to the nearest 100
-        int adder = 99;
+        // Set the multiplier based on the upperValue
         int multiplier = 100;
-        if(upperValue <= 90){
-            lowerBound = 0;
-            upperBound = ((upperValue + 9)/10)*10;
-            return;
-        // to round to nearest thousand
-        }else if(upperValue > 9999){
-            adder = 999;
+        if (upperValue <= 90) {
+            multiplier = 10;
+        } else if (upperValue > 9999) {
             multiplier = 1000;
-        // to round to nearest ten thousand
-        }else if(upperValue > 99999){
-            adder = 9999;
+        } else if (upperValue > 99999) {
             multiplier = 10000;
         }
-
-        // rounding lowerValue down and upperValue up to the nearest 100/1000/10,000
-        lowerBound = (lowerValue/multiplier)*multiplier;
-        upperBound = ((upperValue + adder)/multiplier)*multiplier;
+        
+        // The lower bound is rounded down to the nearest multiple of the multiplier
+        // The upper bound is rounded up to the nearest multiple of the multiplier
+        lowerBound = (lowerValue / multiplier) * multiplier;
+        upperBound = ((upperValue + multiplier - 1) / multiplier) * multiplier;
     }
     
     /**
