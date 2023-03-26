@@ -21,10 +21,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 
 /**
- * Write a description of class GraphViewerController here.
+ * Responsible for managing the graph viewer of the program.
+ * The user selects a date range, borough, and particular stat.
+ * A line chart is plotted of the stats vs dates for the particular borough.
+ * The user can hover over points on the line chart for the exact values of the plots.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Muhammad Ahsan Mahfuz
+ * @version 2023.03.26 (yyyy.mm.dd)
  */
 public class GraphViewerController extends ViewerController implements Initializable
 {
@@ -35,7 +38,7 @@ public class GraphViewerController extends ViewerController implements Initializ
     private ChoiceBox<String> boroughChoiceBox, statChoiceBox;
 
     @FXML
-    private Label infoLabel;
+    private Label infoLabel, hoverLabel;
     
     @FXML
     private LineChart<String, Integer> chart;
@@ -52,6 +55,8 @@ public class GraphViewerController extends ViewerController implements Initializ
     private LocalDate fromDate, toDate;
 
     private XYChart.Series<String, Integer> series;
+    
+    private double upperBound, lowerBound;
     
     private String borough, stat;
     
@@ -120,7 +125,7 @@ public class GraphViewerController extends ViewerController implements Initializ
      */
     private void constructChart(LocalDate from, LocalDate to){
         series = new XYChart.Series<String, Integer>();
-        series.setName("deaths in borough");
+        series.setName(stat.toLowerCase() + " in borough");
         // Clears the previous chart before creating a new one
         chart.getData().clear();
 
@@ -143,6 +148,7 @@ public class GraphViewerController extends ViewerController implements Initializ
             series.getData().add(new XYChart.Data<String, Integer>(dates.get(i),yAxisValues.get(i)));
         }
         chart.getData().addAll(series);
+        yAxis.setLabel(stat);
         setBounds(yAxisValues);
         addTooltips();
         
@@ -153,15 +159,12 @@ public class GraphViewerController extends ViewerController implements Initializ
     /**
      * Set the ArrayLists 'date' and 'yAxisValues' to the X and Y values that
      * will be plotted on the linechart.
-     * dates is the 
+     * dates is the x-axis. yAxisValues is the y-axis.
      */
     private void setChartXYValues(LocalDate from, LocalDate to){
         // Add data from the excel database to the arraylists
         for(CovidData data : dataset.getBoroughData(borough, from, to)){
             LocalDate date = LocalDate.parse(data.getDate());
-            // As some cells in the excel file are empty, and an int cannot have a value 'null',
-            // there is a try and catch block for each case.
-            // -1 means the cell was null
             Integer yValue = null;
             switch(stat){
                 case "New Cases":
@@ -193,19 +196,37 @@ public class GraphViewerController extends ViewerController implements Initializ
     
     /**
      * Sets the upper and lower bound of the y-axis on the line chart.
-     * An upperValue in the thousands or lower will set bounds to the nearest hundred.
+     * @param yValues   Arraylist of all the y-axis valus in the specified borough and date range.
+     */
+    private void setBounds(ArrayList<Integer> yValues){
+        calculateBounds(yValues);
+        yAxis.setAutoRanging(false);
+        yAxis.setLowerBound(lowerBound);
+        yAxis.setUpperBound(upperBound);
+        // 20 evenly spaced ticks on the y-axis
+        yAxis.setTickUnit((upperBound - lowerBound)/20);
+        yAxis.setMinorTickVisible(false);
+    }
+    
+    /**
+     * Calculating the upper and lower bounds of the y-axis
+     * An upperValue less than or equal to 10 will set the lower and upper bounds to 0 and 10 respectively.
+     * An upperValue in the thousands, hundreds, or tens will set bounds to the nearest hundred.
      * An upperValue in the ten thousands will set bounds to the nearest thousand. 
      * An upperValue in the hundred thousands will set bounds to the nearest ten thousand.
      * 
      * @param yValues   Arraylist of all the y-axis valus in the specified borough and date range.
      */
-    private void setBounds(ArrayList<Integer> yValues){
+    private void calculateBounds(ArrayList<Integer> yValues){
         int lowerValue = 9999999;
         int upperValue = 0;
+        // for the total deaths and cases, the last value in the arraylist will be the smallest
+        // and the first value in the arraylist will be the largest
         if(stat.contains("Total")){
             lowerValue = Integer.valueOf(yValues.get(yValues.size() - 1));
             upperValue = Integer.valueOf(yValues.get(0));
         }else{
+            // for the new deaths and cases, search through each value to find the smallest and largest
             for(int value : yValues){
                 if(value < lowerValue){
                     lowerValue = value;
@@ -215,37 +236,27 @@ public class GraphViewerController extends ViewerController implements Initializ
             }
         }
         
-        //---------tk Change and fix labels too. Including the number axis
-        //---------tk Add some way for the user to know you can hover
-        //---------tk Points cut out at the top of the chart. Add padding?
-        
         // adder and multiplier are used when calculating the lower and upper bounds of the y-axis
-        // by default their values round to the nearest 100
+        // by default their values will be used to round to the nearest 100
         int adder = 99;
         int multiplier = 100;
-        if(upperValue < 10){
-            adder = 9;
-            multiplier = 10;
-        }
-        if(upperValue > 9999){
+        if(upperValue <= 10){
+            lowerBound = 0;
+            upperBound = 10;
+            return;
+        // to round to nearest thousand
+        }else if(upperValue > 9999){
             adder = 999;
             multiplier = 1000;
+        // to round to nearest ten thousand
         }else if(upperValue > 99999){
             adder = 9999;
             multiplier = 10000;
         }
-        
-        // rounding lowerValue down and upperValue up to the nearest 100/1000/10,000
-        double lowerBound = (lowerValue/multiplier)*multiplier;
-        double upperBound = ((upperValue + adder)/multiplier)*multiplier;
 
-        //Setting the y-axis
-        yAxis.setAutoRanging(false);
-        yAxis.setLowerBound(lowerBound);
-        yAxis.setUpperBound(upperBound);
-        double thing = (upperBound-lowerBound)/20;
-        yAxis.setTickUnit(thing);
-        yAxis.setMinorTickVisible(false);
+        // rounding lowerValue down and upperValue up to the nearest 100/1000/10,000
+        lowerBound = (lowerValue/multiplier)*multiplier;
+        upperBound = ((upperValue + adder)/multiplier)*multiplier;
     }
     
     /**
@@ -260,7 +271,7 @@ public class GraphViewerController extends ViewerController implements Initializ
                     Tooltip tp = new Tooltip("Date: " + data.getXValue() + "\nTotal Deaths: " + data.getYValue().toString());
                     tp.setShowDelay(Duration.seconds(0.0));
                     Tooltip.install(data.getNode(), tp);
-                    //Tooltip.install(data.getNode(), new Tooltip("Date: " + data.getXValue() + "\nTotal Deaths: " + data.getYValue().toString()));
+                    hoverLabel.setVisible(false);
                 }
             });
         }
