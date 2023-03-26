@@ -48,29 +48,20 @@ public class GraphViewerController extends ViewerController implements Initializ
     
     @FXML
     private NumberAxis yAxis = new NumberAxis();
-    
-    @FXML
-    private DatePicker fromDatePicker, toDatePicker;
-    
-    private LocalDate fromDate, toDate;
 
     private XYChart.Series<String, Integer> series;
     
     private double upperBound, lowerBound;
     
     private String borough, stat;
-    
-    //tk remove All or keep it
-    private String[] boroughs = {"All", "Barking And Dagenham", "Barnet", "Bexley", "Brent", "Bromley", "Camden",
+    private String[] boroughs = {"Barking And Dagenham", "Barnet", "Bexley", "Brent", "Bromley", "Camden",
         "Croydon", "Ealing", "Enfield", "Greenwich", "Hackney", "Hammersmith And Fulham", "Haringey",
         "Harrow", "Havering", "Hillingdon", "Hounslow", "Kensington And Chelsea", "Kingston Upon Thames",
         "Lambeth", "Lewisham", "Merton", "Newham", "Redbridge", "Richmond Upon Thames", "Southwark",
         "Sutton", "Tower Hamlets", "Waltham Forest", "Wandsworth", "Westminster"};
-        
     private String[] stats = {"New Cases", "Total Cases", "New Deaths", "Total Deaths"};
     
     private ArrayList<String> dates = new ArrayList<>();
-    
     private ArrayList<Integer> yAxisValues = new ArrayList<>();
     
     /**
@@ -101,8 +92,8 @@ public class GraphViewerController extends ViewerController implements Initializ
     }
     
     /**
-     * Gets the selected borough from the choice box and creates a chart from it.
-     * @param event     The borough the user selected from the choice box .   
+     * Gets the selected borough from the choice box to use when creating the chart.
+     * @param event     The borough the user selected from the choice box.   
      */
     private void selectBorough(ActionEvent event){
         borough = boroughChoiceBox.getValue();
@@ -111,6 +102,10 @@ public class GraphViewerController extends ViewerController implements Initializ
         }
     }
     
+    /**
+     * Gets the selected stat from the choice box to use when creating the chart.
+     * @param event     The stat the user selected from the choice box.   
+     */
     private void selectStat(ActionEvent event){
         stat = statChoiceBox.getValue();
         if(boroughChoiceBox.getValue() != null){
@@ -120,10 +115,10 @@ public class GraphViewerController extends ViewerController implements Initializ
     
     /**
      * Creates a line chart for the dates vs total deaths of a borough.
-     * @param from      The start date of the date range.
-     * @param to        The end date of the date range.
+     * @param fromDate      The start date of the date range.
+     * @param toDate        The end date of the date range.
      */
-    private void constructChart(LocalDate from, LocalDate to){
+    private void constructChart(LocalDate fromDate, LocalDate toDate){
         series = new XYChart.Series<String, Integer>();
         series.setName(stat.toLowerCase() + " in borough");
         // Clears the previous chart before creating a new one
@@ -136,7 +131,7 @@ public class GraphViewerController extends ViewerController implements Initializ
             return;
         }
 
-        setChartXYValues(from, to);
+        setChartXYValues(fromDate, toDate);
         
         if(dates.size() == 0){
             infoLabel.setText("There is no data for this stat and borough in the selected date range");
@@ -160,10 +155,13 @@ public class GraphViewerController extends ViewerController implements Initializ
      * Set the ArrayLists 'date' and 'yAxisValues' to the X and Y values that
      * will be plotted on the linechart.
      * dates is the x-axis. yAxisValues is the y-axis.
+     * 
+     * @param fromDate      The start date of the date range.
+     * @param toDate        The end date of the date range.
      */
-    private void setChartXYValues(LocalDate from, LocalDate to){
+    private void setChartXYValues(LocalDate fromDate, LocalDate toDate){
         // Add data from the excel database to the arraylists
-        for(CovidData data : dataset.getBoroughData(borough, from, to)){
+        for(CovidData data : dataset.getBoroughData(borough, fromDate, toDate)){
             LocalDate date = LocalDate.parse(data.getDate());
             Integer yValue = null;
             switch(stat){
@@ -189,11 +187,6 @@ public class GraphViewerController extends ViewerController implements Initializ
         }
     }
     
-    private void calculateAllBoroughs(String borough, LocalDate from, LocalDate to){
-        ArrayList<CovidData> boroughs = new ArrayList<>();
-        boroughs = dataset.getBoroughData(borough, from, to);
-    }
-    
     /**
      * Sets the upper and lower bound of the y-axis on the line chart.
      * @param yValues   Arraylist of all the y-axis valus in the specified borough and date range.
@@ -203,8 +196,8 @@ public class GraphViewerController extends ViewerController implements Initializ
         yAxis.setAutoRanging(false);
         yAxis.setLowerBound(lowerBound);
         yAxis.setUpperBound(upperBound);
-        // 20 evenly spaced ticks on the y-axis
-        yAxis.setTickUnit((upperBound - lowerBound)/20);
+        // 10 evenly spaced ticks on the y-axis
+        yAxis.setTickUnit((upperBound - lowerBound)/10);
         yAxis.setMinorTickVisible(false);
     }
     
@@ -263,7 +256,7 @@ public class GraphViewerController extends ViewerController implements Initializ
     
     /**
      * Adds a Tooltip to every node on the line chart which displays the exact date
-     * and stat value when hovered over with the mouse
+     * and stat value when hovered over with the mouse.
      */
     private void addTooltips(){
         for(XYChart.Data<String, Integer> data : series.getData()){
@@ -275,7 +268,7 @@ public class GraphViewerController extends ViewerController implements Initializ
             data.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event){
-                    Tooltip tp = new Tooltip("Date: " + data.getXValue() + "\nTotal Deaths: " + data.getYValue().toString());
+                    Tooltip tp = new Tooltip("Date: " + data.getXValue() + "\n" + stat + ": " + data.getYValue().toString());
                     tp.setShowDelay(Duration.seconds(0.0));
                     Tooltip.install(data.getNode(), tp);
                     hoverLabel.setVisible(false);
