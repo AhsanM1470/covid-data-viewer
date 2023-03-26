@@ -58,7 +58,7 @@
    <center>
       <AnchorPane fx:id="graphPane" prefHeight="580.0" prefWidth="920.0" style="-fx-background-color: #191919D1;" BorderPane.alignment="CENTER">
          <children>
-            <ChoiceBox fx:id="choiceBox" layoutX="14.0" layoutY="35.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+            <ChoiceBox fx:id="boroughChoiceBox" layoutX="14.0" layoutY="35.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
             <Label layoutX="15.0" layoutY="14.0" text="Select the borough" textFill="WHITE">
                <font>
                   <Font size="15.0" />
@@ -73,6 +73,12 @@
               </yAxis>
             </LineChart>
             <Label fx:id="infoLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="214.0" layoutY="15.0" prefHeight="29.0" prefWidth="684.0" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <ChoiceBox fx:id="statChoiceBox" layoutX="15.0" layoutY="122.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+            <Label layoutX="15.0" layoutY="100.0" text="Select the stat" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>

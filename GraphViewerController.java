@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.util.Duration;
 import java.net.URL;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,9 +18,6 @@ import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Label;
-
-//import javafx.scene.Node;
-//import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Tooltip;
 
 /**
@@ -34,7 +32,7 @@ public class GraphViewerController extends ViewerController implements Initializ
     private AnchorPane graphPane;
     
     @FXML
-    private ChoiceBox<String> choiceBox;
+    private ChoiceBox<String> boroughChoiceBox, statChoiceBox;
 
     @FXML
     private Label infoLabel;
@@ -55,6 +53,8 @@ public class GraphViewerController extends ViewerController implements Initializ
 
     private XYChart.Series<String, Integer> series;
     
+    private String borough, stat;
+    
     //tk remove All or keep it
     private String[] boroughs = {"All", "Barking And Dagenham", "Barnet", "Bexley", "Brent", "Bromley", "Camden",
         "Croydon", "Ealing", "Enfield", "Greenwich", "Hackney", "Hammersmith And Fulham", "Haringey",
@@ -62,7 +62,11 @@ public class GraphViewerController extends ViewerController implements Initializ
         "Lambeth", "Lewisham", "Merton", "Newham", "Redbridge", "Richmond Upon Thames", "Southwark",
         "Sutton", "Tower Hamlets", "Waltham Forest", "Wandsworth", "Westminster"};
         
-    private String borough;
+    private String[] stats = {"New Cases", "Total Cases", "New Deaths", "Total Deaths"};
+    
+    private ArrayList<String> dates = new ArrayList<>();
+    
+    private ArrayList<Integer> yAxisValues = new ArrayList<>();
     
     /**
      * Add all the boroughs to the choice box and respond to the selection made
@@ -70,8 +74,10 @@ public class GraphViewerController extends ViewerController implements Initializ
      */
     @Override
     public void initialize(URL url, ResourceBundle rb){ 
-        choiceBox.getItems().addAll(boroughs);
-        choiceBox.setOnAction(this::selectBorough);
+        boroughChoiceBox.getItems().addAll(boroughs);
+        statChoiceBox.getItems().addAll(stats);
+        boroughChoiceBox.setOnAction(this::selectBorough);
+        statChoiceBox.setOnAction(this::selectStat);
     }
     
     /**
@@ -84,7 +90,7 @@ public class GraphViewerController extends ViewerController implements Initializ
     public void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {
         this.fromDate = fromDate;
         this.toDate = toDate;
-        if(borough != null){
+        if(borough != null || stat != null){
             constructChart(fromDate, toDate);
         }
     }
@@ -93,9 +99,18 @@ public class GraphViewerController extends ViewerController implements Initializ
      * Gets the selected borough from the choice box and creates a chart from it.
      * @param event     The borough the user selected from the choice box .   
      */
-    public void selectBorough(ActionEvent event){
-        borough = choiceBox.getValue();
-        constructChart(fromDate, toDate);
+    private void selectBorough(ActionEvent event){
+        borough = boroughChoiceBox.getValue();
+        if(statChoiceBox.getValue() != null){
+            constructChart(fromDate, toDate);
+        }
+    }
+    
+    private void selectStat(ActionEvent event){
+        stat = statChoiceBox.getValue();
+        if(boroughChoiceBox.getValue() != null){
+            constructChart(fromDate, toDate);
+        }
     }
     
     /**
@@ -103,59 +118,133 @@ public class GraphViewerController extends ViewerController implements Initializ
      * @param from      The start date of the date range.
      * @param to        The end date of the date range.
      */
-    public void constructChart(LocalDate from, LocalDate to){
+    private void constructChart(LocalDate from, LocalDate to){
         series = new XYChart.Series<String, Integer>();
         series.setName("deaths in borough");
-        //Clears the previous chart before creating a new one
+        // Clears the previous chart before creating a new one
         chart.getData().clear();
 
         // check if date range is valid and update label text appropriately
-        // only continue with plotting if valid date range is selected
         infoLabel.setText("Showing data between "+fromDate+" and "+toDate);
         if(!dataset.isDateRangeValid(fromDate, toDate)){
             infoLabel.setText("The selected 'from' date is after the 'to' date");
             return;
         }
 
-        ArrayList<String> dates = new ArrayList<>();
-        ArrayList<Integer> totalDeaths = new ArrayList<>();
-        //Add data from the excel database to the arraylists
-        for(CovidData data : dataset.getBoroughData(borough, from, to)){
-            LocalDate date = LocalDate.parse(data.getDate());
-            Integer deaths = data.getTotalDeaths();
-            if(deaths != null || date != null){
-                dates.add(date.toString());
-                totalDeaths.add(deaths);
-            }
+        setChartXYValues(from, to);
+        
+        if(dates.size() == 0){
+            infoLabel.setText("There is no data for this stat and borough in the selected date range");
+            return;
         }
         
         //Creates a new point on the line chart using elements from the arraylists
         for(int i = dates.size() - 1; i >= 0; i--){
-            series.getData().add(new XYChart.Data<String, Integer>(dates.get(i),totalDeaths.get(i)));
+            series.getData().add(new XYChart.Data<String, Integer>(dates.get(i),yAxisValues.get(i)));
         }
         chart.getData().addAll(series);
-        setBounds(totalDeaths);
+        setBounds(yAxisValues);
         addTooltips();
+        
+        dates.clear();
+        yAxisValues.clear();
+    }
+    
+    /**
+     * Set the ArrayLists 'date' and 'yAxisValues' to the X and Y values that
+     * will be plotted on the linechart.
+     * dates is the 
+     */
+    private void setChartXYValues(LocalDate from, LocalDate to){
+        // Add data from the excel database to the arraylists
+        for(CovidData data : dataset.getBoroughData(borough, from, to)){
+            LocalDate date = LocalDate.parse(data.getDate());
+            // As some cells in the excel file are empty, and an int cannot have a value 'null',
+            // there is a try and catch block for each case.
+            // -1 means the cell was null
+            Integer yValue = null;
+            switch(stat){
+                case "New Cases":
+                    yValue = data.getNewCases();
+                    break;
+                case "Total Cases":
+                    yValue = data.getTotalCases();
+                    break;
+                case "New Deaths":
+                    yValue = data.getNewDeaths();
+                    break;
+                case "Total Deaths":
+                    yValue = data.getTotalDeaths();
+                    break;
+                default:
+                    break;
+            }
+            if(date != null && yValue != null){
+                dates.add(date.toString());
+                yAxisValues.add(yValue);
+            }
+        }
+    }
+    
+    private void calculateAllBoroughs(String borough, LocalDate from, LocalDate to){
+        ArrayList<CovidData> boroughs = new ArrayList<>();
+        boroughs = dataset.getBoroughData(borough, from, to);
     }
     
     /**
      * Sets the upper and lower bound of the y-axis on the line chart.
-     * @param deaths    Arraylist of all the deaths in the specified borough and date range.
+     * An upperValue in the thousands or lower will set bounds to the nearest hundred.
+     * An upperValue in the ten thousands will set bounds to the nearest thousand. 
+     * An upperValue in the hundred thousands will set bounds to the nearest ten thousand.
+     * 
+     * @param yValues   Arraylist of all the y-axis valus in the specified borough and date range.
      */
-    private void setBounds(ArrayList<Integer> deaths){
-        //The arraylist stores total deaths from most recent to oldest
-        int lowerValue = Integer.valueOf(deaths.get(deaths.size() - 1));
-        int upperValue = Integer.valueOf(deaths.get(0));
+    private void setBounds(ArrayList<Integer> yValues){
+        int lowerValue = 9999999;
+        int upperValue = 0;
+        if(stat.contains("Total")){
+            lowerValue = Integer.valueOf(yValues.get(yValues.size() - 1));
+            upperValue = Integer.valueOf(yValues.get(0));
+        }else{
+            for(int value : yValues){
+                if(value < lowerValue){
+                    lowerValue = value;
+                } else if(value > upperValue){
+                    upperValue = value;
+                }
+            }
+        }
         
-        //Rounding lowerValue down to the nearest 100 and and upperValue up to the nearest 100 
-        double lowerBound = (lowerValue/100)*100;
-        double upperBound = ((upperValue + 99)/100)*100;
+        //---------tk Change and fix labels too. Including the number axis
+        //---------tk Add some way for the user to know you can hover
+        //---------tk Points cut out at the top of the chart. Add padding?
         
+        // adder and multiplier are used when calculating the lower and upper bounds of the y-axis
+        // by default their values round to the nearest 100
+        int adder = 99;
+        int multiplier = 100;
+        if(upperValue < 10){
+            adder = 9;
+            multiplier = 10;
+        }
+        if(upperValue > 9999){
+            adder = 999;
+            multiplier = 1000;
+        }else if(upperValue > 99999){
+            adder = 9999;
+            multiplier = 10000;
+        }
+        
+        // rounding lowerValue down and upperValue up to the nearest 100/1000/10,000
+        double lowerBound = (lowerValue/multiplier)*multiplier;
+        double upperBound = ((upperValue + adder)/multiplier)*multiplier;
+
         //Setting the y-axis
         yAxis.setAutoRanging(false);
         yAxis.setLowerBound(lowerBound);
         yAxis.setUpperBound(upperBound);
-        yAxis.setTickUnit(50);
+        double thing = (upperBound-lowerBound)/20;
+        yAxis.setTickUnit(thing);
         yAxis.setMinorTickVisible(false);
     }
     
@@ -168,7 +257,10 @@ public class GraphViewerController extends ViewerController implements Initializ
             data.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event){
-                    Tooltip.install(data.getNode(), new Tooltip("Date: " + data.getXValue() + "\nTotal Deaths: " + data.getYValue().toString()));
+                    Tooltip tp = new Tooltip("Date: " + data.getXValue() + "\nTotal Deaths: " + data.getYValue().toString());
+                    tp.setShowDelay(Duration.seconds(0.0));
+                    Tooltip.install(data.getNode(), tp);
+                    //Tooltip.install(data.getNode(), new Tooltip("Date: " + data.getXValue() + "\nTotal Deaths: " + data.getYValue().toString()));
                 }
             });
         }
