@@ -1,27 +1,16 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.transform.Rotate;
-import javafx.stage.Stage;
 
 public class BoroughInfoController {
 
@@ -103,10 +92,6 @@ public class BoroughInfoController {
      * @param data
      */
     public void showData(ArrayList<CovidData> data) {
-        // TODO: try and make stage in mapviewer an attribute, and when date changed
-        // also re-arrange the data. (this should be done by inheriting from
-        // viewercontroller to use 'data' and 'processDataInRange')
-
         ObservableList<CovidData> obsData = FXCollections.observableArrayList(data);
         boroughTable.getItems().setAll(obsData);
 
@@ -131,6 +116,8 @@ public class BoroughInfoController {
      * Sorting the table by a certain column
      */
     private void sortTable() {
+        // TODO: ask lads whether to keep sorting or just replace it with a label of the borough name
+        
         int colIndex = getColumnIndexOfStat(filterSelected);
 
         // column we're retrieving could be String or Integer, hence the '?'

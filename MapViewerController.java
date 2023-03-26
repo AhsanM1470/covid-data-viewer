@@ -2,40 +2,27 @@
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.SVGPath;
-import javafx.scene.text.Font;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.converter.PercentageStringConverter;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.fxml.Initializable;
-
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class MapViewerController extends ViewerController {
 
-    Paint hoveredPolygonDefaultBorderColor;
-    Double hoveredPolygonDefaultStroke;
+    //
+    Paint hoveredPolygonInitialBorderColor;
+    Double hoveredPolygonInitialStroke;
 
     @FXML
     private AnchorPane mapAnchorPane, polygonPane;
@@ -44,16 +31,10 @@ public class MapViewerController extends ViewerController {
     private BorderPane viewPane;
 
     @FXML
-    private AnchorPane infoPane;
+    private AnchorPane hoverBox;
 
     @FXML
-    private Label deathsHoverLabel, baseHoverTotal, percentLabel, hoverBoxBoroughLabel;
-
-    // @FXML
-    // private Label
-
-    @FXML
-    private Label selectedBoroughLabel;
+    private Label deathsHoverLabel, baseHoverTotal, percentLabel, hoverBoxBoroughLabel, selectedBoroughLabel;
 
     @FXML
     private Polygon brentPolygon, bexleyPolygon, bromleyPolygon, camdenPolygon, cityPolygon, croydonPolygon,
@@ -66,25 +47,24 @@ public class MapViewerController extends ViewerController {
     private Polygon[] boroughPolygons;
 
     @FXML
-    private Label title;
+    private Label messageLabel;
 
     // used to map polygon IDs to String borough names
     private HashMap<String, String> boroughIdToName;
 
     // stores the data for each borough which will be used to calculate intensity on
     // heat map
-    private HashMap<String, Integer> boroughHeatMapData;
+    private HashMap<String, Integer> heatMapData;
 
     // the value which is used as a base to determine the intensity for other
     // boroughs on the heat map
     private Integer heatMapBaseValue;
 
-    // stores the data within the date range selected
-    private ArrayList<CovidData> dataInDateRange;
-
     // store the mouse position realtive to the mapacnhor pane
-    Double mapMouseX = -100.0;
-    Double mapMouseY = -100.0;
+    Double infoPaneX = -100.0;
+    Double infoPaneY = -100.0;
+
+    /* ================================== MAIN ================================== */
 
     public void initialize() {
         // adding window size change listeneres
@@ -92,14 +72,12 @@ public class MapViewerController extends ViewerController {
             if (oldVal != newVal) {
                 resizeComponents(viewPane);
             }
-            ;
         });
 
         viewPane.heightProperty().addListener((obs, oldVal, newVal) -> {
             if (oldVal != newVal) {
                 resizeComponents(viewPane);
             }
-            ;
         });
 
         // an array of all the borough polygons which will be used when assigning
@@ -118,7 +96,35 @@ public class MapViewerController extends ViewerController {
     }
 
     /**
-     * resizing the
+     * called when the date has been selected/changed to 
+     */
+    protected void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {
+
+        resetHeatMapData();
+
+        validateDateRange(fromDate, toDate);
+
+        assignBoroughsColor();
+    }
+
+    /**
+     * Set the appropriate message depending on date range selected, and load data
+     * if a valid date range is selected
+     */
+    private void validateDateRange(LocalDate fromDate, LocalDate toDate) {
+        if (dataset.isDateRangeValid(fromDate, toDate)) {
+            messageLabel.setText("Click on a borough to view more information");
+            // get the heat map values for each borough to colour them
+            loadHeatMapData(fromDate, toDate);
+        } else {
+            messageLabel.setText("The 'from date' is after the 'to date' ! ");
+        }
+    }
+
+    /* --------------------------- RESIZE COMPONENTS ---------------------------- */
+
+    /**
+     * resizing the map pane
      * 
      * @param parentPane pane that is to be used to scale with
      */
@@ -128,129 +134,86 @@ public class MapViewerController extends ViewerController {
         double ratioX = parentPane.getWidth() / parentPane.getPrefWidth();
         double ratioY = parentPane.getHeight() / parentPane.getPrefHeight();
 
-        // returns the border pane at the center which stores our map (polygonPane +
-        // labels)
-
+        // calculate the ratio the window was scaled by, limiting the minimum ratio to 1
+        // and the maximum to 2
         ratioY = Math.max(Math.min(ratioY, 2), 1);
         ratioX = Math.max(Math.min(ratioX, 2), 1);
 
         Node toScale = viewPane.getCenter();
 
-        // scale by same ratio ensuring scaling will still fit inside the window.
+        // scale by same ratio allowing aspect ratio to be maintained.
         double scale = Math.min(ratioX, ratioY);
 
         toScale.setScaleY(scale);
         toScale.setScaleX(scale);
     }
 
-    /**
-     * Executes set of instructions related to the date range selected
-     */
-    protected void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {
-        title.setText("Click on a borough to view more information");
-
-        if (!dataset.isDateRangeValid(fromDate, toDate)) {
-            title.setText("The 'from date' is after the 'to date' ! ");
-        }
-        // reset boroughs heat map measure information when date is changed
-        resetBoroughHeatMapData();
-
-        if (dataset.isDateRangeValid(fromDate, toDate)) {
-            // reset base value each time date is changed
-            heatMapBaseValue = 0;
-
-            // filter all the data to select data from our selected range
-            loadDataInDateRange(fromDate, toDate);
-
-            checkToChangeTitleLabel();
-
-            // get the heat map values for each borough to colour them
-            loadBoroughHeatMapData();
-        }
-
-        assignBoroughsColor();
-    }
+    /* ========================== HEAT MAP PROCESSING =========================== */
 
     /**
-     * Set the appropriate message depending on the data that is loaded in the
-     * selected date range
-     */
-    private void checkToChangeTitleLabel() {
-        if (dataInDateRange.size() > 1) {
-            title.setText("Click on a borough to view more information");
-        } else {
-            title.setText("No data in the selected date range");
-        }
-    }
-
-    /**
-     * Creates an ArrayList containing data between date period selected filtered
-     * from the ArrayList 'data' which was created upon initialisation
-     * 
-     * @param fromDate
-     * @param toDate
-     */
-    private void loadDataInDateRange(LocalDate fromDate, LocalDate toDate) {
-        dataInDateRange = dataset.getDataInDateRange(fromDate, toDate);
-    }
-
-    /**
-     * Sets default value for all boroughs' heat map measure to null in the HashMap
-     * 'boroughHeatMapData'
-     */
-    private void resetBoroughHeatMapData() {
-        heatMapBaseValue = null;
-        boroughHeatMapData = new HashMap<>();
-        for (CovidData covidRecord : dataset.getData()) {
-            String recordBoroughName = covidRecord.getBorough();
-            boroughHeatMapData.put(recordBoroughName, null);
-        }
-    }
-
-    /**
-     * Fills in the boroughHeatMapData HashMap with our chosen measure for the heat
+     * Fills in the heatMapData HashMap with our chosen measure for the heat
      * map.
      * 
      * Also calculate the heat map's base value within the range to avoid multiple
-     * iterations
-     * over potentially large data set
+     * iterations over potentially large data set
      * 
      * In this case, we're using deaths within the time period selected as the
      * measure. This is done by summing the number of new deaths on each day for
      * each borough in the time range
      */
-    private void loadBoroughHeatMapData() {
+    private void loadHeatMapData(LocalDate fromDate, LocalDate toDate) {
 
-        for (CovidData covidEntry : dataInDateRange) {
+        // TODO: discuss if i should leave for loop, or use (totalDeaths on end date) -
+        // (total deaths on start date)
+        for (CovidData covidEntry : dataset.getDataInDateRange(fromDate, toDate)) {
             String entryBoroughName = covidEntry.getBorough();
             Integer entryDeathsOnDay = covidEntry.getNewDeaths();
-            Integer boroughCumulitiveDeaths = boroughHeatMapData.get(entryBoroughName);
+            Integer boroughCumulitiveDeaths = heatMapData.get(entryBoroughName);
 
             // if no new deaths on this entry, continue onto next iteration
             if (entryDeathsOnDay == null) {
                 continue;
             }
 
-            // if there's an existing value stored for a borough, update it
             int compareValue = 0;
+            // if there's an existing value stored for a borough, update it
             if (boroughCumulitiveDeaths != null) {
                 int deathCountInDateRange = entryDeathsOnDay + boroughCumulitiveDeaths;
                 compareValue = deathCountInDateRange;
-                boroughHeatMapData.put(entryBoroughName, deathCountInDateRange);
+                heatMapData.put(entryBoroughName, deathCountInDateRange);
             } else {
-                // if the borough currently stores no new deaths, place deaths on this day
-                boroughHeatMapData.put(entryBoroughName, entryDeathsOnDay);
+                // if the borough currently stores no new deaths, store the amount of new deaths
+                // from the current entry
+                heatMapData.put(entryBoroughName, entryDeathsOnDay);
                 compareValue = entryDeathsOnDay;
             }
+
+            // set the base to the max between the current and the value to be compared with
             heatMapBaseValue = Math.max(compareValue, heatMapBaseValue);
         }
 
     }
 
     /**
-     * attempt to calculate which interpolated colour from green to red to assign to
-     * each borough based on heat map alues within the date range relative to the
-     * base heat map value
+     * Sets default value for all boroughs' heat map measure to null in the HashMap
+     * 'heatMapData'
+     */
+    private void resetHeatMapData() {
+        // reset the base value
+        heatMapBaseValue = 0;
+
+        heatMapData = new HashMap<>();
+        for (String boroughName : dataset.getBoroughs()) {
+            heatMapData.put(boroughName, null);
+        }
+    }
+
+    /**
+     * Calculates what colour to assign to a borough depending on the ratio between
+     * it's heat map value and the base heat map value.
+     * 
+     * Uses HSB values to determine the colour allowing for a nice transition from
+     * red to green
      * 
      */
     private void assignBoroughsColor() {
@@ -258,32 +221,25 @@ public class MapViewerController extends ViewerController {
 
         for (Polygon boroughPolygon : boroughPolygons) {
             String boroughName = boroughIdToName.get(boroughPolygon.getId());
-            Integer boroughHeatMapMeasure = boroughHeatMapData.get(boroughName);
+            Integer boroughHeatMapValue = heatMapData.get(boroughName);
             Color col;
 
             // if the borough has data available within the date range, give it a valid
             // heatMap colour.
-            if (boroughHeatMapMeasure != null && heatMapBaseValue > 0) {
+            if (boroughHeatMapValue != null && heatMapBaseValue > 0) {
 
                 // calculate proportion of current borough data with the base value
                 // in HSB hue is measured in degrees where: 0 -> 120 == red -> green.
                 // converts the proportion of heat map values as a % of the hueUpperBound
-                double hueUpperBound = 100.0;
-                double perc = 100.0 * boroughHeatMapMeasure / heatMapBaseValue;
-                double percentageOfHue = (hueUpperBound * boroughHeatMapMeasure / heatMapBaseValue);
-
-                // if (perc < 40){
-                //     double perc2 = perc/40;
-                //     percentageOfHue += (20*perc2);
-
-                // }
+                double hueUpperBound = 105.0;
+                double percentageOfHue = (hueUpperBound * boroughHeatMapValue / heatMapBaseValue);
 
                 // subtracting from the upper bound gives us reversed scale.
                 // green -> low deaths
                 // red -> high deaths
                 double hue = hueUpperBound - percentageOfHue;
 
-                // HSB (hue (in degrees), saturation , brightness)
+                // HSB (hue (in degrees), saturation 100%, brightness 80%)
                 col = Color.hsb(hue, 1, 0.8);
 
             } else {
@@ -297,6 +253,121 @@ public class MapViewerController extends ViewerController {
         }
     }
 
+    /* ============================ POLYGON HOVERING ============================ */
+
+    /**
+     * When hovering over a polygon, change border(stroke) colour and width
+     * also change the lable at the top to show the borough being hovered over.
+     * 
+     * Display a mini info box showing data related to the heat map
+     * 
+     * @param event
+     */
+    @FXML
+    void mouseEnteredPolygon(MouseEvent event) {
+        Polygon poly = (Polygon) event.getSource();
+
+        String name = boroughIdToName.get(poly.getId());
+
+        // set the coordinates of the info pane to mouse coords + padding
+        determineInfoPaneCoordinates(event, poly);
+
+        // Add an event handler to get the mouse coordinates when the user moves the
+        // mosue within the polygon
+        poly.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                // calculate the x and y coordinates with additional padding
+                determineInfoPaneCoordinates(event, poly);
+                showBoroughHeatMapInfo(poly);
+            }
+        });
+
+        // when hovering, show the heatmap information for the borough
+        showBoroughHeatMapInfo(poly);
+
+        // change selected borough label text
+        selectedBoroughLabel.setText(name);
+
+        // store the polygon's initial properties
+        hoveredPolygonInitialBorderColor = poly.getStroke();
+
+        // change to new properties
+        poly.setStrokeWidth(3);
+        poly.setStroke(new Color(1, 1, 1, 1.0));
+    }
+
+    /**
+     * If a polygon was being hovered, and is no long being hovered,
+     * reset its attributes to default polygon state
+     * 
+     * @param event
+     */
+    @FXML
+    void mouseExitedPolygon(MouseEvent event) {
+        Polygon poly = (Polygon) event.getSource();
+
+        // if mouse leaves polygon, disable visiblity of hover box
+        hoverBox.setVisible(false);
+
+        poly.setStrokeWidth(1);
+        poly.setStroke(hoveredPolygonInitialBorderColor);
+
+        // remove text if no borough is selected
+        selectedBoroughLabel.setText("");
+    }
+
+    /**
+     * calculate the x and y coordinates for info box pane whilst hovering over a
+     * polygon relative to the polygonPane to get coordinates on the window
+     * 
+     * @param event mouse event
+     * @param poly  polygon that's being hovered over
+     */
+    private void determineInfoPaneCoordinates(MouseEvent event, Polygon poly) {
+        // polygonPane
+        infoPaneX = event.getX() + poly.getLayoutX() + polygonPane.getLayoutX() + 40;
+        infoPaneY = event.getY() + poly.getLayoutY() + polygonPane.getLayoutY() - 10;
+    }
+
+    /**
+     * show the info box next to the cursor displaying the data which has determined
+     * the
+     * borough's heat map data
+     * 
+     * @param poly
+     */
+    private void showBoroughHeatMapInfo(Polygon poly) {
+        // make the mini info box visible
+        hoverBox.setVisible(true);
+
+        String boroughName = boroughIdToName.get(poly.getId());
+
+        // retrieve the heat map data and calculate the percentage
+        Integer boroughHeatMapValue = heatMapData.get(boroughName);
+
+        // calculate then borough's heat map value as a percentage of the base heat map
+        // value
+        Integer percentage = null;
+        if (boroughHeatMapValue != null && heatMapBaseValue > 0) {
+            percentage = (int) Math.round((100.0 * boroughHeatMapValue / heatMapBaseValue));
+
+        }
+
+        // changing the text on the labels to adjust for the current borough being
+        // hovered over
+        hoverBoxBoroughLabel.setText(boroughName);
+
+        deathsHoverLabel.setText("Borough Deaths: " + heatMapData.get(boroughName) + "\n" + percentage
+                + "% of highest deaths within date range");
+
+        // position the hover pane
+        hoverBox.setLayoutX(infoPaneX);
+        hoverBox.setLayoutY(infoPaneY);
+    }
+
+    /* ---------------------------- POLYGON CLICKING ---------------------------- */
+
     /**
      * If a polygon is clicked, prints the name of the borough that the fxid is
      * mapped to
@@ -305,19 +376,19 @@ public class MapViewerController extends ViewerController {
      * @throws IOException
      */
     @FXML
-    void polygonClicked(MouseEvent event) throws IOException {
+    void mousePressedPolygon(MouseEvent event) throws IOException {
         Polygon poly = (Polygon) event.getSource();
         String name = boroughIdToName.get(poly.getId());
-        showData(name);
+        showBoroughData(name);
     }
 
     /**
-     * create a pop up window for the borough data
+     * create a pop up window to show the borough's data
      * 
      * @param boroughName
      * @throws IOException
      */
-    private void showData(String boroughName) throws IOException {
+    private void showBoroughData(String boroughName) throws IOException {
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("BoroughInfo.fxml"));
         Parent root = loader.load();
@@ -332,99 +403,7 @@ public class MapViewerController extends ViewerController {
         stage.show();
     }
 
-    /**
-     * When hovering over a polygon, change border(stroke) colour and width
-     * also change the lable at the top to show the borough being hovered over
-     * 
-     * @param event
-     */
-    @FXML
-    void polygonHovered(MouseEvent event) {
-        Polygon poly = (Polygon) event.getSource();
-
-        String name = boroughIdToName.get(poly.getId());
-
-        // initial mouse coordinates when the mouse enters a polygon
-        mapMouseX = event.getX() + poly.getLayoutX() + polygonPane.getLayoutX() + 40;
-        mapMouseY = event.getY() + poly.getLayoutY();
-
-        // Add an event handler to get the mouse coordinates whilst the user changes the
-        // coordinates within the polygon
-        poly.setOnMouseMoved(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                // calculate the x and y coordinates with additional padding
-                mapMouseX = event.getX() + poly.getLayoutX() + polygonPane.getLayoutX() + 40;
-                mapMouseY = event.getY() + poly.getLayoutY();
-                showBoroughHeatMapInfo(poly);
-            }
-        });
-
-        // when hovering, make the heatmap information for the borough visiable
-        showBoroughHeatMapInfo(poly);
-
-        // change label text
-        selectedBoroughLabel.setText(name);
-
-        // change properties to indicate hovered borough
-        hoveredPolygonDefaultBorderColor = poly.getStroke();
-        poly.setStrokeWidth(3);
-        poly.setStroke(new Color(1, 1, 1, 1.0));
-
-    }
-
-    /**
-     * show the mini box next to the cursor displaying the data which determines the
-     * borough's heat map data
-     * 
-     * @param poly
-     */
-    private void showBoroughHeatMapInfo(Polygon poly) {
-        // make the mini box visible
-        infoPane.setVisible(true);
-
-        String polygonName = boroughIdToName.get(poly.getId());
-
-        
-
-        // retrieve the heat map data and calculate the percentage
-        Integer boroughHeatMapMeasure = boroughHeatMapData.get(polygonName);
-
-        Integer percentage = null;
-        if (boroughHeatMapMeasure != null && heatMapBaseValue > 0) {
-            percentage = (int) Math.round((100.0 * boroughHeatMapMeasure / heatMapBaseValue)) ;
-
-        }
-
-        // changing the text on the labels to adjust for the current borough being
-        // hovered over
-        deathsHoverLabel.setText("Borough Deaths: " + boroughHeatMapData.get(polygonName)+"\n"+percentage+"% of highest deaths in date range");
-        // baseHoverTotal.setText("Highest deaths within date range: " + heatMapBaseValue);
-        // percentLabel.setText("Percentage of highest deaths within date range: " + percentage + "%");
-        hoverBoxBoroughLabel.setText(polygonName);
-
-        // position the pane
-        infoPane.setLayoutX(mapMouseX);
-        infoPane.setLayoutY(mapMouseY);
-    }
-
-    /**
-     * If a polygon was being hovered, and is no long being hovered,
-     * reset its attributes to default polygon state
-     * 
-     * @param event
-     */
-    @FXML
-    void polygonLeft(MouseEvent event) {
-        Polygon poly = (Polygon) event.getSource();
-        infoPane.setVisible(false);
-
-        poly.setStrokeWidth(1);
-        poly.setStroke(hoveredPolygonDefaultBorderColor);
-
-        // remove text if no borough is selected
-        selectedBoroughLabel.setText("");
-    }
+    /* ---------------------------------- MISC ---------------------------------- */
 
     protected Parent getView() {
         return viewPane;
