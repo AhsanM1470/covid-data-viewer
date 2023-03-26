@@ -1,7 +1,8 @@
-
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -9,18 +10,19 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Polygon;
-import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.stage.Stage;
+import javafx.event.EventHandler;
+
 import java.time.LocalDate;
+
 import java.util.HashMap;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+
 import java.io.IOException;
 
 public class MapViewerController extends ViewerController {
 
-    //
     Paint hoveredPolygonInitialBorderColor;
     Double hoveredPolygonInitialStroke;
 
@@ -65,9 +67,10 @@ public class MapViewerController extends ViewerController {
     Double infoPaneY = -100.0;
 
     /* ================================== MAIN ================================== */
-
-    public void initialize() {
-        // adding window size change listeneres
+    
+    @FXML
+    protected void initialize() {
+        // Adding window size change listeners to resize map properly
         viewPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             if (oldVal != newVal) {
                 resizeComponents(viewPane);
@@ -80,8 +83,7 @@ public class MapViewerController extends ViewerController {
             }
         });
 
-        // an array of all the borough polygons which will be used when assigning
-        // colours
+        // Array of all the borough polygons which will be used when assigning colours
         boroughPolygons = new Polygon[] { brentPolygon, bexleyPolygon, bromleyPolygon, camdenPolygon, cityPolygon,
                 croydonPolygon, ealingPolygon, enfieldPolygon, greenwichPolygon, hackneyPolygon, hamletsPolygon,
                 hammfullPolygon, haringeyPolygon, harrowPolygon, haveringPolygon, hillingdonPolygon, hounslowPolygon,
@@ -89,7 +91,7 @@ public class MapViewerController extends ViewerController {
                 newhamPolygon, redbridgePolygon, richmondPolygon, southwarkPolygon, suttonPolygon,
                 walthamPolygon, wandsworthPolygon, westminsterPolygon, barkDagPolygon, barnetPolygon };
 
-        // load the mapping of polygon IDs to their respective borough names
+        // boroughIDs.json maps every polygon ID to the corresponding borough name
         JsonReader jsonReader = new JsonReader();
         boroughIdToName = jsonReader.readJson("boroughIDs.json");
 

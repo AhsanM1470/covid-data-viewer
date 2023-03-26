@@ -1,5 +1,4 @@
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 
 import java.time.LocalDate;
 import javafx.scene.Parent;
@@ -13,9 +12,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.ResourceBundle;
-
-import java.net.URL;
 
 /**
  * Responsible for managing the GUI components of the application, including
@@ -25,7 +21,7 @@ import java.net.URL;
  * @author Ishab Ahmed
  * @version 2023.03.13
  */
-public class WelcomeViewerController extends ViewerController implements Initializable {
+public class WelcomeViewerController extends ViewerController {
 
     @FXML
     private VBox welcomePane;
@@ -53,8 +49,8 @@ public class WelcomeViewerController extends ViewerController implements Initial
      * Creates a new Controller object and initialises it with a list of
      * CovidData objects loaded from the data source.
      */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {      
+    @FXML
+    protected void initialize() {      
         // Create TableColumns for the TableView
         TableColumn<CovidData, String> dateCol = new TableColumn<CovidData, String>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<CovidData, String>("date"));

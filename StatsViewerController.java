@@ -1,5 +1,4 @@
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 
 import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
@@ -10,9 +9,6 @@ import javafx.event.ActionEvent;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
-
-import java.net.URL;
 
 import java.time.LocalDate;
 
@@ -26,7 +22,7 @@ import java.util.stream.Collectors;
  * @version 2023.03.13
  */
 
-public class StatsViewerController extends ViewerController implements Initializable {
+public class StatsViewerController extends ViewerController {
 
     @FXML
     private BorderPane statsPane;
@@ -67,8 +63,8 @@ public class StatsViewerController extends ViewerController implements Initializ
     /**
      * Initialises list of panes to be shown.
      */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    protected void initialize() {
         statsPanes = new ArrayList<>();
 
         statsPanes.add(firstPane);
@@ -168,7 +164,6 @@ public class StatsViewerController extends ViewerController implements Initializ
 
         for (CovidData record : mostRecentDataWithTotalDeaths) {
             totalNumberOfDeaths += record.getTotalDeaths();
-
         }
 
         return totalNumberOfDeaths;
