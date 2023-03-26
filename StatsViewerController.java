@@ -156,7 +156,7 @@ public class StatsViewerController extends ViewerController {
      * 
      * @return sum of total deaths in all boroughs wuthin the date range
      */
-    public int getTotalNumberOfDeaths() {
+    private int getTotalNumberOfDeaths() {
         int totalNumberOfDeaths = 0;
 
         // gets the most recent record of every borough that is non-null and non-zero in the total_deaths column
