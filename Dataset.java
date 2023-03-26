@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.function.Function;
 
 /**
  * Represents the data set that is loaded from a CovidDataLoader and processed. 
@@ -51,6 +51,8 @@ public class Dataset {
         return instance;
     }
     
+    // -------------------------------- Retrieving data -------------------------------- //
+    
     /**
      * Returns a list of all CovidData objects in the dataset.
      *
@@ -93,15 +95,25 @@ public class Dataset {
         return new ArrayList<>(filteredData);
     }
     
-    public ArrayList<CovidData> getMostRecentDataWithTotalDeaths(ArrayList<CovidData> covidData) {
+    /**
+     * Returns an list of the most recent CovidData records for each borough, filtered by the given function.
+     * 
+     * @param covidData the ArrayList of CovidData records to be filtered
+     * @param filterFunc the function to use as a filter (takes an argument of type CovidData and returns an Integer)
+     * @return an ArrayList of the most recent CovidData records for each borough that pass the given filter
+     */
+    public ArrayList<CovidData> getMostRecentDataWithFilter(ArrayList<CovidData> covidData, Function<CovidData, Integer> filterFunc) {
         List<CovidData> result = new ArrayList<>();
     
         for (String boroughName : boroughs) {
+            // Data is already sorted, so iterates from newest to oldest data
             CovidData mostRecentData = null;
             for (CovidData record : covidData) {
+                // Ensures that the result function being used is not null nor 0
                 if (record.getBorough().equals(boroughName) &&
-                        record.getTotalDeaths() != null &&
-                        record.getTotalDeaths() != 0) {
+                        filterFunc.apply(record) != null &&
+                        filterFunc.apply(record) != 0) {
+                    // Newest, non-null and non-zero record on filter function found
                     mostRecentData = record;
                     break;
                 }
@@ -114,27 +126,15 @@ public class Dataset {
         return new ArrayList<>(result);
     }
     
-    public ArrayList<CovidData> getMostRecentDataWithTotalCases(ArrayList<CovidData> covidData) {
-        List<CovidData> result = new ArrayList<>();
-    
-        for (String boroughName : boroughs) {
-            CovidData mostRecentData = null;
-            for (CovidData record : covidData) {
-                if (record.getBorough().equals(boroughName) &&
-                        record.getTotalCases() != null &&
-                        record.getTotalCases() != 0) {
-                    mostRecentData = record;
-                    break;
-                }
-            }
-            if (mostRecentData != null) {
-                result.add(mostRecentData);
-            }
-        }
-    
-        return new ArrayList<>(result);
+    /**
+     * @return Array of strings representing the names of all boroughs in the dataset.
+     */
+    public String[] getBoroughs() {
+        return boroughs;
     }
     
+    // -------------------------------- Date validation -------------------------------- //
+        
     /**
      * Checks if a given date falls within a specified date range.
      *
@@ -163,6 +163,8 @@ public class Dataset {
         return fromDate.isBefore(toDate) || fromDate.isEqual(toDate);
     }
     
+    // -------------------------------- Statistics calculations -------------------------------- //
+    
     /**
      * Calculates the average of a list of numbers by adding up all the non-null values 
      * and dividing by the number of non-null values.
@@ -173,18 +175,19 @@ public class Dataset {
     public double getAverage(List<Number> field) {
         double sum = 0;
         double average = 0;
+        int count = 0;  // count of non-null values
         
         for (Number value : field) {
             // To stop the many null values in dataset
             if (value != null) {
                 sum += value.doubleValue();
+                count++;
             }
         }
         
-        int fieldSize = field.size();
         // Check to ensure no division by zero error
-        if (fieldSize > 0) {
-            average = sum / fieldSize;
+        if (count > 0) {
+            average = sum / count;
             // Rounds to 2 decimal places
             average = Math.round(average * 100.0) / 100.0;
         }

@@ -1,17 +1,17 @@
 import javafx.fxml.FXML;
+
 import java.time.LocalDate;
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
-import java.util.ArrayList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.fxml.Initializable;
-import java.net.URL;
-import java.util.ResourceBundle;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Responsible for managing the GUI components of the application, including
@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
  * @author Ishab Ahmed
  * @version 2023.03.13
  */
-public class DataViewerController extends ViewerController implements Initializable {
+public class WelcomeViewerController extends ViewerController {
 
     @FXML
     private VBox welcomePane;
@@ -37,6 +37,9 @@ public class DataViewerController extends ViewerController implements Initializa
 
     @FXML
     private Label dataTableInfoLabel;
+    
+    @FXML
+    private Label validDataRangeLabel;
 
     /**
      * Initializes the FXML controller class.
@@ -46,8 +49,8 @@ public class DataViewerController extends ViewerController implements Initializa
      * Creates a new Controller object and initialises it with a list of
      * CovidData objects loaded from the data source.
      */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {      
+    @FXML
+    protected void initialize() {      
         // Create TableColumns for the TableView
         TableColumn<CovidData, String> dateCol = new TableColumn<CovidData, String>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<CovidData, String>("date"));
@@ -72,6 +75,9 @@ public class DataViewerController extends ViewerController implements Initializa
 
         // Make all columns equal width
         dataTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        
+        validDataRangeLabel.setText("The dataset shows data from " + Collections.min(dataset.getData()).getDate() + " to " + Collections.max(dataset.getData()).getDate() 
+            + " so you can only select dates from that period.");
     }
 
     /**
@@ -96,7 +102,7 @@ public class DataViewerController extends ViewerController implements Initializa
                 dataTableInfoLabel.setText("There's no available data for the selected date range.");
             }
         } else {
-            dataTableInfoLabel.setText("The 'from' date is before the 'to' date.");
+            dataTableInfoLabel.setText("The 'to' date is before the 'from' date.");
         }
 
         setWelcomeState(false);
