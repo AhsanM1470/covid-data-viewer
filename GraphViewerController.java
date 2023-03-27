@@ -1,38 +1,41 @@
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-import javafx.util.Duration;
-import java.net.URL;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.CategoryAxis;
+
 import javafx.scene.Parent;
-import javafx.scene.control.DatePicker;
-import java.time.LocalDate;
-import javafx.event.EventHandler;
-import javafx.event.ActionEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.input.MouseEvent;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
+import javafx.util.Duration;
+
+import java.time.LocalDate;
+
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ResourceBundle;
 
 /**
  * Responsible for managing the graph viewer of the program.
- * The user selects a date range, borough, and particular stat.
- * A line chart is plotted of the stats vs dates for the particular borough.
+ * The user selects a date range, borough, and particular dataField.
+ * A line chart is plotted of the dataFields vs xAxisValues for the particular borough.
  * The user can hover over points on the line chart for the exact values of the
  * plots.
  *
  * @author Muhammad Ahsan Mahfuz
- * @version 2023.03.26 (yyyy.mm.dd)
+ * @version 2023.03.26 
  */
-public class GraphViewerController extends ViewerController implements Initializable {
+public class GraphViewerController extends ViewerController {
     @FXML
     private AnchorPane graphPane;
 
@@ -40,7 +43,7 @@ public class GraphViewerController extends ViewerController implements Initializ
     private BorderPane viewPane;
 
     @FXML
-    private ComboBox<String> boroughComboBox, statComboBox;
+    private ComboBox<String> boroughComboBox, dataFieldComboBox;
 
     @FXML
     private Label infoLabel, hoverLabel;
@@ -58,21 +61,20 @@ public class GraphViewerController extends ViewerController implements Initializ
 
     private double upperBound, lowerBound;
 
-    private String borough, stat;
-    private String[] stats = { "Retail and Recreation Mobility", "Grocery and Pharmacy Mobility", "Parks Mobility",
+    private String borough, dataField;
+    private String[] dataFields = { "Retail and Recreation Mobility", "Grocery and Pharmacy Mobility", "Parks Mobility",
             "Transit Stations Mobility", "Workplaces Mobility", "Residential Mobility", "New Cases", "Total Cases",
             "New Deaths", "Total Deaths" };
 
-    private ArrayList<String> dates = new ArrayList<>();
+    private ArrayList<String> xAxisValues = new ArrayList<>();
     private ArrayList<Integer> yAxisValues = new ArrayList<>();
 
     /**
      * Add all the boroughs to the choice box and respond to the selection made
      * by the user.
      */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-
+    @FXML
+    public void initialize() {
         // Adding window size change listeners to resize map properly
         viewPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             if (oldVal != newVal) {
@@ -87,20 +89,19 @@ public class GraphViewerController extends ViewerController implements Initializ
         });
 
         boroughComboBox.getItems().addAll(dataset.getBoroughs());
-        statComboBox.getItems().addAll(stats);
+        dataFieldComboBox.getItems().addAll(dataFields);
     }
 
     /**
      * Called when either date picker is changed.
      * 
-     * @param fromDate The starting date of the range.
-     * @param toDate   The ending date of the range.
+     * @param fromDate The starting date of the range
+     * @param toDate The ending date of the range
      */
     @FXML
     public void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {
-        this.fromDate = fromDate;
-        this.toDate = toDate;
-        if (borough != null || stat != null) {
+        // If the user changes the date range, but has a borough and field selected, construct the chart
+        if (borough != null || dataField != null) {
             constructChart(fromDate, toDate);
         }
     }
@@ -113,19 +114,21 @@ public class GraphViewerController extends ViewerController implements Initializ
     @FXML
     private void selectBorough(ActionEvent event) {
         borough = boroughComboBox.getValue();
-        if (statComboBox.getValue() != null) {
+        // If the user has selected both a borough and field to graph, construct the chart
+        if (dataFieldComboBox.getValue() != null) {
             constructChart(fromDate, toDate);
         }
     }
 
     /**
-     * Gets the selected stat from the choice box to use when creating the chart.
+     * Gets the selected dataField from the choice box to use when creating the chart.
      * 
-     * @param event The stat the user selected from the choice box.
+     * @param event The dataField the user selected from the choice box.
      */
     @FXML
     private void selectStat(ActionEvent event) {
-        stat = statComboBox.getValue();
+        dataField = dataFieldComboBox.getValue();
+        // If the user has selected both a borough and field to graph, construct the chart
         if (boroughComboBox.getValue() != null) {
             constructChart(fromDate, toDate);
         }
@@ -138,38 +141,43 @@ public class GraphViewerController extends ViewerController implements Initializ
      * @param toDate   The end date of the date range.
      */
     private void constructChart(LocalDate fromDate, LocalDate toDate) {
-        series = new XYChart.Series<String, Integer>();
-        series.setName(stat.toLowerCase() + " in borough");
         // Clears the previous chart before creating a new one
         chart.getData().clear();
+        
+        series = new XYChart.Series<String, Integer>();
+        series.setName(dataField + " in " + borough);
 
-        // check if date range is valid and update label text appropriately
-        infoLabel.setText("Showing data between " + fromDate + " and " + toDate);
-
+        // Display appropriate label if data range is invalid
         if (!dataset.isDateRangeValid(fromDate, toDate)) {
             infoLabel.setText("The selected 'from' date is after the 'to' date");
             return;
         }
-
-        plotChartXYValues(fromDate, toDate);
-
-        if (dates.size() == 0) {
-            infoLabel.setText("There is no data for this stat and borough in the selected date range");
+        
+        // Get the data to plot and split to x-axis data and y-axis data
+        ArrayList<Object> dataToPlot = getDataToPlot(fromDate, toDate);
+        ArrayList<String> xAxisValues = (ArrayList<String>) dataToPlot.get(0);
+        ArrayList<Integer> yAxisValues = (ArrayList<Integer>) dataToPlot.get(1);
+        
+        // Display appropriate label if no data in date range
+        if (xAxisValues.size() == 0) {
+            infoLabel.setText("There is no data for this dataField and borough in the selected date range");
             return;
         }
+        
+        infoLabel.setText("Showing data between " + fromDate + " and " + toDate);
 
-        // Creates a new point on the line chart using elements from the arraylists
-        for (int i = dates.size() - 1; i >= 0; i--) {
-            series.getData().add(new XYChart.Data<String, Integer>(dates.get(i), yAxisValues.get(i)));
+        // Populate series to be plotted
+        for (int i = xAxisValues.size() - 1; i >= 0; i--) {
+            series.getData().add(new XYChart.Data<String, Integer>(xAxisValues.get(i), yAxisValues.get(i)));
         }
-
+        
+        // Plot the series
         chart.getData().addAll(series);
-        yAxis.setLabel(stat);
-        setBounds(yAxisValues);
+        
         addTooltips();
-
-        dates.clear();
-        yAxisValues.clear();
+        setBounds(yAxisValues);
+        
+        yAxis.setLabel(dataField);
     }
 
     /**
@@ -180,28 +188,37 @@ public class GraphViewerController extends ViewerController implements Initializ
      * @param fromDate The start date of the date range.
      * @param toDate   The end date of the date range.
      */
-    private void plotChartXYValues(LocalDate fromDate, LocalDate toDate) {
-        // Add data from the excel database to the arraylists
+    private ArrayList<Object> getDataToPlot(LocalDate fromDate, LocalDate toDate) {
+        ArrayList<String> xAxisValues = new ArrayList<>();
+        ArrayList<Integer> yAxisValues = new ArrayList<>();
+        
+        // Get the data from the dataset and store dates as x-axis and the data as y-axis
         for (CovidData data : dataset.getBoroughData(borough, fromDate, toDate)) {
-            LocalDate date = LocalDate.parse(data.getDate());
-            Integer yValue = getStat(data);
-            if (date != null && yValue != null) {
-                dates.add(date.toString());
+            LocalDate xValue = LocalDate.parse(data.getDate());
+            Integer yValue = getDataField(data);
+            if (xValue != null && yValue != null) {
+                xAxisValues.add(xValue.toString());
                 yAxisValues.add(yValue);
             }
         }
+        
+        ArrayList<Object> dataToPlot = new ArrayList<>();
+        dataToPlot.add(xAxisValues);
+        dataToPlot.add(yAxisValues);
+        
+        return dataToPlot;
     }
 
     /**
-     * Calls the appripriate method to retrieve the statistic selected by the user.
+     * Calls the appripriate method to retrieve the dataFieldistic selected by the user.
      * 
      * @param data
      * @return
      */
-    private Integer getStat(CovidData data) {
-        String statSelected = statComboBox.getValue();
+    private Integer getDataField(CovidData data) {
+        String dataFieldSelected = dataFieldComboBox.getValue();
 
-        switch (statSelected) {
+        switch (dataFieldSelected) {
             case "Retail and Recreation Mobility":
                 return data.getRetailRecreationGMR();
 
@@ -231,9 +248,10 @@ public class GraphViewerController extends ViewerController implements Initializ
 
             case "Total Deaths":
                 return data.getTotalDeaths();
+                
+            default:
+                return null;
         }
-
-        return null;
     }
 
     /**
@@ -248,9 +266,6 @@ public class GraphViewerController extends ViewerController implements Initializ
         yAxis.setAutoRanging(false);
         yAxis.setLowerBound(lowerBound);
         yAxis.setUpperBound(upperBound);
-        // 10 evenly spaced ticks on the y-axis
-        // minimum ticks is 1
-        // yAxis.setTickUnit(Math.max((int) (upperBound - lowerBound) / 10,1));
         yAxis.setMinorTickVisible(false);
     }
 
@@ -261,33 +276,34 @@ public class GraphViewerController extends ViewerController implements Initializ
      *                and date range
      */
     private void calculateBounds(ArrayList<Integer> yValues) {
-        // The arraylist stores total deaths from most recent to oldest
+        // Get min and max value in data
         Integer lowerValue = Integer.valueOf(Collections.min(yValues));
         Integer upperValue = Integer.valueOf(Collections.max(yValues));
 
-        // calculate the upper and lower padding for y axis
+        // Add 10% padding around the lower and upper bouds
         double yPadding = 0.1 * (upperValue - lowerValue);
+        
         lowerBound = (lowerValue - yPadding);
         upperBound = upperValue + yPadding;
-
     }
 
     /**
      * Adds a Tooltip to every node on the line chart which displays the exact date
-     * and stat value when hovered over with the mouse.
+     * and dataField value when hovered over with the mouse.
      */
     private void addTooltips() {
         for (XYChart.Data<String, Integer> data : series.getData()) {
-            // make the nodes smaller
+            // Make each point smaller - more visually appealing
             data.getNode().setStyle("-fx-background-insets: 0, 1;" +
                     "-fx-background-radius: 1px;" +
                     "-fx-padding: 2px;");
-            // add the feature to hover over them
+                    
+            // Shows the exact data when hovering over a point
             data.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
                     Tooltip tp = new Tooltip(
-                            "Date: " + data.getXValue() + "\n" + stat + ": " + data.getYValue().toString());
+                            "Date: " + data.getXValue() + "\n" + dataField + ": " + data.getYValue().toString());
                     tp.setShowDelay(Duration.seconds(0.0));
                     Tooltip.install(data.getNode(), tp);
                     hoverLabel.setVisible(false);
