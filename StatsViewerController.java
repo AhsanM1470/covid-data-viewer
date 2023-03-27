@@ -73,35 +73,39 @@ public class StatsViewerController extends ViewerController {
 
     /**
      * Initialises list of panes to be shown.
+     * Initialises fade transitions that later are used to switch panes.
      */
     @FXML
     protected void initialize() {
         statsPanes = new ArrayList<>();
 
+        // First pane is the only visible pane
         firstPane.setOpacity(1);
         secondPane.setOpacity(0.0);
         thirdPane.setOpacity(0.0);
         fourthPane.setOpacity(0.0);
 
+        // Initialises "statsPanes" ArrayList<Pane>
         statsPanes.add(firstPane);
         statsPanes.add(secondPane);
         statsPanes.add(thirdPane);
         statsPanes.add(fourthPane);
 
-
         // Start on first panel
         panelIndex = 0;
 
-
+        // Sets up fade transitions
         fadeIn = new FadeTransition();
-        fadeIn.setDuration(Duration.millis(300));
+        fadeIn.setDuration(Duration.millis(150));
         fadeIn.setToValue(1);
         fadeIn.setFromValue(0);
 
         fadeOut = new FadeTransition();
-        fadeOut.setDuration(Duration.millis(300));
+        fadeOut.setDuration(Duration.millis(150));
         fadeOut.setToValue(0);
         fadeOut.setFromValue(1);
+
+        // "fadeIn" plays as soon as "fadeOut is finished"
         fadeOut.setOnFinished(e -> fadeIn.play());
 
     }
@@ -119,7 +123,6 @@ public class StatsViewerController extends ViewerController {
 
         refreshLabels();
 
-
     }
 
     /**
@@ -129,31 +132,16 @@ public class StatsViewerController extends ViewerController {
      */
     @FXML
     private void forwardButton(ActionEvent event) {
-        // Show next panel
-//        statsPanes.get((panelIndex+1) % statsPanes.size()).setVisible(true);
-        // Stop showing current pane
-
-//        statsPanes.get(panelIndex).setVisible(false);
-
+        // Sets up nodes for fade transitions
         fadeOut.setNode(statsPanes.get((panelIndex) % statsPanes.size()));
+        fadeIn.setNode(statsPanes.get((panelIndex + 1) % statsPanes.size()));
+
         // Increment to next pane
         panelIndex = (panelIndex + 1) % statsPanes.size();
 
-
-        fadeIn.setNode(statsPanes.get((panelIndex) % statsPanes.size()));
+        // Show next panel
         fadeOut.play();
 
-
-
-//        fadeOut.setNode(statsPanes.get(3));
-//        fadeOut.play();
-//
-//        fadeOut.setNode(statsPanes.get(2));
-//        fadeOut.play();
-//        fadeOut.setNode(statsPanes.get(1));
-//        fadeOut.play();
-//        fadeOut.setNode(statsPanes.get(0));
-//        fadeOut.play();
     }
 
     /**
@@ -163,21 +151,20 @@ public class StatsViewerController extends ViewerController {
      */
     @FXML
     private void backwardButton(ActionEvent event) {
-        // Stop showing current pane
-//        statsPanes.get(panelIndex).setVisible(false);
-
         // Decrement to previous pane
         panelIndex--;
+
         // Roll around to last pane in array if index becomes -ve
         if (panelIndex < 0) {
             panelIndex = statsPanes.size() - 1;
         }
 
+        // Nodes are set up after to prevent negative indexes
         fadeIn.setNode(statsPanes.get((panelIndex) % statsPanes.size()));
         fadeOut.setNode(statsPanes.get((panelIndex + 1) % statsPanes.size()));
+
+        // Show previous panel
         fadeOut.play();
-        // Show previous pane
-//        statsPanes.get(panelIndex).setVisible(true);
     }
 
     /**
