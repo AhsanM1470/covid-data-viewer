@@ -37,6 +37,9 @@ public class GraphViewerController extends ViewerController implements Initializ
     private AnchorPane graphPane;
 
     @FXML
+    private BorderPane viewPane;
+
+    @FXML
     private ComboBox<String> boroughComboBox, statComboBox;
 
     @FXML
@@ -69,6 +72,20 @@ public class GraphViewerController extends ViewerController implements Initializ
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+        // Adding window size change listeners to resize map properly
+        viewPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            if (oldVal != newVal) {
+                resizeComponents(viewPane);
+            }
+        });
+
+        viewPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            if (oldVal != newVal) {
+                resizeComponents(viewPane);
+            }
+        });
+
         boroughComboBox.getItems().addAll(dataset.getBoroughs());
         statComboBox.getItems().addAll(stats);
     }
@@ -285,6 +302,6 @@ public class GraphViewerController extends ViewerController implements Initializ
      * @return graphPane
      */
     protected Parent getView() {
-        return graphPane;
+        return viewPane;
     }
 }

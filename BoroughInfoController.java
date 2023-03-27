@@ -58,7 +58,7 @@ public class BoroughInfoController {
         TableColumn<CovidData, Integer> totalCasesCol = new TableColumn<>("Total Cases");
         totalCasesCol.setCellValueFactory(new PropertyValueFactory<>("totalCases"));
 
-        TableColumn<CovidData, Integer> newDeathsCol = new TableColumn<>("New  Deaths");
+        TableColumn<CovidData, Integer> newDeathsCol = new TableColumn<>("New Deaths");
         newDeathsCol.setCellValueFactory(new PropertyValueFactory<>("newDeaths"));
         
         TableColumn<CovidData, Integer> totalDeathsCol = new TableColumn<>("Total Deaths");
