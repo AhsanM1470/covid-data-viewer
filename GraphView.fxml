@@ -19,12 +19,12 @@
                </font>
             </Label>
             <ComboBox fx:id="boroughComboBox" layoutX="25.0" layoutY="78.0" onAction="#selectBorough" prefWidth="150.0" />
-            <Label layoutX="26.0" layoutY="142.0" text="Select the stat" textFill="WHITE">
+            <Label layoutX="26.0" layoutY="142.0" text="Select the field" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <ComboBox fx:id="statComboBox" layoutX="25.0" layoutY="165.0" onAction="#selectStat" prefWidth="150.0" />
+            <ComboBox fx:id="dataFieldComboBox" layoutX="25.0" layoutY="165.0" onAction="#selectStat" prefWidth="150.0" />
             <LineChart fx:id="chart" layoutX="198.0" layoutY="56.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="467.0" prefWidth="694.0" style="-fx-background-color: FFFFFF;">
               <xAxis>
                 <CategoryAxis animated="false" label="Date" side="BOTTOM" fx:id="xAxis" />
