@@ -1,3 +1,7 @@
+import javafx.animation.FadeTransition;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.Property;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 
 import javafx.scene.Parent;
@@ -6,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.event.ActionEvent;
+import javafx.util.Duration;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -23,6 +28,12 @@ import java.util.stream.Collectors;
  */
 
 public class StatsViewerController extends ViewerController {
+
+    private FadeTransition fadeIn;
+    private FadeTransition fadeOut;
+
+
+
 
     @FXML
     private BorderPane statsPane;
@@ -53,7 +64,7 @@ public class StatsViewerController extends ViewerController {
     @FXML
     private Label averageCasesLabel;
 
-    // Date of highest deaths label
+    // Date of the highest deaths label
     @FXML
     private Label highestDeathDateLabel;
 
@@ -67,14 +78,32 @@ public class StatsViewerController extends ViewerController {
     protected void initialize() {
         statsPanes = new ArrayList<>();
 
+        firstPane.setOpacity(1);
+        secondPane.setOpacity(0.0);
+        thirdPane.setOpacity(0.0);
+        fourthPane.setOpacity(0.0);
+
         statsPanes.add(firstPane);
         statsPanes.add(secondPane);
         statsPanes.add(thirdPane);
         statsPanes.add(fourthPane);
-        firstPane.setVisible(true);
+
 
         // Start on first panel
         panelIndex = 0;
+
+
+        fadeIn = new FadeTransition();
+        fadeIn.setDuration(Duration.millis(300));
+        fadeIn.setToValue(1);
+        fadeIn.setFromValue(0);
+
+        fadeOut = new FadeTransition();
+        fadeOut.setDuration(Duration.millis(300));
+        fadeOut.setToValue(0);
+        fadeOut.setFromValue(1);
+        fadeOut.setOnFinished(e -> fadeIn.play());
+
     }
 
     /**
@@ -89,6 +118,8 @@ public class StatsViewerController extends ViewerController {
         }
 
         refreshLabels();
+
+
     }
 
     /**
@@ -98,14 +129,31 @@ public class StatsViewerController extends ViewerController {
      */
     @FXML
     private void forwardButton(ActionEvent event) {
+        // Show next panel
+//        statsPanes.get((panelIndex+1) % statsPanes.size()).setVisible(true);
         // Stop showing current pane
-        statsPanes.get(panelIndex).setVisible(false);
 
+//        statsPanes.get(panelIndex).setVisible(false);
+
+        fadeOut.setNode(statsPanes.get((panelIndex) % statsPanes.size()));
         // Increment to next pane
         panelIndex = (panelIndex + 1) % statsPanes.size();
 
-        // Show next pane
-        statsPanes.get(panelIndex).setVisible(true);
+
+        fadeIn.setNode(statsPanes.get((panelIndex) % statsPanes.size()));
+        fadeOut.play();
+
+
+
+//        fadeOut.setNode(statsPanes.get(3));
+//        fadeOut.play();
+//
+//        fadeOut.setNode(statsPanes.get(2));
+//        fadeOut.play();
+//        fadeOut.setNode(statsPanes.get(1));
+//        fadeOut.play();
+//        fadeOut.setNode(statsPanes.get(0));
+//        fadeOut.play();
     }
 
     /**
@@ -116,7 +164,7 @@ public class StatsViewerController extends ViewerController {
     @FXML
     private void backwardButton(ActionEvent event) {
         // Stop showing current pane
-        statsPanes.get(panelIndex).setVisible(false);
+//        statsPanes.get(panelIndex).setVisible(false);
 
         // Decrement to previous pane
         panelIndex--;
@@ -125,8 +173,11 @@ public class StatsViewerController extends ViewerController {
             panelIndex = statsPanes.size() - 1;
         }
 
+        fadeIn.setNode(statsPanes.get((panelIndex) % statsPanes.size()));
+        fadeOut.setNode(statsPanes.get((panelIndex + 1) % statsPanes.size()));
+        fadeOut.play();
         // Show previous pane
-        statsPanes.get(panelIndex).setVisible(true);
+//        statsPanes.get(panelIndex).setVisible(true);
     }
 
     /**

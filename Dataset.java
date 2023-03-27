@@ -107,19 +107,15 @@ public class Dataset {
     
         for (String boroughName : boroughs) {
             // Data is already sorted, so iterates from newest to oldest data
-            CovidData mostRecentData = null;
             for (CovidData record : covidData) {
                 // Ensures that the result function being used is not null nor 0
                 if (record.getBorough().equals(boroughName) &&
                         filterFunc.apply(record) != null &&
                         filterFunc.apply(record) != 0) {
                     // Newest, non-null and non-zero record on filter function found
-                    mostRecentData = record;
+                    result.add(record);
                     break;
                 }
-            }
-            if (mostRecentData != null) {
-                result.add(mostRecentData);
             }
         }
     
