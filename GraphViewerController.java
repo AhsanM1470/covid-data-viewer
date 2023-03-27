@@ -8,11 +8,13 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.CategoryAxis;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
@@ -66,9 +68,6 @@ public class GraphViewerController extends ViewerController {
             "Transit Stations Mobility", "Workplaces Mobility", "Residential Mobility", "New Cases", "Total Cases",
             "New Deaths", "Total Deaths" };
 
-    private ArrayList<String> xAxisValues = new ArrayList<>();
-    private ArrayList<Integer> yAxisValues = new ArrayList<>();
-
     /**
      * Add all the boroughs to the choice box and respond to the selection made
      * by the user.
@@ -87,6 +86,7 @@ public class GraphViewerController extends ViewerController {
                 resizeComponents(viewPane);
             }
         });
+
 
         boroughComboBox.getItems().addAll(dataset.getBoroughs());
         dataFieldComboBox.getItems().addAll(dataFields);
