@@ -22,31 +22,31 @@
                      <children>
                         <Label contentDisplay="CENTER" text="Google Mobility Statistics" textAlignment="CENTER" textFill="WHITE" underline="true" wrapText="true">
                            <padding>
-                              <Insets top="92.0" />
+                              <Insets top="100.0" />
                            </padding>
                            <font>
                               <Font size="29.0" />
                            </font>
                         </Label>
-                        <Label fx:id="rrGMRLabel" text="No date range has been selected." textFill="WHITE" wrapText="true">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
+                        <Label fx:id="rrGMRLabel" text="No date range has been selected." textFill="WHITE">
                            <padding>
-                              <Insets top="120.0" />
-                           </padding></Label>
-                        <Label fx:id="gpGMRLabel" text="No date range has been selected." textFill="WHITE" wrapText="true">
+                              <Insets top="100.0" />
+                           </padding>
                            <font>
-                              <Font size="24.0" />
-                           </font>
+                              <Font size="29.0" />
+                           </font></Label>
+                        <Label fx:id="gpGMRLabel" text="No date range has been selected." textFill="WHITE">
                            <padding>
                               <Insets top="40.0" />
-                           </padding></Label>
+                           </padding>
+                           <font>
+                              <Font size="29.0" />
+                           </font></Label>
                      </children>
                   </VBox>
                   <BorderPane fx:id="secondPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="597.0">
                      <top>
-                        <Label alignment="CENTER" prefHeight="154.0" prefWidth="399.0" text="Total number of total deaths" textAlignment="CENTER" textFill="WHITE" underline="true" wrapText="true" BorderPane.alignment="CENTER">
+                        <Label alignment="CENTER" prefHeight="154.0" prefWidth="399.0" text="Total number of total deaths" textFill="WHITE" underline="true" BorderPane.alignment="CENTER">
                            <font>
                               <Font size="29.0" />
                            </font>
@@ -59,7 +59,7 @@
                         </Label>
                      </top>
                      <center>
-                        <Label fx:id="sumTotalDeathLabel" alignment="CENTER" prefHeight="287.0" prefWidth="306.0" text="No date range has been selected." textAlignment="CENTER" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER">
+                        <Label fx:id="sumTotalDeathLabel" alignment="CENTER" prefHeight="287.0" prefWidth="306.0" text="No date range has been selected." textFill="WHITE" BorderPane.alignment="CENTER">
                            <padding>
                               <Insets bottom="150.0" />
                            </padding>
@@ -71,7 +71,7 @@
                   </BorderPane>
                   <BorderPane fx:id="thirdPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="597.0">
                      <center>
-                        <Label fx:id="averageCasesLabel" text="No date range has been selected." textAlignment="CENTER" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER">
+                        <Label fx:id="averageCasesLabel" text="No date range has been selected." textFill="WHITE" BorderPane.alignment="CENTER">
                            <padding>
                               <Insets bottom="125.0" />
                            </padding>
@@ -80,7 +80,7 @@
                            </font></Label>
                      </center>
                      <top>
-                        <Label text="Average of total cases over all records in date range" textAlignment="CENTER" textFill="WHITE" underline="true" wrapText="true" BorderPane.alignment="CENTER">
+                        <Label text="Average of total cases over all records in date range" textFill="WHITE" underline="true" BorderPane.alignment="CENTER">
                            <font>
                               <Font size="25.0" />
                            </font>
@@ -91,7 +91,7 @@
                   </BorderPane>
                   <BorderPane fx:id="fourthPane" prefHeight="581.0" prefWidth="597.0">
                      <center>
-                        <Label fx:id="highestDeathDateLabel" text="No date range has been selected." textAlignment="CENTER" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER">
+                        <Label fx:id="highestDeathDateLabel" text="No date range has been selected." textFill="WHITE" BorderPane.alignment="CENTER">
                            <padding>
                               <Insets bottom="125.0" />
                            </padding>
@@ -100,7 +100,7 @@
                            </font></Label>
                      </center>
                      <top>
-                        <Label text="Date with the highest death" textAlignment="CENTER" textFill="WHITE" underline="true" wrapText="true" BorderPane.alignment="CENTER">
+                        <Label text="Date with the highest death" textFill="WHITE" underline="true" BorderPane.alignment="CENTER">
                            <font>
                               <Font size="29.0" />
                            </font>
