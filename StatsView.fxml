@@ -83,7 +83,7 @@
                            </padding></Label>
                      </children>
                   </VBox>
-                  <BorderPane fx:id="secondPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="597.0" visible="false">
+                  <BorderPane fx:id="secondPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="597.0">
                      <top>
                         <Label alignment="CENTER" prefHeight="154.0" prefWidth="399.0" text="Total number of total deaths" textAlignment="CENTER" textFill="WHITE" underline="true" wrapText="true" BorderPane.alignment="CENTER">
                            <font>
@@ -108,7 +108,7 @@
                         </Label>
                      </center>
                   </BorderPane>
-                  <BorderPane fx:id="thirdPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="597.0" visible="false">
+                  <BorderPane fx:id="thirdPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="597.0">
                      <center>
                         <Label fx:id="averageCasesLabel" text="No date range has been selected." textAlignment="CENTER" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER">
                            <padding>
@@ -128,7 +128,7 @@
                            </padding></Label>
                      </top>
                   </BorderPane>
-                  <BorderPane fx:id="fourthPane" prefHeight="581.0" prefWidth="597.0" visible="false">
+                  <BorderPane fx:id="fourthPane" prefHeight="581.0" prefWidth="597.0">
                      <center>
                         <Label fx:id="highestDeathDateLabel" text="No date range has been selected." textAlignment="CENTER" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER">
                            <padding>
