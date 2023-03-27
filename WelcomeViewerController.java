@@ -1,9 +1,12 @@
 import javafx.fxml.FXML;
 
 import java.time.LocalDate;
+
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
@@ -50,7 +53,9 @@ public class WelcomeViewerController extends ViewerController {
      * CovidData objects loaded from the data source.
      */
     @FXML
-    protected void initialize() {      
+    protected void initialize() {    
+        super.initialize();  
+
         // Create TableColumns for the TableView
         TableColumn<CovidData, String> dateCol = new TableColumn<CovidData, String>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<CovidData, String>("date"));

@@ -2,8 +2,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import javafx.fxml.FXML;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import java.util.Collections;
 import javafx.fxml.Initializable;
@@ -21,12 +23,31 @@ public abstract class ViewerController {
     protected Dataset dataset = Dataset.getInstance();
 
     @FXML
+    protected BorderPane viewPane;
+
+    @FXML
     protected StackPane parentPane;
 
     @FXML
     protected StackPane stackPane;
 
     protected LocalDate fromDate, toDate;
+
+    @FXML
+    protected void initialize(){
+        // Adding window size change listeners to resize map properly
+        viewPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            if (oldVal != newVal) {
+                resizeComponents(viewPane);
+            }
+        });
+
+        viewPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            if (oldVal != newVal) {
+                resizeComponents(viewPane);
+            }
+        });
+    }
 
     // -------------------------------- Getters -------------------------------- //
 
@@ -66,12 +87,31 @@ public abstract class ViewerController {
         processDataInDateRange(fromDate, toDate);
     }
 
+    // -------------------------------- Resize Components -------------------------------- //
+
     /**
-     * Resize certain components (not mandatory) in certain panels.
+     * Resizes the map relative to the size of the parentPane (MainWindow).
      * 
-     * @param parentPane pane that is to be used to scale with
+     * @param parentPane The parentPane that is being resized.
      */
-    protected void resizeComponents(Region parentPane) {};
+    protected void resizeComponents(Region parentPane) {
+        // Calculate the ratio of the current width/height relative to the original width/height
+        double ratioX = parentPane.getWidth() / parentPane.getPrefWidth();
+        double ratioY = parentPane.getHeight() / parentPane.getPrefHeight();
+
+        // Calculate the scale factor (s.f.) the window was scaled by (limited to s.f. of 1, and max s.f. of 2)
+        ratioX = Math.max(Math.min(ratioX, 2), 1);
+        ratioY = Math.max(Math.min(ratioY, 2), 1);
+        
+        // Scale by same ratio allowing aspect ratio to be maintained
+        double scale = Math.min(ratioX, ratioY);
+        
+        // Get the centre of the MainWindow and scale relative to the current MainWindow size
+        Node toScale = viewPane.getCenter();
+        
+        toScale.setScaleY(scale);
+        toScale.setScaleX(scale);
+    }
 
     // ---------------------------- Abstract Methods --------------------------- //
 

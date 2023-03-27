@@ -7,11 +7,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.CategoryAxis;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.DatePicker;
 import java.time.LocalDate;
@@ -85,6 +87,7 @@ public class GraphViewerController extends ViewerController implements Initializ
                 resizeComponents(viewPane);
             }
         });
+
 
         boroughComboBox.getItems().addAll(dataset.getBoroughs());
         statComboBox.getItems().addAll(stats);
