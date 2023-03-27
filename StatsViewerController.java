@@ -3,9 +3,10 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.Property;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -36,7 +37,7 @@ public class StatsViewerController extends ViewerController {
 
 
     @FXML
-    private BorderPane statsPane;
+    private BorderPane statsPane, viewPane;
     
     // first pane - setVisible(true) when injected
     @FXML
@@ -77,6 +78,19 @@ public class StatsViewerController extends ViewerController {
      */
     @FXML
     protected void initialize() {
+        super.initialize();
+        // Adding window size change listeners to resize map properly
+        viewPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            if (oldVal != newVal) {
+                resizeComponents(viewPane);
+            }
+        });
+
+        viewPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            if (oldVal != newVal) {
+                resizeComponents(viewPane);
+            }
+        });
         statsPanes = new ArrayList<>();
 
         // First pane is the only visible pane
@@ -253,6 +267,6 @@ public class StatsViewerController extends ViewerController {
      * @return The view that this controller is associated with.
      */
     protected Parent getView() {
-        return statsPane;
+        return viewPane;
     }
 }
