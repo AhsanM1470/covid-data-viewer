@@ -28,7 +28,7 @@ import javafx.util.Duration;
  * @author Muhammad Ahsan Mahfuz
  * @version 2023.03.26 
  */
-public class GraphViewerController extends ViewerController {
+public class GraphViewController extends ViewController {
     @FXML
     private AnchorPane graphPane;
 

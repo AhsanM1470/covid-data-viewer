@@ -23,7 +23,7 @@ import javafx.util.Duration;
  * @version 2023.03.13
  */
 
-public class StatsViewerController extends ViewerController {
+public class StatsViewController extends ViewController {
 
     @FXML
     private BorderPane statsPane, viewPane;

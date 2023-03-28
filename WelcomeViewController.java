@@ -1,20 +1,17 @@
-import javafx.fxml.FXML;
-
 import java.time.LocalDate;
 
-import javafx.scene.Node;
+import java.util.ArrayList;
+import java.util.Collections;
+
+import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
-
-import java.util.ArrayList;
-import java.util.Collections;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 /**
  * Responsible for managing the GUI components of the application, including
@@ -24,7 +21,7 @@ import java.util.Collections;
  * @author Ishab Ahmed
  * @version 2023.03.13
  */
-public class WelcomeViewerController extends ViewerController {
+public class WelcomeViewController extends ViewController {
 
     @FXML
     private VBox welcomePane;

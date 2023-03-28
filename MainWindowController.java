@@ -48,7 +48,7 @@ public class MainWindowController implements Initializable {
     // Instance of Dataset singleton
     protected Dataset dataset = Dataset.getInstance();
     
-    private ArrayList<ViewerController> controllers;
+    private ArrayList<ViewController> controllers;
     private int controllerIndex;
 
     /**
@@ -65,7 +65,7 @@ public class MainWindowController implements Initializable {
 
         // Try to load the controllers for all the panels
         try {
-            controllers = new ArrayList<ViewerController>();
+            controllers = new ArrayList<ViewController>();
             loadControllers();
         } catch (Exception e) {
             // Print the error message and stack trace to the console
@@ -97,7 +97,7 @@ public class MainWindowController implements Initializable {
             loader.load();
             
             // get controller instance as set in FXML file
-            ViewerController controller = loader.getController();
+            ViewController controller = loader.getController();
             controllers.add(controller);
         }
     }
@@ -157,11 +157,11 @@ public class MainWindowController implements Initializable {
     private void nextPanel(ActionEvent event) {
         // prevents continuous clicking if currently in process of switching to next panel
         if (canSwitchPanels()){
-            ViewerController currentController = controllers.get(controllerIndex);
+            ViewController currentController = controllers.get(controllerIndex);
         
             // increment the panel controller (% to prevent indexOutOfBound)
             controllerIndex = (controllerIndex + 1) % controllers.size();
-            ViewerController nextController = controllers.get(controllerIndex);
+            ViewController nextController = controllers.get(controllerIndex);
             
             // transition from current view to the next view
             transitionIntoNextPanel(currentController, nextController, event);
@@ -177,14 +177,14 @@ public class MainWindowController implements Initializable {
     private void previousPanel(ActionEvent event) {
         // prevents continuous clicking if currently in process of switching to next panel
         if (canSwitchPanels()){
-            ViewerController currentController = controllers.get(controllerIndex);
+            ViewController currentController = controllers.get(controllerIndex);
             
             controllerIndex--;
             // rolls index back to end of list if reaching -ve index
             if (controllerIndex < 0) {
                 controllerIndex = controllers.size() - 1;
             }
-            ViewerController nextController = controllers.get(controllerIndex);
+            ViewController nextController = controllers.get(controllerIndex);
             
             // transition from  current view to the previous view
             transitionIntoNextPanel(currentController, nextController, event);
@@ -197,11 +197,11 @@ public class MainWindowController implements Initializable {
      * Sets the center of the screen to next panel.
      * Shows a transition between the the current panel and next panel. 
      * 
-     * @param currentController The ViewerController of the current panel
-     * @param nextController The ViewerController of the next panel
+     * @param currentController The ViewController of the current panel
+     * @param nextController The ViewController of the next panel
      * @param event Button click event that triggers the panel transition
      */
-    private void transitionIntoNextPanel(ViewerController currentController, ViewerController nextController,
+    private void transitionIntoNextPanel(ViewController currentController, ViewController nextController,
             ActionEvent event) {
 
         // Updates the next panel with the necessary information given the dates

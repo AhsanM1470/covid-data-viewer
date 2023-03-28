@@ -1,24 +1,21 @@
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
+import java.time.LocalDate;;
+
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import java.util.Collections;
-import javafx.fxml.Initializable;
 
 /**
- * Serves as a template of common functionality for the Controllers of each
+ * Serves as a template of common functionality for the controllers of each
  * view. Predominantly ensures that date pickers contain the same value across
  * each controller, and accessing the dataset.
  *
  * @author Ishab Ahmed
  * @version 2023.03.16
  */
-public abstract class ViewerController {
+public abstract class ViewController {
     // Instance of Dataset singleton
     protected Dataset dataset = Dataset.getInstance();
 

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="viewPane" prefHeight="580.0" prefWidth="920.0" style="-fx-background-color: #191919D1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WelcomeViewerController">
+<BorderPane fx:id="viewPane" prefHeight="580.0" prefWidth="920.0" style="-fx-background-color: #191919D1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WelcomeViewController">
    <center>
       <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="920.0" BorderPane.alignment="CENTER">
          <children>

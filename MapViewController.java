@@ -1,27 +1,34 @@
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
-import javafx.scene.shape.Polygon;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.stage.Stage;
-import javafx.event.EventHandler;
+import java.io.IOException;
 
 import java.time.LocalDate;
 
 import java.util.HashMap;
 
-import java.io.IOException;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 
-public class MapViewerController extends ViewerController {
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Polygon;
+import javafx.stage.Stage;
+
+/**
+ * Handles the displaying and processing of a map of London. Responsible for initialising the borough polygons and assigning colours to them based on 
+ * the number of deaths within a given date range.
+ * 
+ * @author Harshraj Patel
+ * @version 2023.03.28
+ */
+public class MapViewController extends ViewController {
 
     @FXML
     private AnchorPane mapAnchorPane, polygonPane;
@@ -89,7 +96,8 @@ public class MapViewerController extends ViewerController {
             "hounslowPolygon", "islingtonPolygon", "kensChelsPolygon", "kingstonPolygon", "lambethPolygon", "lewishamPolygon",
             "mertonPolygon", "newhamPolygon", "redbridgePolygon", "richmondPolygon", "southwarkPolygon", "suttonPolygon", "hamletsPolygon",
             "walthamPolygon", "wandsworthPolygon", "westminsterPolygon"};
-
+        
+        // Creates a mapping between each polygon name and the name of the borough
         for (int i = 0; i < boroughNames.length; i++) {
             boroughIdToName.put(boroughPolygons[i], boroughNames[i]);
         }
