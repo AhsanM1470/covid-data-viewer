@@ -21,9 +21,8 @@ public class DataViewer extends Application
         
         stage.setTitle("Covid Data");
 
-        // don't allow window to be resized smaller than this
         stage.setMinWidth(920);
-        stage.setMinHeight(650 + 35); // + 35px for the top bar of OS windows.
+        stage.setMinHeight(685);
         
         stage.setScene(scene);
         stage.show();
