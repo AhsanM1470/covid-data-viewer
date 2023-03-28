@@ -58,6 +58,8 @@ public class GraphViewerController extends ViewerController {
      */
     @FXML
     public void initialize() {
+        super.initialize();
+        
         boroughComboBox.getItems().addAll(dataset.getBoroughs());
         dataFieldComboBox.getItems().addAll(new String[] {"Retail and Recreation Mobility", "Grocery and Pharmacy Mobility", "Parks Mobility",
             "Transit Stations Mobility", "Workplaces Mobility", "Residential Mobility", "New Cases", "Total Cases",

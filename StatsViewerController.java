@@ -15,6 +15,7 @@ import javafx.util.Duration;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import java.time.LocalDate;
 
@@ -29,12 +30,6 @@ import java.util.stream.Collectors;
  */
 
 public class StatsViewerController extends ViewerController {
-
-    private FadeTransition fadeIn;
-    private FadeTransition fadeOut;
-
-
-
 
     @FXML
     private BorderPane statsPane, viewPane;
@@ -71,6 +66,11 @@ public class StatsViewerController extends ViewerController {
 
     // Stores the data within the date range selected
     private ArrayList<CovidData> dataInDateRange;
+    
+    //private FadeTransition fade;
+    
+    private FadeTransition fadeIn;
+    private FadeTransition fadeOut;
 
     /**
      * Initialises list of panes to be shown.
@@ -79,49 +79,34 @@ public class StatsViewerController extends ViewerController {
     @FXML
     protected void initialize() {
         super.initialize();
-        // Adding window size change listeners to resize map properly
-        viewPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-            if (oldVal != newVal) {
-                resizeComponents(viewPane);
-            }
-        });
-
-        viewPane.heightProperty().addListener((obs, oldVal, newVal) -> {
-            if (oldVal != newVal) {
-                resizeComponents(viewPane);
-            }
-        });
-        statsPanes = new ArrayList<>();
-
-        // First pane is the only visible pane
-        firstPane.setOpacity(1);
-        secondPane.setOpacity(0.0);
-        thirdPane.setOpacity(0.0);
-        fourthPane.setOpacity(0.0);
-
+        
         // Initialises "statsPanes" ArrayList<Pane>
-        statsPanes.add(firstPane);
-        statsPanes.add(secondPane);
-        statsPanes.add(thirdPane);
-        statsPanes.add(fourthPane);
-
+        statsPanes = new ArrayList<>(Arrays.asList(firstPane, secondPane, thirdPane, fourthPane));
+        
+        // Only show the first pane initially
+        statsPanes.forEach(pane -> pane.setOpacity(0));
+        statsPanes.get(0).setOpacity(1);
+        
         // Start on first panel
         panelIndex = 0;
-
+        
         // Sets up fade transitions
-        fadeIn = new FadeTransition();
-        fadeIn.setDuration(Duration.millis(150));
-        fadeIn.setToValue(1);
-        fadeIn.setFromValue(0);
-
-        fadeOut = new FadeTransition();
-        fadeOut.setDuration(Duration.millis(150));
-        fadeOut.setToValue(0);
-        fadeOut.setFromValue(1);
+        fadeIn = createFadeTransition(Duration.millis(150), 1, 0);
+        fadeOut = createFadeTransition(Duration.millis(150), 0, 1);
 
         // "fadeIn" plays as soon as "fadeOut is finished"
         fadeOut.setOnFinished(e -> fadeIn.play());
-
+    }
+    
+    /**
+     * Creates a FadeTransition animate the opacity of each statistic from the start value 
+     * to the end value over the specified duration.
+     */
+    private FadeTransition createFadeTransition(Duration duration, double toValue, double fromValue) {
+        FadeTransition fade = new FadeTransition(duration);
+        fade.setToValue(toValue);
+        fade.setFromValue(fromValue);
+        return fade;
     }
 
     /**
@@ -136,7 +121,6 @@ public class StatsViewerController extends ViewerController {
         }
 
         refreshLabels();
-
     }
 
     /**
@@ -155,7 +139,6 @@ public class StatsViewerController extends ViewerController {
 
         // Show next panel
         fadeOut.play();
-
     }
 
     /**
