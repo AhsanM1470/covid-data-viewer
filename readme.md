@@ -37,7 +37,7 @@ When a valid date range is chosen, a table appears showing the key information (
 
 **Panel 2: The Map** - Implemented by Harshraj Patel
 
-The second panel displays a map. The boroughs are represented by using JavaFX polygons. This allowed to create a geographically accurate map of London, with each polygon being the actual shape of the borough. 
+The second panel displays a map. The boroughs are represented by using JavaFX polygons. This allowed the creation of a geographically accurate map of London, with each polygon being the actual shape of the borough. 
 
 The map that gives a visual representation of the Covid death rates in the date range. It does this by summing up the new deaths for each record to get the deaths for the borough in the time period selected. The number of deaths in the borough in the date range is used to colour its respective polygon. Green represents a low number of deaths and red represents a high number of deaths, with a gradient between the green and red for values in between. The colour is determined by getting the number of deaths in the borough for the time period and getting it as a percentage of the highest deaths in the period. For example, if the highest deaths in the period was Harrow with 250 deaths, Harrow will be coloured with the deepest red and all other boroughs are coloured relative to this number (e.g. Camden with 120 deaths will be 120/250=48% between pure green and pure red).
 
@@ -45,7 +45,7 @@ When you hover over a borough in the map, a small box shows up showing the death
 
 *Borough Data*
 
-Upon a user selecting a date range, and after the appropraite visualisation of the data is displayed, it is possible for a user to click on any of the boroughs in order to see all of the Covid information for that specific borough. A new window pops up with a TableView displaying all of the data for that borough in the date range. At the top of the window, there is a drop-down menu that allows the user to sort by any one of the table columns, and whether they want the data in ascending or descending order.
+Upon a user selecting a date range, and after the appropriate visualisation of the data is displayed, it is possible for a user to click on any of the boroughs in order to see all of the Covid information for that specific borough. A new window pops up with a TableView displaying all of the data for that borough in the date range. At the top of the window, there is a drop-down menu that allows the user to sort by any one of the table columns, and whether they want the data in ascending or descending order.
 
 **Panel 3: Statistics** - Implemented by Saihan Marshall
 
@@ -59,7 +59,7 @@ The next statistic calculated is *(3)* total number of total deaths. Jeffrey def
 
 The next statistic shown is *(4)* average of total cases. Jeffrey defined this as "Total Cases for all boroughs at the End date of the period / (number of boroughs)". The statistic was calculated by summing up the *Total Cases* column for all boroughs on the last date in the date range (the *to* date) and dividing by the number of boroughs with non-null values in this column.
 
-The final statistic to be seen is *(5)* the date with the highest total death. Jeffrey defined this as "Always the End date of the selection period". For this reason, the final statistic is always the last date in the date range (the *to* date), as that is the date with the highest cumulative deaths (as it is the most recent date).
+The final statistic to be seen is *(5)* the date with the highest total deaths. Jeffrey defined this as "Always the End date of the selection period". For this reason, the final statistic is always the last date in the date range (the *to* date), as that is the date with the highest cumulative deaths (as it is the most recent date).
 
 This makes *five* statistics implemented as required by the task sheet.
 
@@ -67,7 +67,7 @@ This makes *five* statistics implemented as required by the task sheet.
 
 **Panel 4: Graphs** - Implemented by Muhammad Ahsan Mahfuz
 
-For the challenge task, the fourth panel to provides a graph for the user to visually see how the data changed over time for each borough and for each field in the Covid dataset.
+For the challenge task, the fourth panel provides a graph for the user to visually see how the data changed over time for each borough and for each field in the Covid dataset.
 
 The user can select which borough they want to see data for, and for which field (e.g. Total Cases, New Deaths, Grocery and Pharmacy Mobility, etc.) in the dataset they want data graphed. A tooltip has also been added to each point that is graphed so that the user is able to see the exact data that the point is representing.
 
@@ -75,7 +75,7 @@ If you simply just graphed the data without any changes to the y-axis, there wou
 
 <h2 style="padding:0;margin:0;display:inline;vertical-align: top;float:left;">Unit Testing </h2> <p style="display:inline;vertical-align: top;"> - Implemented by Ishab Ahmed</p>
 
-The *Dataset* class was tested due to being systemically important to our software. Without the *Dataset* class working as intended, all other classes will be able to unable to access and process the data to be displayed on the panels.
+The *Dataset* class was tested due to being systemically important to our software. Without the *Dataset* class working as intended, all other classes will be unable to access and process the data to be displayed on the panels.
 
 *DatasetTest* has nine test methods for the nine methods in *Dataset*. Each method of *Dataset* is thoroughly tested with a range of valid data, invalid data and edge cases where possible to test the methods as well as possible.
 
@@ -86,5 +86,5 @@ The *Dataset* class was tested due to being systemically important to our softwa
 5. *testGetMostRecentDataWithFilter()*: This method tests that getMostRecentDataWithFilter() returns only the most recent records that match the given filter. First, the method gets the most recent data with the getTotalCases filter applied and checks that the data returned matches the filter and is the most recent available. Then, the method does the same, but with the getTotalDeaths filter applied instead.
 6. *testGetBoroughs()*: This method tests whether getBoroughs() is returning the expected borough names or not. The method checks that each borough name in the returned array matches the expected borough names.
 7. *testIsDateInRange()*: This method tests whether isDateInRange() returns true when the input date is within the date range (inclusive), and false when it's outside the range. The method checks the method's result for valid dates, invalid dates, and edge case dates.
-8. testIsDateRangeValid(): This method tests whether isDateRangeValid() returns false when either date is null or the 'to' date is before the 'from' date, and true otherwise. The method checks the method's result for valid and invalid inputs.
-9. testGetAverage(): This method tests whether the getAverage() method calculates the correct mean average, even when nulls are passed in. The method tests the method's behavior for various scenarios, including all null values, mixed values, and non-null values.
+8. testIsDateRangeValid(): This method tests whether isDateRangeValid() returns false when either date is null or the 'from' date is after the 'to' date, and true otherwise. The method checks the method's result for valid and invalid inputs.
+9. testGetAverage(): This method tests whether the getAverage() method calculates the correct mean average, even when nulls are passed in. The method tests the method for various scenarios, including all null values, mixed values, and non-null values.
