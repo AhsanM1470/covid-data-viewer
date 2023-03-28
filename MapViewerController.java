@@ -81,9 +81,18 @@ public class MapViewerController extends ViewerController {
                 newhamPolygon, redbridgePolygon, richmondPolygon, southwarkPolygon, suttonPolygon,
                 walthamPolygon, wandsworthPolygon, westminsterPolygon, barkDagPolygon, barnetPolygon };
 
-        // boroughIDs.json maps every polygon ID to the corresponding borough name
-        JsonReader jsonReader = new JsonReader();
-        boroughIdToName = jsonReader.readJson("boroughIDs.json");
+        boroughIdToName = new HashMap<>();
+        String[] boroughNames = dataset.getBoroughs();
+        String[] boroughPolygons = {"barkDagPolygon", "barnetPolygon", "bexleyPolygon", "brentPolygon", "bromleyPolygon", 
+            "camdenPolygon", "cityPolygon", "croydonPolygon", "ealingPolygon", "enfieldPolygon", "greenwichPolygon", 
+            "hackneyPolygon", "hammfullPolygon", "haringeyPolygon", "harrowPolygon", "haveringPolygon", "hillingdonPolygon",
+            "hounslowPolygon", "islingtonPolygon", "kensChelsPolygon", "kingstonPolygon", "lambethPolygon", "lewishamPolygon",
+            "mertonPolygon", "newhamPolygon", "redbridgePolygon", "richmondPolygon", "southwarkPolygon", "suttonPolygon", "hamletsPolygon",
+            "walthamPolygon", "wandsworthPolygon", "westminsterPolygon"};
+
+        for (int i = 0; i < boroughNames.length; i++) {
+            boroughIdToName.put(boroughPolygons[i], boroughNames[i]);
+        }
     }
 
     /**
@@ -171,7 +180,6 @@ public class MapViewerController extends ViewerController {
             // Check if value calculated is larger than the maximum deaths in the range for all boroughs.
             highestDeathsInRange = Math.max(deathsInDateRange, highestDeathsInRange);
         }
-
     }
 
     /**
