@@ -132,8 +132,6 @@ public class MapViewController extends ViewController {
         }
     }
 
-    
-
     // -------------------------------- Heat Map Processing -------------------------------- //
     
     /**
@@ -203,7 +201,7 @@ public class MapViewController extends ViewController {
             Color col;  // colour to assign the borough
 
             // If the borough has data within the date range, give it a colour.
-            if (deathsInDateRangeForBorough != null && highestDeathsInRange > 0) {
+            if (dataset.isDateRangeValid(fromDate, toDate) && deathsInDateRangeForBorough != null && highestDeathsInRange > 0) {
                 // Calculate the colour of the borough based on its deaths relative to the maximum deaths in the date range
                 // In HSB, hue is measured in degrees where 0 -> 120 == red -> green.
                 double hueUpperBound = 105.0;

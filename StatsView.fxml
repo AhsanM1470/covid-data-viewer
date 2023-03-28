@@ -28,19 +28,19 @@
                               <Font size="29.0" />
                            </font>
                         </Label>
-                        <Label fx:id="rrGMRLabel" text="No date range has been selected." textFill="WHITE">
+                        <Label fx:id="rrGMRLabel" contentDisplay="CENTER" text="No date range has been selected." textAlignment="CENTER" textFill="WHITE" wrapText="true">
                            <padding>
                               <Insets top="100.0" />
                            </padding>
                            <font>
-                              <Font size="29.0" />
+                              <Font size="25.0" />
                            </font></Label>
-                        <Label fx:id="gpGMRLabel" text="No date range has been selected." textFill="WHITE">
+                        <Label fx:id="gpGMRLabel" contentDisplay="CENTER" text="No date range has been selected." textAlignment="CENTER" textFill="WHITE" wrapText="true">
                            <padding>
                               <Insets top="40.0" />
                            </padding>
                            <font>
-                              <Font size="29.0" />
+                              <Font size="25.0" />
                            </font></Label>
                      </children>
                   </VBox>
@@ -59,24 +59,24 @@
                         </Label>
                      </top>
                      <center>
-                        <Label fx:id="sumTotalDeathLabel" alignment="CENTER" prefHeight="287.0" prefWidth="306.0" text="No date range has been selected." textFill="WHITE" BorderPane.alignment="CENTER">
+                        <Label fx:id="sumTotalDeathLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="287.0" prefWidth="306.0" text="No date range has been selected." textAlignment="CENTER" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER">
                            <padding>
                               <Insets bottom="150.0" />
                            </padding>
                            <font>
-                              <Font size="29.0" />
+                              <Font size="25.0" />
                            </font>
                         </Label>
                      </center>
                   </BorderPane>
                   <BorderPane fx:id="thirdPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="597.0">
                      <center>
-                        <Label fx:id="averageCasesLabel" text="No date range has been selected." textFill="WHITE" BorderPane.alignment="CENTER">
+                        <Label fx:id="averageCasesLabel" contentDisplay="CENTER" text="No date range has been selected." textAlignment="CENTER" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER">
                            <padding>
                               <Insets bottom="125.0" />
                            </padding>
                            <font>
-                              <Font size="29.0" />
+                              <Font size="25.0" />
                            </font></Label>
                      </center>
                      <top>
@@ -91,12 +91,12 @@
                   </BorderPane>
                   <BorderPane fx:id="fourthPane" prefHeight="581.0" prefWidth="597.0">
                      <center>
-                        <Label fx:id="highestDeathDateLabel" text="No date range has been selected." textFill="WHITE" BorderPane.alignment="CENTER">
+                        <Label fx:id="highestDeathDateLabel" contentDisplay="CENTER" text="No date range has been selected." textAlignment="CENTER" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER">
                            <padding>
                               <Insets bottom="125.0" />
                            </padding>
                            <font>
-                              <Font size="29.0" />
+                              <Font size="25.0" />
                            </font></Label>
                      </center>
                      <top>

@@ -172,7 +172,7 @@ public class StatsViewController extends ViewController {
     private int getTotalNumberOfDeaths() {
         int totalNumberOfDeaths = 0;
 
-        // gets the most recent record of every borough that is non-null and non-zero in the total_deaths column
+        // gets the most recent record of every borough that is non-null in the total_deaths column
         ArrayList<CovidData> mostRecentDataWithTotalDeaths = dataset.getMostRecentDataWithFilter(dataInDateRange, CovidData::getTotalDeaths);
 
         for (CovidData record : mostRecentDataWithTotalDeaths) {
@@ -188,7 +188,7 @@ public class StatsViewController extends ViewController {
      * @return the average of total cases in all boroughs within the date range (to 2 d.p.)
      */
     private double getAverageTotalCases() {
-        // gets the most recent record of every borough that is non-null and non-zero in the total_cases column
+        // gets the most recent record of every borough that is non-null in the total_cases column
         ArrayList<CovidData> mostRecentDataWithTotalCases = dataset.getMostRecentDataWithFilter(dataInDateRange, CovidData::getTotalCases);
 
         List<Number> totalCasesData = mostRecentDataWithTotalCases.stream()

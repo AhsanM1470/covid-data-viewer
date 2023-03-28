@@ -104,7 +104,7 @@ public class WelcomeViewController extends ViewController {
                 dataTableInfoLabel.setText("There's no available data for the selected date range.");
             }
         } else {
-            dataTableInfoLabel.setText("The 'to' date is before the 'from' date.");
+            dataTableInfoLabel.setText("The 'from' date is after the 'to' date.");
         }
 
         setWelcomeState(false);

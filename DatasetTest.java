@@ -185,7 +185,7 @@ public class DatasetTest {
         assertFalse(dataset.isDateRangeValid(null, null));
         assertFalse(dataset.isDateRangeValid(null, toDate));
         assertFalse(dataset.isDateRangeValid(fromDate, null));
-        // Invalid input: 'to' before 'from'
+        // Invalid input: 'from' after 'to'
         assertFalse(dataset.isDateRangeValid(toDate, fromDate));
     }
 
