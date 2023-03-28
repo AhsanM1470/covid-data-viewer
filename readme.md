@@ -7,6 +7,8 @@ Muhammad Ahsan Mahfuz (K22044399)
 <br />Team 3b1w</center><br />
 <h2 style="padding:0;margin:0;">Base Tasks</h2>
 
+The Java class which should be run to display the application is *DataViewer*.
+
 All GUI elements were created in SceneBuilder and loaded into the controller classes using FXMLLoader. This was to save time by quickly creating the GUI layouts without writing and debugging code, to increase maintainability as separating the user interface from the code makes it easier to update the layout or design, and to improve collaboration within the team through the ease of sharing and modifying the FXML files.
 
 **Application Window** - Implemented by Ishab Ahmed and Harshraj Patel
