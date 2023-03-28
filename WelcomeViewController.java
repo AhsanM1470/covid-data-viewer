@@ -25,7 +25,7 @@ public class WelcomeViewController extends ViewController {
 
     @FXML
     private VBox welcomePane;
-    
+
     @FXML
     protected BorderPane viewPane;
 
@@ -37,7 +37,7 @@ public class WelcomeViewController extends ViewController {
 
     @FXML
     private Label dataTableInfoLabel;
-    
+
     @FXML
     private Label validDataRangeLabel;
 
@@ -50,8 +50,8 @@ public class WelcomeViewController extends ViewController {
      * CovidData objects loaded from the data source.
      */
     @FXML
-    protected void initialize() {    
-        super.initialize();  
+    protected void initialize() {
+        super.initialize();
 
         // Create TableColumns for the TableView
         TableColumn<CovidData, String> dateCol = new TableColumn<CovidData, String>("Date");
@@ -77,9 +77,10 @@ public class WelcomeViewController extends ViewController {
 
         // Make all columns equal width
         dataTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        
-        validDataRangeLabel.setText("The dataset shows data from " + Collections.min(dataset.getData()).getDate() + " to " + Collections.max(dataset.getData()).getDate() 
-            + " so you can only select dates from that period.");
+
+        validDataRangeLabel.setText("The dataset shows data from " + Collections.min(dataset.getData()).getDate()
+                + " to " + Collections.max(dataset.getData()).getDate()
+                + " so you can only select dates from that period.");
     }
 
     /**
@@ -132,9 +133,9 @@ public class WelcomeViewController extends ViewController {
         for (CovidData covidData : dataToShow) {
             dataTable.getItems().add(covidData);
         }
-        
+
     }
-    
+
     public Parent getView() {
         return viewPane;
     }

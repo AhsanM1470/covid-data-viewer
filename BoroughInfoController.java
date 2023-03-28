@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -10,6 +11,14 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 
+/**
+ * Responsible for displaying CovidData objects in a TableView object for
+ * a specified borough. Opens when a borough polygon is clicked on
+ * MapViewController.
+ * 
+ * @author Harshraj Patel
+ * @version 2023.03.28
+ */
 public class BoroughInfoController {
 
     @FXML
@@ -60,46 +69,49 @@ public class BoroughInfoController {
 
         TableColumn<CovidData, Integer> newDeathsCol = new TableColumn<>("New Deaths");
         newDeathsCol.setCellValueFactory(new PropertyValueFactory<>("newDeaths"));
-        
+
         TableColumn<CovidData, Integer> totalDeathsCol = new TableColumn<>("Total Deaths");
         totalDeathsCol.setCellValueFactory(new PropertyValueFactory<>("totalDeaths"));
 
-        boroughTable.getColumns().addAll(dateCol, retailRecreationGMRCol, groceryPharmacyGMRCol, parksGMRCol, transitGMRCol,
+        boroughTable.getColumns().addAll(dateCol, retailRecreationGMRCol, groceryPharmacyGMRCol, parksGMRCol,
+                transitGMRCol,
                 workplacesGMRCol, residentialGMRCol, newCasesCol, totalCasesCol, newDeathsCol, totalDeathsCol);
 
         // Add all the column names to the filter combobox
         columnNames = boroughTable.getColumns().stream().map(e -> e.getText()).collect(Collectors.toList());
         filterComboBox.getItems().addAll(columnNames);
-        
+
         // Bind the height of the tableview to the height of the stage
         boroughTable.prefHeightProperty().bind(mainPane.heightProperty());
 
         // Create the options for how the user can sort
         orderStrings = new String[] { "Ascending", "Descending" };
         orderComboBox.getItems().setAll(orderStrings);
-        
+
         // Initially ordered by ascending
         String initialOrder = orderStrings[0];
         orderComboBox.setValue(initialOrder);
         orderByAscending = true;
-        
+
         filterSelected = columnNames.get(0);
         filterComboBox.setValue(filterSelected);
     }
-    
+
     /**
-     * Filters the data displayed in boroughTable based on the selected option in the filterComboBox
+     * Filters the data displayed in boroughTable based on the selected option in
+     * the filterComboBox
      * 
-     * @param event ActionEvent triggered by the user selecting a filter option from the filterComboBox
+     * @param event ActionEvent triggered by the user selecting a filter option from
+     *              the filterComboBox
      */
     @FXML
     void filterSelected(ActionEvent event) {
         filterSelected = filterComboBox.getValue();
         sortTable();
     }
-    
+
     /**
-     * Sets the order of sorting for the data displayed in boroughTable based on the 
+     * Sets the order of sorting for the data displayed in boroughTable based on the
      * selected option in the orderComboBox
      * 
      * @param event ActionEvent triggered by the user changing the order type
@@ -123,9 +135,10 @@ public class BoroughInfoController {
 
         sortTable();
     }
-    
+
     /**
-     * Sorts the data displayed in the TableView by the selected filter and order options.
+     * Sorts the data displayed in the TableView by the selected filter and order
+     * options.
      */
     private void sortTable() {
         // Get the column to sort
@@ -136,7 +149,7 @@ public class BoroughInfoController {
 
         // Determine whether the order should be ascending or descending
         col.setSortType(orderByAscending ? TableColumn.SortType.ASCENDING : TableColumn.SortType.DESCENDING);
-       
+
         boroughTable.getSortOrder().setAll(col);
         boroughTable.sort();
     }

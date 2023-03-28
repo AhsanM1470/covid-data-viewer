@@ -31,7 +31,7 @@ public abstract class ViewController {
     protected LocalDate fromDate, toDate;
 
     @FXML
-    protected void initialize(){
+    protected void initialize() {
         // Adding window size change listeners to resize map properly
         viewPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             if (oldVal != newVal) {
@@ -45,8 +45,6 @@ public abstract class ViewController {
             }
         });
     }
-
-    // -------------------------------- Getters -------------------------------- //
 
     /**
      * @return the currently selected date in 'fromDatePicker'
@@ -66,7 +64,7 @@ public abstract class ViewController {
      * Sets the date range of the date pickers to the given dates.
      *
      * @param fromDate The starting date of the date range to be set.
-     * @param toDate The ending date of the date range to be set.
+     * @param toDate   The ending date of the date range to be set.
      */
     public void setDateRange(LocalDate fromDate, LocalDate toDate) {
         this.fromDate = fromDate;
@@ -77,14 +75,12 @@ public abstract class ViewController {
      * Updates the current panel for the given date range.
      * 
      * @param fromDate The start date of the date range.
-     * @param toDate The end date of the date range.
+     * @param toDate   The end date of the date range.
      */
     protected void updatePanelForDateRange(LocalDate fromDate, LocalDate toDate) {
         setDateRange(fromDate, toDate);
         processDataInDateRange(fromDate, toDate);
     }
-
-    // -------------------------------- Resize Components -------------------------------- //
 
     /**
      * Resizes the map relative to the size of the parentPane (MainWindow).
@@ -92,31 +88,32 @@ public abstract class ViewController {
      * @param parentPane The parentPane that is being resized.
      */
     protected void resizeComponents(Region parentPane) {
-        // Calculate the ratio of the current width/height relative to the original width/height
+        // Calculate the ratio of the current width/height relative to the original
+        // width/height
         double ratioX = parentPane.getWidth() / parentPane.getPrefWidth();
         double ratioY = parentPane.getHeight() / parentPane.getPrefHeight();
 
-        // Calculate the scale factor (s.f.) the window was scaled by (limited to s.f. of 1, and max s.f. of 2)
+        // Calculate the scale factor (s.f.) the window was scaled by (limited to s.f.
+        // of 1, and max s.f. of 2)
         ratioX = Math.max(Math.min(ratioX, 2), 1);
         ratioY = Math.max(Math.min(ratioY, 2), 1);
-        
+
         // Scale by same ratio allowing aspect ratio to be maintained
         double scale = Math.min(ratioX, ratioY);
-        
-        // Get the centre of the MainWindow and scale relative to the current MainWindow size
+
+        // Get the centre of the MainWindow and scale relative to the current MainWindow
+        // size
         Node toScale = viewPane.getCenter();
-        
+
         toScale.setScaleY(scale);
         toScale.setScaleX(scale);
     }
-
-    // ---------------------------- Abstract Methods --------------------------- //
 
     /**
      * Called when either date picker is changed.
      * 
      * @param from The starting date of the range
-     * @param to The ending date of the range
+     * @param to   The ending date of the range
      */
     abstract protected void processDataInDateRange(LocalDate fromDate, LocalDate toDate);
 

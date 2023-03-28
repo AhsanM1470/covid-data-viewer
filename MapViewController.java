@@ -8,21 +8,20 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 
 /**
- * Handles the displaying and processing of a map of London. Responsible for initialising the borough polygons and assigning colours to them based on 
+ * Handles the displaying and processing of a map of London. Responsible for
+ * initialising the borough polygons and assigning colours to them based on
  * the number of deaths within a given date range.
  * 
  * @author Harshraj Patel
@@ -38,7 +37,7 @@ public class MapViewController extends ViewController {
 
     @FXML
     private Label deathsHoverLabel, baseHoverTotal, percentLabel, hoverBoxBoroughLabel, selectedBoroughLabel;
-    
+
     // Small info box that is shown about a borough when it is hovered over
     @FXML
     private AnchorPane hoverBox;
@@ -59,12 +58,12 @@ public class MapViewController extends ViewController {
     // Used to map polygon IDs to String borough names
     private HashMap<String, String> boroughIdToName;
 
-    // Stores the sum of new cases in the date range for each borough 
+    // Stores the sum of new cases in the date range for each borough
     private HashMap<String, Integer> boroughDeathsInDateRange;
 
     // The highest death sum in the date range
     private Integer highestDeathsInRange;
-    
+
     // Initial attributes of the polygon, before hover changes
     private Paint hoveredPolygonInitialBorderColor;
     private Double hoveredPolygonInitialStroke;
@@ -72,9 +71,10 @@ public class MapViewController extends ViewController {
     // Mouse position relative to the mapAnchorPane
     private Double infoPaneX = -100.0;
     private Double infoPaneY = -100.0;
-    
+
     /**
-     * Initialises the controller with attributes used to render the map as required.
+     * Initialises the controller with attributes used to render the map as
+     * required.
      */
     @FXML
     protected void initialize() {
@@ -90,13 +90,14 @@ public class MapViewController extends ViewController {
 
         boroughIdToName = new HashMap<>();
         String[] boroughNames = dataset.getBoroughs();
-        String[] boroughPolygons = {"barkDagPolygon", "barnetPolygon", "bexleyPolygon", "brentPolygon", "bromleyPolygon", 
-            "camdenPolygon", "cityPolygon", "croydonPolygon", "ealingPolygon", "enfieldPolygon", "greenwichPolygon", 
-            "hackneyPolygon", "hammfullPolygon", "haringeyPolygon", "harrowPolygon", "haveringPolygon", "hillingdonPolygon",
-            "hounslowPolygon", "islingtonPolygon", "kensChelsPolygon", "kingstonPolygon", "lambethPolygon", "lewishamPolygon",
-            "mertonPolygon", "newhamPolygon", "redbridgePolygon", "richmondPolygon", "southwarkPolygon", "suttonPolygon", "hamletsPolygon",
-            "walthamPolygon", "wandsworthPolygon", "westminsterPolygon"};
-        
+        String[] boroughPolygons = { "barkDagPolygon", "barnetPolygon", "bexleyPolygon", "brentPolygon",
+                "bromleyPolygon", "camdenPolygon", "cityPolygon", "croydonPolygon", "ealingPolygon", "enfieldPolygon",
+                "greenwichPolygon", "hackneyPolygon", "hammfullPolygon", "haringeyPolygon", "harrowPolygon",
+                "haveringPolygon", "hillingdonPolygon", "hounslowPolygon", "islingtonPolygon", "kensChelsPolygon",
+                "kingstonPolygon", "lambethPolygon", "lewishamPolygon", "mertonPolygon", "newhamPolygon",
+                "redbridgePolygon", "richmondPolygon", "southwarkPolygon", "suttonPolygon", "hamletsPolygon",
+                "walthamPolygon", "wandsworthPolygon", "westminsterPolygon" };
+
         // Creates a mapping between each polygon name and the name of the borough
         for (int i = 0; i < boroughNames.length; i++) {
             boroughIdToName.put(boroughPolygons[i], boroughNames[i]);
@@ -104,11 +105,11 @@ public class MapViewController extends ViewController {
     }
 
     /**
-     * Processes the data within the given date range by resetting the heat map data, 
-     * validating the date range, and assigning colors to the boroughs.
+     * Processes the data within the given date range by resetting the heat map
+     * data, validating the date range, and assigning colors to the boroughs.
      * 
      * @param fromDate The start date of the date range (inclusive) to be processed.
-     * @param toDate The end date of the date range (inclusive) to be processed.
+     * @param toDate   The end date of the date range (inclusive) to be processed.
      */
     protected void processDataInDateRange(LocalDate fromDate, LocalDate toDate) {
         validateDateRange(fromDate, toDate);
@@ -116,10 +117,11 @@ public class MapViewController extends ViewController {
     }
 
     /**
-     * Displays appropriate message to user depending on if the data is valid or not.
+     * Displays appropriate message to user depending on if the data is valid or
+     * not.
      * 
      * @param fromDate The start date of the date range (inclusive) to validate.
-     * @param toDate The end date of the date range (inclusive) to validate.
+     * @param toDate   The end date of the date range (inclusive) to validate.
      */
     private void validateDateRange(LocalDate fromDate, LocalDate toDate) {
         if (dataset.isDateRangeValid(fromDate, toDate)) {
@@ -132,15 +134,14 @@ public class MapViewController extends ViewController {
         }
     }
 
-    // -------------------------------- Heat Map Processing -------------------------------- //
-    
     /**
-     * Resets the the sum of new deaths for all boroughs in the previous date range, ready to be loaded with new data for new date range.
+     * Resets the the sum of new deaths for all boroughs in the previous date range,
+     * ready to be loaded with new data for new date range.
      */
     private void resetBoroughDeathsInDateRange() {
         // Reset the maximum value
         highestDeathsInRange = 0;
-        
+
         // Clear values of map
         boroughDeathsInDateRange = new HashMap<>();
         for (String boroughName : dataset.getBoroughs()) {
@@ -149,22 +150,27 @@ public class MapViewController extends ViewController {
     }
 
     /**
-     * Calculates the number of deaths in the given date range for each borough in the dataset
+     * Calculates the number of deaths in the given date range for each borough in
+     * the dataset
      * by summing all of the new deaths on each day for each borough.
      * 
-     * Also calculates the maximum number of deaths in the date range, by checking if the updated
-     * value is larger than the current maximum. This is to avoid multiple iterations over the 
+     * Also calculates the maximum number of deaths in the date range, by checking
+     * if the updated
+     * value is larger than the current maximum. This is to avoid multiple
+     * iterations over the
      * relatively large dataset.
      * 
-     * @param fromDate The start date of the date range (inclusive) to calculate deaths in
-     * @param toDate The end date of the date range (inclusive) to calculate deaths in
+     * @param fromDate The start date of the date range (inclusive) to calculate
+     *                 deaths in
+     * @param toDate   The end date of the date range (inclusive) to calculate
+     *                 deaths in
      */
     private void calculateBoroughDeathsInDateRange(LocalDate fromDate, LocalDate toDate) {
         resetBoroughDeathsInDateRange();
 
         for (CovidData record : dataset.getDataInDateRange(fromDate, toDate)) {
             String boroughName = record.getBorough();
-            
+
             Integer deathsOnDay = record.getNewDeaths();
             Integer deathsInDateRange = boroughDeathsInDateRange.get(boroughName);
 
@@ -172,7 +178,7 @@ public class MapViewController extends ViewController {
             if (deathsOnDay == null) {
                 continue;
             }
-            
+
             // If this is the first record for the borough checked, set initial value
             if (deathsInDateRange == null) {
                 deathsInDateRange = deathsOnDay;
@@ -180,29 +186,34 @@ public class MapViewController extends ViewController {
                 // Update cumulative count of deaths for borough
                 deathsInDateRange += deathsOnDay;
             }
-            
+
             boroughDeathsInDateRange.put(boroughName, deathsInDateRange);
 
-            // Check if value calculated is larger than the maximum deaths in the range for all boroughs.
+            // Check if value calculated is larger than the maximum deaths in the range for
+            // all boroughs.
             highestDeathsInRange = Math.max(deathsInDateRange, highestDeathsInRange);
         }
     }
 
     /**
-     * Assigns colours to borough polygons based on the number of deaths in the given date range.
-     * The colour of a borough is determined relative to the maximum number of deaths in the date range.
-     * If a borough has no data within the date range, it is assigned a grey colour.
+     * Assigns colours to borough polygons based on the number of deaths in the
+     * given date range. The colour of a borough is determined relative to the
+     * maximum number of deaths in the date range. If a borough has no data within
+     * the date range, it is assigned a grey colour.
      */
     private void assignBoroughsColor() {
         for (Polygon boroughPolygon : boroughPolygons) {
             String boroughName = boroughIdToName.get(boroughPolygon.getId());
-            // the colour the borough is assigned is based on the number of deaths for the borough in the date range
+            // the colour the borough is assigned is based on the number of deaths for the
+            // borough in the date range
             Integer deathsInDateRangeForBorough = boroughDeathsInDateRange.get(boroughName);
-            Color col;  // colour to assign the borough
+            Color col; // colour to assign the borough
 
             // If the borough has data within the date range, give it a colour.
-            if (dataset.isDateRangeValid(fromDate, toDate) && deathsInDateRangeForBorough != null && highestDeathsInRange > 0) {
-                // Calculate the colour of the borough based on its deaths relative to the maximum deaths in the date range
+            if (dataset.isDateRangeValid(fromDate, toDate) && deathsInDateRangeForBorough != null
+                    && highestDeathsInRange > 0) {
+                // Calculate the colour of the borough based on its deaths relative to the
+                // maximum deaths in the date range
                 // In HSB, hue is measured in degrees where 0 -> 120 == red -> green.
                 double hueUpperBound = 105.0;
                 double percentageOfHue = (hueUpperBound * deathsInDateRangeForBorough / highestDeathsInRange);
@@ -223,12 +234,10 @@ public class MapViewController extends ViewController {
         }
     }
 
-    // -------------------------------- Polygon Hovering -------------------------------- //
-
     /**
-     * Displays an info box on the borough being hovered over, as well as changing the
-     * visual attributes of the borough polygon to give a visual cue to the user which
-     * polygon they are hovering over.
+     * Displays an info box on the borough being hovered over, as well as changing
+     * the visual attributes of the borough polygon to give a visual cue to the user
+     * which polygon they are hovering over.
      * 
      * @param event The mouse event that triggered this method
      */
@@ -277,7 +286,7 @@ public class MapViewController extends ViewController {
 
         // If mouse leaves polygon, disable visiblity of hover box
         hoverBox.setVisible(false);
-        
+
         // Reset visual attributes
         poly.setStrokeWidth(1);
         poly.setStroke(hoveredPolygonInitialBorderColor);
@@ -287,11 +296,11 @@ public class MapViewController extends ViewController {
     }
 
     /**
-     * calculate the x and y coordinates for info box pane whilst hovering over a
-     * polygon relative to the polygonPane to get coordinates on the window
+     * Determines the coordinates of the information pane relative to the
+     * mouse and specified polygon.
      * 
-     * @param event mouse event
-     * @param poly  polygon that's being hovered over
+     * @param event the mouse event that triggered this method
+     * @param poly  polygon that is being hovered over
      */
     private void determineInfoPaneCoordinates(MouseEvent event, Polygon poly) {
         // polygonPane
@@ -300,8 +309,8 @@ public class MapViewController extends ViewController {
     }
 
     /**
-     * Displays a box with information about the specified borough when hovering over
-     * its corresponding polygon.
+     * Displays a box with information about the specified borough when hovering
+     * over its corresponding polygon.
      * 
      * @param poly The borough polygon that was hovered over
      */
@@ -314,7 +323,8 @@ public class MapViewController extends ViewController {
         // Retrieve the deaths in the date range for that borough
         Integer deathsInDateRangeForBorough = boroughDeathsInDateRange.get(boroughName);
 
-        // Calculate the value as a percentage of the highest death count in the date range
+        // Calculate the value as a percentage of the highest death count in the date
+        // range
         Integer percentage = null;
         if (deathsInDateRangeForBorough != null && highestDeathsInRange > 0) {
             percentage = (int) Math.round((100.0 * deathsInDateRangeForBorough / highestDeathsInRange));
@@ -329,8 +339,6 @@ public class MapViewController extends ViewController {
         hoverBox.setLayoutY(infoPaneY);
     }
 
-    // -------------------------------- Polygon Clicking -------------------------------- //
-
     /**
      * Displays the data for the borough polygon clicked in a new window.
      * 
@@ -342,12 +350,12 @@ public class MapViewController extends ViewController {
         // Get which borough was clicked
         Polygon poly = (Polygon) event.getSource();
         String borough = boroughIdToName.get(poly.getId());
-        
+
         // Show data for that borough
         showBoroughData(borough);
     }
 
-     /**
+    /**
      * Displays a pop-up window with information about the specified borough.
      * 
      * @param boroughName The name of the borough that data is being displayed
@@ -356,26 +364,24 @@ public class MapViewController extends ViewController {
     private void showBoroughData(String boroughName) throws IOException {
         // Load and stage the FXML file
         Stage stage = new Stage();
-        
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("BoroughInfo.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
-        
+
         stage.setTitle(boroughName);
         stage.setScene(scene);
-        
+
         // Sets owner of pop-up to the MainWindow
         stage.initOwner(mapAnchorPane.getScene().getWindow());
-        
+
         BoroughInfoController controller = loader.getController();
         // Load data into pop-up controller
         controller.showData(dataset.getBoroughData(boroughName, fromDate, toDate));
-        
+
         stage.show();
     }
-    
-    // -------------------------------- Misc -------------------------------- //
-    
+
     /**
      * @return The view that this controller is associated with.
      */
