@@ -1,25 +1,19 @@
-import javafx.animation.FadeTransition;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.Property;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.event.ActionEvent;
-import javafx.util.Duration;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import java.time.LocalDate;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
+
+import javafx.animation.FadeTransition;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 /**
  * Defines multiple panes, that can be navigated between, for displaying different statistics,
@@ -34,41 +28,28 @@ public class StatsViewerController extends ViewerController {
     @FXML
     private BorderPane statsPane, viewPane;
     
-    // first pane - setVisible(true) when injected
     @FXML
     private VBox firstPane;
 
-    // setVisible(false) when injected
     @FXML
     private BorderPane secondPane, thirdPane, fourthPane;
-
-    // Array of all panes
+        
+    // Stores all panels and the current panel index
     private ArrayList<Pane> statsPanes;
-
-    // Index of current panel
     private int panelIndex;
 
-    // Google mobility data labels
+    // Google mobility data statistics labels
     @FXML
     private Label gpGMRLabel, rrGMRLabel;
 
-    // Total deaths in given range label
+    // Government data statistics labels
     @FXML
-    private Label sumTotalDeathLabel;
-
-    // Average of total cases label
-    @FXML
-    private Label averageCasesLabel;
-
-    // Date of the highest deaths label
-    @FXML
-    private Label highestDeathDateLabel;
+    private Label sumTotalDeathLabel, averageCasesLabel, highestDeathDateLabel;
 
     // Stores the data within the date range selected
     private ArrayList<CovidData> dataInDateRange;
     
-    //private FadeTransition fade;
-    
+    // Allows for transition between statistics
     private FadeTransition fadeIn;
     private FadeTransition fadeOut;
 
@@ -91,18 +72,18 @@ public class StatsViewerController extends ViewerController {
         panelIndex = 0;
         
         // Sets up fade transitions
-        fadeIn = createFadeTransition(Duration.millis(150), 1, 0);
-        fadeOut = createFadeTransition(Duration.millis(150), 0, 1);
+        fadeIn = createFadeTransition(1, 0, Duration.millis(150));
+        fadeOut = createFadeTransition(0, 1, Duration.millis(150));
 
         // "fadeIn" plays as soon as "fadeOut is finished"
         fadeOut.setOnFinished(e -> fadeIn.play());
     }
     
     /**
-     * Creates a FadeTransition animate the opacity of each statistic from the start value 
+     * Creates a FadeTransition to animate the opacity of each statistic from the start value 
      * to the end value over the specified duration.
      */
-    private FadeTransition createFadeTransition(Duration duration, double toValue, double fromValue) {
+    private FadeTransition createFadeTransition(double toValue, double fromValue, Duration duration) {
         FadeTransition fade = new FadeTransition(duration);
         fade.setToValue(toValue);
         fade.setFromValue(fromValue);
@@ -124,44 +105,41 @@ public class StatsViewerController extends ViewerController {
     }
 
     /**
-     * Hides the currently displayed pane and shows the next pane.
+     * Hides the currently displayed pane and shows the next pane with a fade transition.
      * 
      * @param event The button clicked event that triggered this method
      */
     @FXML
     private void forwardButton(ActionEvent event) {
-        // Sets up nodes for fade transitions
-        fadeOut.setNode(statsPanes.get((panelIndex) % statsPanes.size()));
-        fadeIn.setNode(statsPanes.get((panelIndex + 1) % statsPanes.size()));
-
         // Increment to next pane
-        panelIndex = (panelIndex + 1) % statsPanes.size();
+        int nextIndex = (panelIndex + 1) % statsPanes.size();
 
-        // Show next panel
+        // Set which pane to fade out from / in to
+        fadeOut.setNode(statsPanes.get(panelIndex));
+        fadeIn.setNode(statsPanes.get(nextIndex));
+        
         fadeOut.play();
+        
+        panelIndex = nextIndex;
     }
 
     /**
-     * Hides the currently displayed pane and shows the previous pane.
+     * Hides the currently displayed pane and shows the previous pane with a fade transition.
      * 
      * @param event The button clicked event that triggered this method
      */
     @FXML
     private void backwardButton(ActionEvent event) {
         // Decrement to previous pane
-        panelIndex--;
-
-        // Roll around to last pane in array if index becomes -ve
-        if (panelIndex < 0) {
-            panelIndex = statsPanes.size() - 1;
-        }
-
-        // Nodes are set up after to prevent negative indexes
-        fadeIn.setNode(statsPanes.get((panelIndex) % statsPanes.size()));
-        fadeOut.setNode(statsPanes.get((panelIndex + 1) % statsPanes.size()));
-
-        // Show previous panel
+        int previousIndex = (panelIndex - 1 + statsPanes.size()) % statsPanes.size();
+        
+        // Set which pane to fade out from / in to
+        fadeIn.setNode(statsPanes.get(previousIndex));
+        fadeOut.setNode(statsPanes.get(panelIndex));
+        
         fadeOut.play();
+        
+        panelIndex = previousIndex;
     }
 
     /**
