@@ -19,6 +19,7 @@ import java.util.Collections;
 import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.animation.Interpolator;
 
 /**
  * Write a description of class MainController here.
@@ -286,6 +287,19 @@ public class MainWindowController implements Initializable {
             } else {
                 allowPanelSwitching(false);
             }
+        }
+    }
+    
+    /**
+     * Growth ratio to allow for fast -> slow animation
+     * y = 1 - (2.6^(-6.8x))
+     * Takes in a value between 0 and 1, returns a value between 0 and 1 determining
+     * acceleration of movement during transition
+     */
+    private class AnimationInterpolator extends Interpolator {
+        @Override
+        protected double curve(double timePassedRatio) {
+            return (timePassedRatio >= 1.0) ? 1.0 : 1 - Math.pow(2, -6.8 * timePassedRatio);
         }
     }
 }
